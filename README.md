@@ -16,11 +16,11 @@ Program to identify unique kmers in a reference, tolerated in an ingroup, not fo
 <pre>
 Usage: ./unikseq2-1.pl v0.2.1 beta
  < k >
- <reference FASTA>
- <ingroup FASTA (1 or multi)>
- <outgroup FASTA (multi)>
- <min. region size (bp) to output (optional, default=100 bp)>
- <min. proportion within ingroup (optional, default=100 %)>
+ < reference FASTA >
+ < ingroup FASTA (1 or multi) >
+ < outgroup FASTA (multi) >
+ < min. region size (bp) to output (optional, default=100 bp) >
+ < min. proportion within ingroup (optional, default=100 %) >
 </pre>
 
 Notes:
