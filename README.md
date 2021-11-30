@@ -12,22 +12,18 @@ Program to identify unique kmers in a reference, tolerated in an ingroup, not fo
 
 ### Usage
 -----------
-
-./unikseq.pl v0.2.1 beta
+<pre>
+./unikseq.pl v0.2.1beta
  <k>
- 
  <reference FASTA>
-  
  <ingroup FASTA (1 or multi)>
- 
  <outgroup FASTA (multi)>
- 
  <min. region size (bp) to output (optional, default=100 bp)>
- 
  <min. proportion within ingroup (optional, default=100 %)>
 
 
  DESCRIPTION OF OPTIONS:
+
  <k> = kmer length
  
  <reference FASTA> = reference FASTA (unique FASTA) analysis is done relative to it
@@ -40,7 +36,7 @@ Program to identify unique kmers in a reference, tolerated in an ingroup, not fo
  
  <min. proportion within ingroup (optional, default=100 %) = minimum % to report unique regions. This should be set to 100 to identify regions common among the ingroup but with no equivalent in the outgroup.
 
-
+</pre>
 
 ### Plotting "butterfly" plots
 -----------
