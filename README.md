@@ -14,13 +14,15 @@ Program to identify unique kmers in a reference, tolerated in an ingroup, not fo
 -----------
 
 <pre>
-Usage: ./unikseq.pl v0.2.1beta
+Usage: ./unikseq.pl v0.2.2 beta
  < k >
  < reference FASTA >
  < ingroup FASTA (1 or multi) >
  < outgroup FASTA (multi) >
  < min. region size (bp) to output (optional, default=100 bp) >
- < min. proportion within ingroup (optional, default=100 %) >
+ < min. average proportion within ingroup (optional, default=25 %) >
+ < min. number of non-unique kmer positions allowed in a row (optional, default=1) >
+ < min. percent unique bases in regions (optional, default=90 %) >
 </pre>
 
 Notes:
