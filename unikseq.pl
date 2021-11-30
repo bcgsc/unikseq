@@ -4,7 +4,7 @@
 
 use strict;
 
-my $version = "v0.2.1 beta";
+my $version = "v0.2.1beta";
 my $regsz = 100;
 my $prop = 100;
 
