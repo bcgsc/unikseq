@@ -16,7 +16,7 @@ library(ggplot2)
 library(ggallin)
 library(scales)
 
-dfa<-read.table("/Users/rwarren_local/Downloads/REF_ALFR.fa_IN_ALFR.fa_OUT_iTrackDNA-Database-020821MJA.fa-uniqueKmers.tsv", sep="\t", header = TRUE)
+dfa<-read.table("REF_ALFR.fa_IN_ALFR.fa_OUT_iTrackDNA-Database-020821MJA.fa-uniqueKmers.tsv", sep="\t", header = TRUE)
 my_x_title <- expression(paste("Position of 25-mers on ", italic("A. fragilis"), " Mt genome"))
 
 # Stacked
