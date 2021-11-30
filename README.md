@@ -15,7 +15,7 @@ Program to identify unique kmers in a reference, tolerated in an ingroup, not fo
 
 <pre>
 Usage: ./unikseq2-1.pl v0.2.1 beta
- <k>
+ < k >
  <reference FASTA>
  <ingroup FASTA (1 or multi)>
  <outgroup FASTA (multi)>
