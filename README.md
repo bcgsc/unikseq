@@ -15,18 +15,29 @@ Program to identify unique kmers in a reference, tolerated in an ingroup, not fo
 
 ./unikseq.pl v0.2.1 beta
  <k>
+ 
  <reference FASTA>
+  
  <ingroup FASTA (1 or multi)>
+ 
  <outgroup FASTA (multi)>
+ 
  <min. region size (bp) to output (optional, default=100 bp)>
+ 
  <min. proportion within ingroup (optional, default=100 %)>
 
-OPTIONS:
+
+ DESCRIPTION OF OPTIONS:
  <k> = kmer length
+ 
  <reference FASTA> = reference FASTA (unique FASTA) analysis is done relative to it
+ 
  <ingroup FASTA (1 or multi)> = tolerated sequences. Used to find regions unique to a % (see last option, min. proportion)
+ 
  <outgroup FASTA (multi)> = outgroup to query kmers against. Note that input reference and ingroup sequences will be automatically excluded from this set.
+ 
  <min. region size (bp) to output (optional, default=100 bp)> = minimum "unique" region size to report.
+ 
  <min. proportion within ingroup (optional, default=100 %) = minimum % to report unique regions. This should be set to 100 to identify regions common among the ingroup but with no equivalent in the outgroup.
 
 
