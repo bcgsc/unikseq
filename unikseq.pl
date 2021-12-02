@@ -4,7 +4,7 @@
 
 use strict;
 
-my $version = "v0.2.2 beta";
+my $version = "v0.2.3 beta";
 my ($regsz, $prop, $minnotunique, $minpercentunique) = (100,25,1,90);
 
 if($#ARGV<3){
@@ -141,26 +141,28 @@ sub printOutput{
          $initial = $pos if($initial==-1); ### only track init if was not tracking
          $sum += $ctin;### for average calculation
       }else{      #### kmer not unique!
-         $notunique++;
-         $sum += $ctin;### for average calculation
-         if($notunique > $minnotunique){ ### absent kmer in a row exceed min threshold
-            my $stretch = $pos-$initial; ### calculate seq stretch
-            my $perunique = $unique / $stretch *100;
-            my $avg = $sum / $stretch;#XXX
-            my $avgpropspc = $avg / $incount *100;
+         if($initial > -1){###do not update trackers unless the region started with unique seqs
+            $notunique++;
+            $sum += $ctin;### for average calculation
+            if($notunique > $minnotunique){ ### absent kmer in a row exceed min allowed threshold
+               my $stretch = $pos-$initial; ### calculate seq stretch
+               my $perunique = $unique / $stretch *100;
+               my $avg = $sum / $stretch;#XXX
+               my $avgpropspc = $avg / $incount *100;
 
-            #print "$pos..$initial UNIQUE $unique.. STRETCH $stretch.. SEQID $seqid .. AVG $avgpropspc > $prop\n";
-            if($stretch>=$regsz && $perunique >= $minpercentunique && $avgpropspc >= $prop){ ### only output longer regions, with a uniqueness prop equal or above user-defined
-               my $uniqueseq=substr($seq,$initial,$stretch);
-               my $poslast = $pos - 1;
-               my $newhead = $head . "region" . $initial . "-" . $poslast . "_size" . $stretch . "_propspcIN";
-               printf OUT ">$newhead%.1f" . "_propunivsOUT%.1f" . "\n$uniqueseq\n", ($avgpropspc,$perunique);
+               #print "$pos..$initial UNIQUE $unique.. STRETCH $stretch.. SEQID $seqid .. AVG $avgpropspc > $prop\n";
+               if($stretch>=$regsz && $perunique >= $minpercentunique && $avgpropspc >= $prop){ ### only output longer regions, with a uniqueness prop equal or above user-defined
+                  my $uniqueseq=substr($seq,$initial,$stretch);
+                  my $poslast = $pos - 1;
+                  my $newhead = $head . "region" . $initial . "-" . $poslast . "_size" . $stretch . "_propspcIN";
+                  printf OUT ">$newhead%.1f" . "_propunivsOUT%.1f" . "\n$uniqueseq\n", ($avgpropspc,$perunique);
+               }
+               ###reset counters
+               $notunique = 0;
+               $unique = 0;
+               $initial = -1;
+               $sum = 0;
             }
-            ###reset counters
-            $notunique = 0;
-            $unique = 0;
-            $initial = -1;
-            $sum = 0;
          }
       }
    }
