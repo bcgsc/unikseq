@@ -18,7 +18,7 @@ Usage: ./unikseq.pl [v0.2.4 beta]
  -r reference FASTA (required)
  -i ingroup FASTA (required)
  -o outgroup FASTA (required)
- -k length (optional, default: -k 25)
+ -k length (option, default: -k 25)
  -s min. reference region [size] (bp) to output (option, default: -s 100 bp)
  -p min. average [proportion] ingroup entries in regions (option, default: -p 25 %)
  -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
@@ -28,7 +28,7 @@ Usage: ./unikseq.pl [v0.2.4 beta]
 Notes:
 <pre>
 
- -k length (optional, default: -k 25)
+ -k length (option, default: -k 25)
   kmer length
 
  -r reference FASTA (required)

@@ -32,7 +32,7 @@ if(! $opt_r || ! $opt_i || ! $opt_o){
    print " -r reference FASTA (required)\n";
    print " -i ingroup FASTA (required)\n";
    print " -o outgroup FASTA (required)\n";
-   print " -k length (optional, default: -k $k)\n";
+   print " -k length (option, default: -k $k)\n";
    print " -s min. reference region [size] (bp) to output (option, default: -s $regsz bp)\n";
    print " -p min. average [proportion] ingroup entries in regions (option, default: -p $prop %)\n";
    print " -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l $minnotunique)\n";
