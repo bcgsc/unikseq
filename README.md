@@ -14,35 +14,43 @@ Program to identify unique kmers in a reference, tolerated in an ingroup, not fo
 -----------
 
 <pre>
-Usage: ./unikseq.pl v0.2.2 beta
- < k >
- < reference FASTA >
- < ingroup FASTA (1 or multi) >
- < outgroup FASTA (multi) >
- < min. region size (bp) to output (optional, default=100 bp) >
- < min. average proportion within ingroup (optional, default=25 %) >
- < min. number of non-unique kmer positions allowed in a row (optional, default=1) >
- < min. percent unique bases in regions (optional, default=90 %) >
+Usage: ./unikseq.pl [v0.2.4 beta]
+ -r reference FASTA (required)
+ -i ingroup FASTA (required)
+ -o outgroup FASTA (required)
+ -k length (optional, default: -k 25)
+ -s min. reference region [size] (bp) to output (option, default: -s 100 bp)
+ -p min. average [proportion] ingroup entries in regions (option, default: -p 25 %)
+ -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
+ -u min. [% unique] kmers in regions (option, default: -u 90 %)
 </pre>
 
 Notes:
 <pre>
 
- < k >   kmer length
+ -k length (optional, default: -k 25)
+  kmer length
 
- < reference FASTA >   reference FASTA (unique FASTA) analysis is done relative to it
+ -r reference FASTA (required)
+  reference FASTA (unique FASTA) analysis is done relative to it
 
- < ingroup FASTA (1 or multi) >   tolerated sequences. Used to find regions unique to a % (see option min. average proportion within ingroup)
+ -i ingroup FASTA (required)
+  tolerated sequences. Used to find regions unique to a % (see -p option)
 
- < outgroup FASTA (multi) >   outgroup to query kmers against. Note that input reference and ingroup sequences will be automatically excluded from this set.
+ -o outgroup FASTA (required)
+  outgroup to query kmers against. Note that input reference and ingroup sequences will be automatically excluded from this set.
 
- < min. region size (bp) to output (optional, default=100 bp) >   minimum "unique" region size to report.
+ -s min. reference region [size] (bp) to output (option, default: -s 100 bp)
+  minimum "unique" reference (target) region size to report.
 
- < min. average proportion within ingroup (optional, default=25 %) > program tracks the numberof qualifying sequences in the ingroup over the sequence stretch, averages and calculates a proportion of the total entries in the ingroup. Sequences are reported only when that proportion is above the minimum set here. 
+ -p min. average [proportion] ingroup entries in regions (option, default: -p 25 %)
+  program tracks the number of qualifying sequences in the ingroup over the sequence stretch, averages and calculates a proportion of the total entries in the ingroup. Sequences are reported only when that proportion is above the minimum set here. 
 
- < min. number of non-unique kmer positions allowed in a row (optional, default=1) > this controls the tolerance for non-unique kmers in the outgroup when computing a sequence stretch. If set to 0, the sequence stretch is limited to unique kmers only and the % unique bases of the stretch will be 100% (see next parameter). Set to 1, allows some leniency and tolerates a single non-unique kmer in a row. Set to 2, tolerates up to 2 in a row, etc. When set >0, the %unique bases of a sequence stretch will almost never be 100% unique.
+ -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
+  this leniency factor controls the tolerance for non-unique kmers in the outgroup when computing a sequence stretch. If set to 0, the sequence stretch is limited to unique kmers only and the % unique bases of the stretch will be 100% (see next parameter). Set to 1, allows some leniency and tolerates a single non-unique kmer in a row. Set to 2, tolerates up to 2 in a row, etc. When set >0, the %unique bases of a sequence stretch will almost never be 100% unique and so -u MUST be lowered below 100%.
 
- < min. percent unique bases in regions (optional, default=90 %) > controls for sequence uniqueness. 
+ -u min. [% unique] kmers in regions (option, default: -u 90 %)
+  controls for sequence uniqueness in the reference output regions. 
 
 </pre>
 

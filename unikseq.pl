@@ -1,38 +1,73 @@
 #!/usr/bin/env perl
-# RLW
-# 11/2020 mod. 11/2021
+
+#AUTHOR
+#   Rene Warren
+#   rwarren at bcgsc.ca
+
+#NAME
+# unikseq
+
+#SYNOPSIS
+# Find unique regions in target, tolerated in ingroup but not/less in sequence outgroup
+
+#DOCUMENTATION
+#   README.md distributed with this software
+#   We hope this code is useful to you -- Please send comments & suggestions to rwarren * bcgsc.ca
+
+#LICENSE
+#unikseq Copyright (c) 2020-2022 British Columbia Cancer Agency Branch.  All rights reserved.
+#unikseq is released under the GNU General Public License v3
 
 use strict;
+use Getopt::Std;
 
-my $version = "v0.2.3 beta";
-my ($regsz, $prop, $minnotunique, $minpercentunique) = (100,25,1,90);
+use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u);
+getopts('k:r:i:o:p:l:u:s:');
 
-if($#ARGV<3){
+my $version = "[v0.2.4 beta]";
+my ($k, $regsz, $prop, $minnotunique, $minpercentunique) = (25,100,25,1,90);
+
+if(! $opt_r || ! $opt_i || ! $opt_o){
    print "Usage: $0 $version\n";
-   print " < k >\n";
-   print " < reference FASTA >\n";
-   print " < ingroup FASTA (1 or multi) >\n";
-   print " < outgroup FASTA (multi) >\n";
-   print " < min. region size (bp) to output (optional, default=$regsz bp) >\n";
-   print " < min. average proportion within ingroup (optional, default=$prop %) >\n";
-   print " < min. number of non-unique kmer positions allowed in a row (optional, default=$minnotunique) >\n";
-   die   " < min. percent unique bases in regions (optional, default=$minpercentunique %) >\n";
+   print " -r reference FASTA (required)\n";
+   print " -i ingroup FASTA (required)\n";
+   print " -o outgroup FASTA (required)\n";
+   print " -k length (optional, default: -k $k)\n";
+   print " -s min. reference region [size] (bp) to output (option, default: -s $regsz bp)\n";
+   print " -p min. average [proportion] ingroup entries in regions (option, default: -p $prop %)\n";
+   print " -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l $minnotunique)\n";
+   die   " -u min. [% unique] kmers in regions (option, default: -u $minpercentunique %)\n";
 
 }
 
-my $k = $ARGV[0];
+### Fetch options
 
-my $f1 = $ARGV[1]; #reference
-my $f2 = $ARGV[2]; #ingroup
-my $f3 = $ARGV[3]; #outgroup
+my $f1 = $opt_r; #reference
+my $f2 = $opt_i; #ingroup
+my $f3 = $opt_o; #outgroup
 
-$regsz = $ARGV[4] if($ARGV[4] ne "");
-$prop = $ARGV[5] if($ARGV[5] ne "");
+$k = $opt_k if($opt_k);
+$regsz = $opt_s if($opt_s);
+$prop = $opt_p if($opt_p);
+$minnotunique = $opt_l if($opt_l);
+$minpercentunique = $opt_u if($opt_u);
 
-$minnotunique = $ARGV[6] if($ARGV[6] ne "");
-$minpercentunique = $ARGV[7] if($ARGV[7] ne "");
+print "\nRunning: $0 $version\n\t-k $k\n\t-r $f1\n\t-i $f2\n\t-o $f3\n\t-s $regsz\n\t-p $prop\n\t-l $minnotunique\n\t-u $minpercentunique\n";
 
-print "\nRunning: $0 $k $f1 $f2 $f3 $regsz $prop $minnotunique $minpercentunique";
+
+###check files
+#-----
+if(! -e $f1){
+   die "Invalid file: $f1 -- fatal\n";
+}
+
+if(! -e $f2){
+   die "Invalid file: $f2 -- fatal\n";
+}
+
+if(! -e $f3){
+   die "Invalid file: $f3 -- fatal\n";
+}
 
 #-----
 print "\n\nRecording IDs in $f1 and $f2 to exclude from $f3 ...\n";
@@ -69,8 +104,8 @@ my $out=$fn . "-uniqueRegions.fa";
 
 &slide($f1,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique);
 
-print "done.\n\nOutput \"unique\" regions of >=$regsz bp are in $out\n";
-die "Output unique $k-mers are in $tsv\n";
+print "done.\n\nOutput unique reference sequence regions >= $regsz bp are in:\n$out\n";
+die "Output unique $k-mers (for butterfly plot):\n$tsv\n";
 
 exit 0;
 
