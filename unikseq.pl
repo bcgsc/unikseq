@@ -24,7 +24,7 @@ use Getopt::Std;
 use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u);
 getopts('k:r:i:o:p:l:u:s:');
 
-my $version = "[v0.2.4 beta]";
+my $version = "[v0.2.5 beta]";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique) = (25,100,25,1,90);
 
 if(! $opt_r || ! $opt_i || ! $opt_o){
@@ -54,8 +54,7 @@ $minpercentunique = $opt_u if($opt_u);
 
 print "\nRunning: $0 $version\n\t-k $k\n\t-r $f1\n\t-i $f2\n\t-o $f3\n\t-s $regsz\n\t-p $prop\n\t-l $minnotunique\n\t-u $minpercentunique\n";
 
-
-###check files
+###checking files
 #-----
 if(! -e $f1){
    die "Invalid file: $f1 -- fatal\n";
@@ -69,8 +68,16 @@ if(! -e $f3){
    die "Invalid file: $f3 -- fatal\n";
 }
 
+###Prepare output
 #-----
-print "\n\nRecording IDs in $f1 and $f2 to exclude from $f3 ...\n";
+my $fn = "unikseq-r_" . $f1 . "-i_" . $f2 . "-o_" . $f3 . "-k" . $k;
+my $tsv= $fn . "-uniqueKmers.tsv";
+
+$fn .= "-s" . $regsz . "-p" . $prop . "-l" . $minnotunique . "-u" . $minpercentunique;
+my $out=$fn . ".fa";
+
+#-----
+print "\nRecording IDs in $f1 and $f2 to exclude from $f3 ...\n";
 my $rec;
 open(IN,$f1) || die "Can't read $f1 -- fatal.\n";
 while(<IN>){
@@ -92,22 +99,19 @@ close IN;
 print "done.\nReading outgroup $f3, excluding records in $f1 and $f2 ...\n";
 my ($ex,$excount) = &readFasta($f3,$k,$rec);##exclude outgroup
 my $rec; ### re-initialize record
-print "done.\nReading ingroup $f2...\n";
+print "done.\nReading ingroup $f2 ...\n";
 my ($in,$incount) = &readFasta($f2,$k,$rec);##include ingroup
 
 print "done.\nBeginning kmer analysis (k$k), sliding base by base on $f1 ...\n";
 
-my $fn = "REF_" . $f1 . "_IN_" . $f2 . "_OUT_" . $f3;
-my $tsv=$fn . "-uniqueKmers.tsv";
-$fn .= "REGION" . $regsz . "bp-propspcIN" . $prop . "-propunivsOUT" . $minpercentunique;
-my $out=$fn . "-uniqueRegions.fa";
-
 &slide($f1,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique);
 
-print "done.\n\nOutput unique reference sequence regions >= $regsz bp are in:\n$out\n";
-die "Output unique $k-mers (for butterfly plot):\n$tsv\n";
+print "done.\n";
+print "-" x 30, "\n";
+print "\nOutput unique reference sequence regions >= $regsz bp in:\n$out\n";
+die "\nOutput unique $k-mers (for butterfly plot):\n$tsv\n\n";
 
-exit 0;
+exit;
 
 #--------------------------------
 sub slide{
@@ -167,15 +171,18 @@ sub printOutput{
 
       #print "$ctin .. $incount $ctinf %%\n";
 
-      printf TSV "$pos\t$kmer\toutgroup\t%.4f\n", $ctexf;
-
       if($ctexf==0){#### kmer is UNIQUE : absent in outgroup, present at sufficient amounts in ingroup!
+
          $unique++;
          $notunique = 0;### reset notuniquecount
          printf TSV "$pos\t$kmer\tingroup-unique\t%.4f\n", $ctinf;
          $initial = $pos if($initial==-1); ### only track init if was not tracking
          $sum += $ctin;### for average calculation
+
       }else{      #### kmer not unique!
+
+         printf TSV "$pos\t$kmer\toutgroup\t%.4f\n", $ctexf; 
+
          if($initial > -1){###do not update trackers unless the region started with unique seqs
             $notunique++;
             $sum += $ctin;### for average calculation

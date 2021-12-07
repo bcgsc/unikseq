@@ -14,7 +14,7 @@ Program to identify unique kmers in a reference, tolerated in an ingroup, not fo
 -----------
 
 <pre>
-Usage: ./unikseq.pl [v0.2.4 beta]
+Usage: ./unikseq.pl [v0.2.5 beta]
  -r reference FASTA (required)
  -i ingroup FASTA (required)
  -o outgroup FASTA (required)
@@ -52,7 +52,64 @@ Notes:
  -u min. [% unique] kmers in regions (option, default: -u 90 %)
   controls for sequence uniqueness in the reference output regions. 
 
+ Example command:
+ ./unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
+
 </pre>
+
+
+### Outputs (2)
+
+1) TSV file (.tsv) 
+
+   Tab-Separated Variable file. Reports all reference sequence kmers in 4 columns:
+   <pre>
+   position	kmer	condition	value
+   [coordinates][sequence][in/out group][proportion (rate) in each in/out group]
+   By default, every instance of a reference kmer is reported when found in the outgroup.
+   When it is not found, the ingroup-unique will be reported (if found).
+   If a reference kmer is found in outgroup sequences, the ingroup-unique WILL NOT report any
+   values.
+
+   e.g.
+   0	GCTAGTGTAGCTTAATGTAAAGTAT	ingroup-unique	-0.1270
+   ...
+   207	ACCTTGCTAAGCCACACCCCCAAGG	ingroup-unique	-0.9683
+   208	CCTTGCTAAGCCACACCCCCAAGGG	outgroup	0.0115
+   209	CTTGCTAAGCCACACCCCCAAGGGA	outgroup	0.0115
+   210	TTGCTAAGCCACACCCCCAAGGGAT	ingroup-unique	-0.2804
+   ...
+   </pre>
+
+2) FASTA file (.fa)
+
+   A multi-FASTA with all sequences passing the filters set at run time.
+   Input parameters will be captured in the filename.
+
+   e.g.
+   <pre>
+    unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-s100-p25-l1-u90.fa
+
+    -k length (option, default: -k 25)
+    -s min. reference region [size] (bp) to output (option, default: -s 100 bp)
+    -p min. average [proportion] ingroup entries in regions (option, default: -p 25 %)
+    -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
+    -u min. [% unique] kmers in regions (option, default: -u 90 %)
+   </pre>
+
+   In this example, unique sequences >=100 bp, found in >=25% of ingroup sequence entries on average, with >=90% of its 25-mers uniquely found (i.e. not in outgroup entries kmers), and with a leniency of at most 1 consecutive non-unique kmer (i.e. found in outgroup).
+
+   The header of each FASTA entry captures several key information.
+   e.g.
+   <pre>
+   >KF597303.1region0-208_size209_propspcIN40.7_propunivsOUT99.5
+   GCTAGTGTAGCTTAATGTAAAG....CACGCACGTAGCCCAAGACAC
+
+   1. The reference accession and start-end positions of the unique region (0-based coordinates, regionXX-XX)
+   2. The size of the region (sizeXX) in bp
+   3. The average proportion (%) of ingroup entries with reference kmers (over unique region length, propspcINXX.X %)
+   4. The percent kmer uniqueness over the region length (propunivsOUTXX.X %)
+   </pre>   
 
 
 ### Plotting "butterfly" plots
@@ -60,8 +117,8 @@ Notes:
 
 Refer to example.r and replace these lines:
 
-dfa<-read.table("REF_ALFR.fa_IN_ALFR.fa_OUT_iTrackDNA-Database-020821MJA.fa-uniqueKmers.tsv", sep="\t", header = TRUE)
-my_x_title <- expression(paste("Position of 25-mers on ", italic("A. fragilis"), " Mt genome"))
+dfa<-read.table("XX unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-uniqueKmers.tsv XX", sep="\t", header = TRUE)
+my_x_title <- expression(paste("Position of 25-mers on ", italic("XX A. fragilis XX"), " Mt genome"))
 
 
 

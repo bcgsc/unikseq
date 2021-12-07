@@ -1,7 +1,7 @@
 library(ggplot2)
 
-dfa<-read.table("REF_ALFR.fa_IN_ALFR.fa_OUT_iTrackDNA-Database-020821MJA.fa-uniqueKmers.tsv", sep="\t", header = TRUE)
-my_x_title <- expression(paste("Position of 25-mers on ", italic("A. fragilis"), " Mt genome"))
+dfa<-read.table("unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-uniqueKmers.tsv", sep="\t", header = TRUE)
+my_x_title <- expression(paste("Position of 25-mers on ", italic("C. maximus"), " Mt genome"))
 
 # Stacked
 ggplot(dfa, aes(fill=condition, y=value, x=position)) + 
@@ -11,13 +11,12 @@ ggplot(dfa, aes(fill=condition, y=value, x=position)) +
 ======
 PLOT ON A LOG10 SCALE
 
-
 library(ggplot2)
 library(ggallin)
 library(scales)
 
-dfa<-read.table("REF_ALFR.fa_IN_ALFR.fa_OUT_iTrackDNA-Database-020821MJA.fa-uniqueKmers.tsv", sep="\t", header = TRUE)
-my_x_title <- expression(paste("Position of 25-mers on ", italic("A. fragilis"), " Mt genome"))
+dfa<-read.table("unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-uniqueKmers.tsv", sep="\t", header = TRUE)
+my_x_title <- expression(paste("Position of 25-mers on ", italic("C. maximus"), " Mt genome"))
 
 # Stacked
 ggplot(dfa, aes(fill=condition, y=value*1000, x=position)) + 
