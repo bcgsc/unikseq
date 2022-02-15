@@ -1,7 +1,7 @@
 # unikseq
 identify unique regions in DNA sequences using a kmer approach
 
-## Rene L. Warren, 2020-2021
+## Rene L. Warren, 2020-2022
 ## email: rwarren [at] bcgsc [dot] ca
 
 
@@ -23,7 +23,7 @@ Usage: ./unikseq.pl [v0.2.7 beta]
  -p min. average [proportion] ingroup entries in regions (option, default: -p 25 %)
  -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
  -u min. [% unique] kmers in regions (option, default: -u 90 %)
- -m max. [% entries] in outgroup tolerated to have reference kmer (option, default: -m 0 % [original behaviour])
+ -m max. [% entries] in outgroup tolerated to have reference kmer at each position (option, default: -m 0 % [original behaviour])
 </pre>
 
 Notes:
@@ -53,7 +53,7 @@ Notes:
  -u min. [% unique] kmers in regions (option, default: -u 90 %)
   controls for sequence uniqueness in the reference output regions. 
 
- -m max. [% entries] in outgroup tolerated to have reference kmer (option, default: -m 0 % [original behaviour])
+ -m max. [% entries] in outgroup tolerated to have reference kmer at each position (option, default: -m 0 % [original behaviour])
   controls the kmer "uniqueness" in the outgroup, by tolerating a certain fraction of sequence entries in the outgroup having the reference kmer. This option could be useful when there's high similarity between the reference, ingroup AND outgroup sequences and more fine-grain adjustments are needed. Not specifying this option (-m 0) is the original unikseq behaviour.
 
  Example command:
@@ -99,7 +99,7 @@ Notes:
     -p min. average [proportion] ingroup entries in regions (option, default: -p 25 %)
     -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
     -u min. [% unique] kmers in regions (option, default: -u 90 %)
-    -m max. [% entries] in outgroup tolerated to have reference kmer (option, default: -m 0 % [original behaviour])
+    -m max. [% entries] in outgroup tolerated to have reference kmer at each position (option, default: -m 0 % [original behaviour])
    </pre>
 
    In this example, unique sequences -s >=100 bp, found in -p >=25% of ingroup sequence entries on average, with -u >=90% of its -k 25-mers uniquely found (i.e. not in outgroup entries kmers), and with a leniency of at most -l 1 consecutive non-unique kmer (i.e. found in outgroup). Further, reference kmers are not tolerated in the outgroup (i.e. -m 0% outgroup entries are tolerated to have the reference kmer at each position).
@@ -107,13 +107,14 @@ Notes:
    The header of each FASTA entry captures several key information.
    e.g.
    <pre>
-   >KF597303.1region0-208_size209_propspcIN40.7_propunivsOUT99.5
+   >KF597303.1region0-208_size209_propspcIN40.7_propunivsOUT99.5_avgOUTentries0.0
    GCTAGTGTAGCTTAATGTAAAG....CACGCACGTAGCCCAAGACAC
 
    1. The reference accession and start-end positions of the unique region (0-based coordinates, regionXX-XX)
    2. The size of the region (sizeXX) in bp
    3. The average proportion (%) of ingroup entries with reference kmers (over unique region length, propspcINXX.X %)
    4. The percent kmer uniqueness over the region length (propunivsOUTXX.X %)
+   5. Average number of outgroup entries over the region length (avgOUTentriesXX.X). The lower the number the more unique the sequence.  
    </pre>   
 
 

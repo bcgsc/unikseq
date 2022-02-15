@@ -37,7 +37,7 @@ if(! $opt_r || ! $opt_i || ! $opt_o){
    print " -p min. average [proportion] ingroup entries in regions (option, default: -p $prop %)\n";
    print " -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l $minnotunique)\n";
    print   " -u min. [% unique] kmers in regions (option, default: -u $minpercentunique %)\n";
-   die " -m max. [% entries] in outgroup tolerated to have reference kmer (option, default: -m $maxpercentoutgroup % [original behaviour])\n"; 
+   die " -m max. [% entries] in outgroup tolerated to have reference kmer at each position (option, default: -m $maxpercentoutgroup % [original behaviour])\n"; 
 }
 
 ### Fetch options
