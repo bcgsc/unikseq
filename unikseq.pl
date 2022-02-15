@@ -24,7 +24,7 @@ use Getopt::Std;
 use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u);
 getopts('k:r:i:o:p:l:u:s:');
 
-my $version = "[v0.2.5 beta]";
+my $version = "[v0.2.6 beta]";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique) = (25,100,25,1,90);
 
 if(! $opt_r || ! $opt_i || ! $opt_o){
@@ -187,6 +187,7 @@ sub printOutput{
             $notunique++;
             $sum += $ctin;### for average calculation
             if($notunique > $minnotunique){ ### absent kmer in a row exceed min allowed threshold
+               $sum -= $ctin;
                my $stretch = $pos-$initial; ### calculate seq stretch
                my $perunique = $unique / $stretch *100;
                my $avg = $sum / $stretch;#XXX
