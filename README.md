@@ -14,7 +14,7 @@ Program to identify unique kmers in a reference, tolerated in an ingroup, not fo
 -----------
 
 <pre>
-Usage: ./unikseq.pl [v0.2.6 beta]
+Usage: ./unikseq.pl [v0.2.7 beta]
  -r reference FASTA (required)
  -i ingroup FASTA (required)
  -o outgroup FASTA (required)
@@ -23,6 +23,7 @@ Usage: ./unikseq.pl [v0.2.6 beta]
  -p min. average [proportion] ingroup entries in regions (option, default: -p 25 %)
  -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
  -u min. [% unique] kmers in regions (option, default: -u 90 %)
+ -m max. [% entries] in outgroup tolerated to have reference kmer (option, default: -m 0 % [original behaviour])
 </pre>
 
 Notes:
@@ -51,6 +52,9 @@ Notes:
 
  -u min. [% unique] kmers in regions (option, default: -u 90 %)
   controls for sequence uniqueness in the reference output regions. 
+
+ -m max. [% entries] in outgroup tolerated to have reference kmer (option, default: -m 0 % [original behaviour])
+  controls the kmer "uniqueness" in the outgroup, by tolerating a certain fraction of sequence entries in the outgroup having the reference kmer. This option could be useful when there's high similarity between the reference, ingroup AND outgroup sequences and more fine-grain adjustments are needed. Not specifying this option (-m 0) is the original unikseq behaviour.
 
  Example command:
  ./unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
@@ -88,16 +92,17 @@ Notes:
 
    e.g.
    <pre>
-    unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-s100-p25-l1-u90.fa
+    unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-s100-p25-l1-u90-m0.fa
 
     -k length (option, default: -k 25)
     -s min. reference region [size] (bp) to output (option, default: -s 100 bp)
     -p min. average [proportion] ingroup entries in regions (option, default: -p 25 %)
     -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
     -u min. [% unique] kmers in regions (option, default: -u 90 %)
+    -m max. [% entries] in outgroup tolerated to have reference kmer (option, default: -m 0 % [original behaviour])
    </pre>
 
-   In this example, unique sequences >=100 bp, found in >=25% of ingroup sequence entries on average, with >=90% of its 25-mers uniquely found (i.e. not in outgroup entries kmers), and with a leniency of at most 1 consecutive non-unique kmer (i.e. found in outgroup).
+   In this example, unique sequences -s >=100 bp, found in -p >=25% of ingroup sequence entries on average, with -u >=90% of its -k 25-mers uniquely found (i.e. not in outgroup entries kmers), and with a leniency of at most -l 1 consecutive non-unique kmer (i.e. found in outgroup). Further, reference kmers are not tolerated in the outgroup (i.e. -m 0% outgroup entries are tolerated to have the reference kmer at each position).
 
    The header of each FASTA entry captures several key information.
    e.g.

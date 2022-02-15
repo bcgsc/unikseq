@@ -21,11 +21,11 @@
 use strict;
 use Getopt::Std;
 
-use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u);
-getopts('k:r:i:o:p:l:u:s:');
+use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m);
+getopts('k:r:i:o:p:l:u:s:m:');
 
-my $version = "[v0.2.6 beta]";
-my ($k, $regsz, $prop, $minnotunique, $minpercentunique) = (25,100,25,1,90);
+my $version = "[v0.2.7 beta]";
+my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup) = (25,100,25,1,90,0);
 
 if(! $opt_r || ! $opt_i || ! $opt_o){
    print "Usage: $0 $version\n";
@@ -36,8 +36,8 @@ if(! $opt_r || ! $opt_i || ! $opt_o){
    print " -s min. reference region [size] (bp) to output (option, default: -s $regsz bp)\n";
    print " -p min. average [proportion] ingroup entries in regions (option, default: -p $prop %)\n";
    print " -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l $minnotunique)\n";
-   die   " -u min. [% unique] kmers in regions (option, default: -u $minpercentunique %)\n";
-
+   print   " -u min. [% unique] kmers in regions (option, default: -u $minpercentunique %)\n";
+   die " -m max. [% entries] in outgroup tolerated to have reference kmer (option, default: -m $maxpercentoutgroup % [original behaviour])\n"; 
 }
 
 ### Fetch options
@@ -51,8 +51,9 @@ $regsz = $opt_s if($opt_s);
 $prop = $opt_p if($opt_p);
 $minnotunique = $opt_l if($opt_l);
 $minpercentunique = $opt_u if($opt_u);
+$maxpercentoutgroup = $opt_m if($opt_m);
 
-print "\nRunning: $0 $version\n\t-k $k\n\t-r $f1\n\t-i $f2\n\t-o $f3\n\t-s $regsz\n\t-p $prop\n\t-l $minnotunique\n\t-u $minpercentunique\n";
+print "\nRunning: $0 $version\n\t-k $k\n\t-r $f1\n\t-i $f2\n\t-o $f3\n\t-s $regsz\n\t-p $prop\n\t-l $minnotunique\n\t-u $minpercentunique\n\t-m $maxpercentoutgroup\n";
 
 ###checking files
 #-----
@@ -73,7 +74,7 @@ if(! -e $f3){
 my $fn = "unikseq-r_" . $f1 . "-i_" . $f2 . "-o_" . $f3 . "-k" . $k;
 my $tsv= $fn . "-uniqueKmers.tsv";
 
-$fn .= "-s" . $regsz . "-p" . $prop . "-l" . $minnotunique . "-u" . $minpercentunique;
+$fn .= "-s" . $regsz . "-p" . $prop . "-l" . $minnotunique . "-u" . $minpercentunique . "-m" . $maxpercentoutgroup;
 my $out=$fn . ".fa";
 
 #-----
@@ -104,7 +105,7 @@ my ($in,$incount) = &readFasta($f2,$k,$rec);##include ingroup
 
 print "done.\nBeginning kmer analysis (k$k), sliding base by base on $f1 ...\n";
 
-&slide($f1,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique);
+&slide($f1,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup);
 
 print "done.\n";
 print "-" x 30, "\n";
@@ -116,7 +117,7 @@ exit;
 #--------------------------------
 sub slide{
 
-   my ($f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique) = @_;
+   my ($f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup) = @_;
 
    my ($head,$prevhead,$seq) = ("","","");
 
@@ -133,7 +134,7 @@ sub slide{
       if(/^\>(\S+)/){
          $head = $1;
          if($prevhead ne $head && $prevhead ne "" && $seq ne ""){
-            &printOutput($seq,$prevhead,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique);
+            &printOutput($seq,$prevhead,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup);
          }
          $seq = "";
          $prevhead = $head;
@@ -142,7 +143,7 @@ sub slide{
          $seq .= uc($seqstretch);
       }
    }
-   &printOutput($seq,$prevhead,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique);
+   &printOutput($seq,$prevhead,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup);
 
    close OUT;
    close TSV;
@@ -151,9 +152,9 @@ sub slide{
 #--------------------------------
 sub printOutput{
 
-   my ($seq,$head,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique) = @_;
+   my ($seq,$head,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup) = @_;
 
-   my ($initial,$unique,$notunique,$sum) = (-1,0,0,0);
+   my ($initial,$unique,$notunique,$sum,$sumout) = (-1,0,0,0,0);
 
    for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
       my $kmer = substr($seq,$pos,$k);
@@ -171,26 +172,29 @@ sub printOutput{
 
       #print "$ctin .. $incount $ctinf %%\n";
 
-      if($ctexf==0){#### kmer is UNIQUE : absent in outgroup, present at sufficient amounts in ingroup!
+      if($ctexf==0 || ($ctexf*100) < $maxpercentoutgroup){#### kmer is UNIQUE : absent in outgroup, present at sufficient amounts in ingroup!
 
          $unique++;
          $notunique = 0;### reset notuniquecount
          printf TSV "$pos\t$kmer\tingroup-unique\t%.4f\n", $ctinf;
          $initial = $pos if($initial==-1); ### only track init if was not tracking
          $sum += $ctin;### for average calculation
+         $sumout += $ctex;
 
       }else{      #### kmer not unique!
 
          printf TSV "$pos\t$kmer\toutgroup\t%.4f\n", $ctexf; 
 
-         if($initial > -1){###do not update trackers unless the region started with unique seqs
+         if($initial > -1){###do not update trackers unless the region started with unique seqs. 
             $notunique++;
             $sum += $ctin;### for average calculation
+
             if($notunique > $minnotunique){ ### absent kmer in a row exceed min allowed threshold
                $sum -= $ctin;
                my $stretch = $pos-$initial; ### calculate seq stretch
                my $perunique = $unique / $stretch *100;
                my $avg = $sum / $stretch;#XXX
+               my $avgout = $sumout / $stretch;
                my $avgpropspc = $avg / $incount *100;
 
                #print "$pos..$initial UNIQUE $unique.. STRETCH $stretch.. SEQID $seqid .. AVG $avgpropspc > $prop\n";
@@ -198,13 +202,14 @@ sub printOutput{
                   my $uniqueseq=substr($seq,$initial,$stretch);
                   my $poslast = $pos - 1;
                   my $newhead = $head . "region" . $initial . "-" . $poslast . "_size" . $stretch . "_propspcIN";
-                  printf OUT ">$newhead%.1f" . "_propunivsOUT%.1f" . "\n$uniqueseq\n", ($avgpropspc,$perunique);
+                  printf OUT ">$newhead%.1f" . "_propunivsOUT%.1f_avgOUTentries%.1f" . "\n$uniqueseq\n", ($avgpropspc,$perunique,$avgout);
                }
                ###reset counters
                $notunique = 0;
                $unique = 0;
                $initial = -1;
                $sum = 0;
+               $sumout = 0;
             }
          }
       }
