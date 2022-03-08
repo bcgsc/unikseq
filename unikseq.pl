@@ -53,9 +53,25 @@ $minnotunique = $opt_l if($opt_l);
 $minpercentunique = $opt_u if($opt_u);
 $maxpercentoutgroup = $opt_m if($opt_m);
 
-print "\nRunning: $0 $version\n\t-k $k\n\t-r $f1\n\t-i $f2\n\t-o $f3\n\t-s $regsz\n\t-p $prop\n\t-l $minnotunique\n\t-u $minpercentunique\n\t-m $maxpercentoutgroup\n";
 
-###checking files
+###Prepare output
+#-----
+my $fn = "unikseq_" . $version . "-r_" . $f1 . "-i_" . $f2 . "-o_" . $f3 . "-k" . $k;
+my $tsv= $fn . "-uniqueKmers.tsv";
+
+$fn .= "-s" . $regsz . "-p" . $prop . "-l" . $minnotunique . "-u" . $minpercentunique . "-m" . $maxpercentoutgroup;
+my $out=$fn . ".fa";
+my $log=$fn . ".log";
+
+open(LOG,">$log") || die "Can't write to $log -- fatal.\n";
+
+my $message = "\nRunning: $0 $version\n\t-k $k\n\t-r $f1\n\t-i $f2\n\t-o $f3\n\t-s $regsz\n\t-p $prop\n\t-l $minnotunique\n\t-u $minpercentunique\n\t-m $maxpercentoutgroup\n";
+
+print $message;
+print LOG $message;
+
+
+###Checking files
 #-----
 if(! -e $f1){
    die "Invalid file: $f1 -- fatal\n";
@@ -69,16 +85,12 @@ if(! -e $f3){
    die "Invalid file: $f3 -- fatal\n";
 }
 
-###Prepare output
 #-----
-my $fn = "unikseq_" . $version . "-r_" . $f1 . "-i_" . $f2 . "-o_" . $f3 . "-k" . $k;
-my $tsv= $fn . "-uniqueKmers.tsv";
+$message = "\nRecording IDs in $f1 and $f2 to exclude from $f3 ...\n";
 
-$fn .= "-s" . $regsz . "-p" . $prop . "-l" . $minnotunique . "-u" . $minpercentunique . "-m" . $maxpercentoutgroup;
-my $out=$fn . ".fa";
+print $message;
+print LOG $message;
 
-#-----
-print "\nRecording IDs in $f1 and $f2 to exclude from $f3 ...\n";
 my $rec;
 open(IN,$f1) || die "Can't read $f1 -- fatal.\n";
 while(<IN>){
@@ -97,20 +109,34 @@ while(<IN>){
 close IN;
 #-----
 
-print "done.\nReading outgroup $f3, excluding records in $f1 and $f2 ...\n";
+$message = "done.\nReading outgroup $f3, excluding records in $f1 and $f2 ...\n";
+print $message;
+print LOG $message;
+
 my ($ex,$excount) = &readFasta($f3,$k,$rec);##exclude outgroup
 my $rec; ### re-initialize record
-print "done.\nReading ingroup $f2 ...\n";
+
+$message = "done.\nReading ingroup $f2 ...\n";
+print $message;
+print LOG $message;
+
 my ($in,$incount) = &readFasta($f2,$k,$rec);##include ingroup
 
-print "done.\nBeginning kmer analysis (k$k), sliding base by base on $f1 ...\n";
+$message = "done.\nBeginning kmer analysis (k$k), sliding base by base on $f1 ...\n";
+print $message;
+print LOG $message;
 
 &slide($f1,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup);
 
-print "done.\n";
-print "-" x 30, "\n";
-print "\nOutput unique reference sequence regions >= $regsz bp in:\n$out\n";
-die "\nOutput unique $k-mers (for butterfly plot):\n$tsv\n\n";
+$message = "done.\n";
+$message .= "-" x 30, "\n";
+$message .= "\nOutput unique reference sequence regions >= $regsz bp in:\n$out\n";
+$message .= "\nOutput unique $k-mers (for butterfly plot):\n$tsv\n\n";
+
+print $message;
+print LOG $message;
+
+close LOG;
 
 exit;
 
