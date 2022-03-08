@@ -14,7 +14,7 @@ Program to identify unique kmers in a reference, tolerated in an ingroup, not fo
 -----------
 
 <pre>
-Usage: ./unikseq.pl [v0.2.7 beta]
+Usage: ./unikseq.pl v0-2-8beta 
  -r reference FASTA (required)
  -i ingroup FASTA (required)
  -o outgroup FASTA (required)
@@ -92,7 +92,7 @@ Notes:
 
    e.g.
    <pre>
-    unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-s100-p25-l1-u90-m0.fa
+    unikseq_v0-2-8beta-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-s100-p25-l1-u90-m0.fa
 
     -k length (option, default: -k 25)
     -s min. reference region [size] (bp) to output (option, default: -s 100 bp)

@@ -24,7 +24,7 @@ use Getopt::Std;
 use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m);
 getopts('k:r:i:o:p:l:u:s:m:');
 
-my $version = "[v0.2.7 beta]";
+my $version = "v0-2-8beta";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup) = (25,100,25,1,90,0);
 
 if(! $opt_r || ! $opt_i || ! $opt_o){
@@ -71,7 +71,7 @@ if(! -e $f3){
 
 ###Prepare output
 #-----
-my $fn = "unikseq-r_" . $f1 . "-i_" . $f2 . "-o_" . $f3 . "-k" . $k;
+my $fn = "unikseq_" . $version . "-r_" . $f1 . "-i_" . $f2 . "-o_" . $f3 . "-k" . $k;
 my $tsv= $fn . "-uniqueKmers.tsv";
 
 $fn .= "-s" . $regsz . "-p" . $prop . "-l" . $minnotunique . "-u" . $minpercentunique . "-m" . $maxpercentoutgroup;
