@@ -29,15 +29,18 @@ my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup) = (
 
 if(! $opt_r || ! $opt_i || ! $opt_o){
    print "Usage: $0 $version\n";
+   print "-" x 5, "input files-----\n";
    print " -r reference FASTA (required)\n";
    print " -i ingroup FASTA (required)\n";
    print " -o outgroup FASTA (required)\n";
+   print "-" x 5, "kmer uniqueness filters-----\n";
    print " -k length (option, default: -k $k)\n";
+   print " -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l $minnotunique)\n";
+   print " -m max. [% entries] in outgroup tolerated to have reference kmer at each position (option, default: -m $maxpercentoutgroup % [original behaviour])\n";
+   print "-" x 5, "output filters-----\n";
    print " -s min. reference region [size] (bp) to output (option, default: -s $regsz bp)\n";
    print " -p min. average [proportion] ingroup entries in regions (option, default: -p $prop %)\n";
-   print " -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l $minnotunique)\n";
-   print   " -u min. [% unique] kmers in regions (option, default: -u $minpercentunique %)\n";
-   die " -m max. [% entries] in outgroup tolerated to have reference kmer at each position (option, default: -m $maxpercentoutgroup % [original behaviour])\n"; 
+   die   " -u min. [% unique] kmers in regions (option, default: -u $minpercentunique %)\n";
 }
 
 ### Fetch options
