@@ -142,12 +142,12 @@ Unikseq also outputs a tab-separated value (tsv) file that tracks, at each coord
 
 Below is a reference guide for controlling the [stringency &] output of unikseq.
 <pre>
-(+) stringent (identifying less & potentially smaller regions, with increased uniqueness)
+(+) more stringent (identifying less & potentially smaller regions, with increased uniqueness)
 
    (-) decrease: -l and -m (controls region uniqueness) parameters
    (+) increase: -p, -u and -s (output filter controls) parameters. You may also increase k
 
-(-) stringent (identifying more & potentially larger regions, with decreased uniqueness)
+(-) less stringent (identifying more & potentially larger regions, with decreased uniqueness)
 
    (+) increase: -l and -m (controls region uniqueness) parameters
    (-) decrease: -p, -u and -s (output filter controls) parameters. You may also decrease k
