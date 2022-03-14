@@ -158,7 +158,7 @@ Below is a reference guide for controlling the [stringency &] output of unikseq.
 
 ![UnikseqButterflyPlot](https://github.com/bcgsc/unikseq/blob/main/unikseq-butterfly.png)
 
-Refer to example.r included with the unikseq distribution, and replace these lines:
+Refer to `example.r` included with the unikseq distribution, and replace these lines:
 
 <pre>
 dfa<-read.table("XX unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-uniqueKmers.tsv XX", sep="\t", header = TRUE)
