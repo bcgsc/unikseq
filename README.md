@@ -135,7 +135,7 @@ To facilitate the detection of unique regions that may be interspersed with non-
 
 When the unique sequence can no longer be extended, it will be written to a FASTA file only when 1) it has reached a length of at least (-s option) bp in size, 2) its constituent kmers have been identified, on average proportion, in at least (-p option) % of ingroup sequences and, overall, 3) those kmers are at least (-u option) % unique, as specified by -l and -m. 
 
-Unikseq also outputs a tab-separated value (tsv) file that tracks, at each coordinate relative to the reference sequence, the proportion of corresponding kmers in the outgroup and ingroup sets, and was used to generate the butterfly plots presented herein. Instructions and code for generating the butterfly plots in the R programming language are both available from the repository at the URL below. The intended use-case of unikseq is for identification of unique sequences in mitochrondrial [genome] or shorter sequences, and thus has not been tested on larger genomes. Unikseq is developed in PERL and runs on any system where PERL is installed, requiring no additional library. It is distributed under GPLv3 license and available freely from github (https://github.com/bcgsc/unikseq).
+Unikseq also outputs a tab-separated value (tsv) file that tracks, at each coordinate relative to the reference sequence, the proportion of corresponding kmers in the outgroup and ingroup sets, and was used to generate the butterfly plots (below). Instructions and code for generating the butterfly plots in the R programming language are both available from the repository at the URL below. The intended use-case of unikseq is for identification of unique sequences in mitochrondrial [genome] or shorter sequences, and thus has not been tested on larger genomes. Unikseq is developed in PERL and runs on any system where PERL is installed, requiring no additional library. It is distributed under GPLv3 license and available freely from github (https://github.com/bcgsc/unikseq).
 
  
 ### Quick reference
@@ -156,11 +156,14 @@ Below is a reference guide for controlling the [stringency &] output of unikseq.
 ### Plotting "butterfly" plots
 -----------
 
-Refer to example.r and replace these lines:
+![UnikseqButterflyPlot](https://github.com/bcgsc/unikseq/blob/master/unikseq-butterfly.png)
 
+Refer to example.r included with the unikseq distribution, and replace these lines:
+
+<pre>
 dfa<-read.table("XX unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-uniqueKmers.tsv XX", sep="\t", header = TRUE)
 my_x_title <- expression(paste("Position of 25-mers on ", italic("XX A. fragilis XX"), " Mt genome"))
-
+</pre>
 
 ### License
 -------
