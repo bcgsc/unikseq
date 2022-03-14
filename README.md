@@ -114,9 +114,9 @@ Notes:
    GCTAGTGTAGCTTAATGTAAAG....CACGCACGTAGCCCAAGACAC
 
    1. The reference accession and start-end positions of the unique region (0-based coordinates, regionXX-XX)
-   2. The size of the region (sizeXX) in bp. It will be larger or equal than -s
-   3. The average proportion (%) of ingroup entries with reference kmers (over unique region length, propspcINXX.X %). It will be more or equal than -p.
-   4. The percent kmer uniqueness over the region length (propunivsOUTXX.X %). It will be more or equal than -u.
+   2. The size of the region (sizeXX) in bp. It will be equal or larger than -s.
+   3. The average proportion (%) of ingroup entries with reference kmers (over unique region length, propspcINXX.X %). It will be equal or higher than -p.
+   4. The percent kmer uniqueness over the region length (propunivsOUTXX.X %). It will be equal or higher than -u.
    5. Average number of outgroup entries over the region length (avgOUTentriesXX.X). The lower the number the more unique the sequence.
    </pre>   
 
