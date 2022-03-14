@@ -156,7 +156,7 @@ Below is a reference guide for controlling the [stringency &] output of unikseq.
 ### Plotting "butterfly" plots
 -----------
 
-![UnikseqButterflyPlot](https://github.com/bcgsc/unikseq/blob/master/unikseq-butterfly.png)
+![UnikseqButterflyPlot](https://github.com/bcgsc/unikseq/blob/main/unikseq-butterfly.png)
 
 Refer to example.r included with the unikseq distribution, and replace these lines:
 
