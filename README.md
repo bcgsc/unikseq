@@ -79,6 +79,7 @@ Notes:
    values.
 
    e.g.
+   position        kmer                 condition       value
    0	GCTAGTGTAGCTTAATGTAAAGTAT	ingroup-unique	-0.1270
    ...
    207	ACCTTGCTAAGCCACACCCCCAAGG	ingroup-unique	-0.9683
