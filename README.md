@@ -22,14 +22,53 @@ Unikseq has broad applications in genomics and biology, and was used to develop 
 
 Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require the additional analysis one would need to carry out atfer an MSA to identify unique conserved regions.
 
+
+### Implementation and requirements
+-------------------------------
+
 Unikseq is developed in PERL and runs on any system where PERL is installed.
+
+
+### Install
+-------
+
+Clone and enter the unikseq directory.
+<pre>
+git clone https://github.com/bcgsc/unikseq
+cd unikseq
+</pre>
+If PERL is installed on your system, you're good to go (no additional libraries needed, nor dependencies).
+
+
+### Documentation
+-------------
+
+Refer to the README.md file on how to install and run unikseq
+Manuscript in preparation
+
+Questions or comments?  We would love to hear from you!
+rwarren@bcgsc.ca
+
+
+### Citing unikseq
+------------
+
+Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/stargazers) and for using, developing and promoting this free software!
+
+If you use unikseq in your research, please cite: TBD
+
+
+### Credits
+-------
+
+unikseq (concept, algorithm design and prototype): Rene Warren
 
 
 ### Running unikseq
 -----------
 
 <pre>
-Usage: ./unikseq.pl v1.0.0
+Usage: ./unikseq.pl v1.1.0
 -----input files-----
  -r reference FASTA (required)
  -i ingroup FASTA (required)
@@ -37,10 +76,11 @@ Usage: ./unikseq.pl v1.0.0
 -----kmer uniqueness filters-----
  -k length (option, default: -k 25)
  -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
- -m max. [% entries] in outgroup tolerated to have reference kmer at each position (option, default: -m 0 % [original behaviour])
+ -m max. [% entries] in outgroup tolerated to have a reference kmer (option, default: -m 0 % [original behaviour])
 -----output filters-----
- -s min. reference region [size] (bp) to output (option, default: -s 100 bp)
- -p min. average [proportion] ingroup entries in regions (option, default: -p 25 %)
+ -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
+ -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
+ -p min. [-c 0:region average /-c 1: per position] rate of ingroup entries (option, default: -p 25 %)
  -u min. [% unique] kmers in regions (option, default: -u 90 %)
 </pre>
 
@@ -62,14 +102,17 @@ Notes:
  -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
   this leniency factor controls the tolerance for non-unique kmers in the outgroup when computing a sequence stretch. If set to 0, the sequence stretch is limited to unique kmers only and the % unique bases of the stretch will be 100% (see next parameter). Set to 1, allows some leniency and tolerates a single non-unique kmer in a row. Set to 2, tolerates up to 2 in a row, etc. When set >0, the %unique bases of a sequence stretch will almost never be 100% unique and so -u MUST be lowered below 100%.
 
- -m max. [% entries] in outgroup tolerated to have reference kmer at each position (option, default: -m 0 % [original behaviour])
+ -m max. [% entries] in outgroup tolerated to have reference kmer (option, default: -m 0 % [original behaviour])
   controls the kmer "uniqueness" in the outgroup, by tolerating a certain fraction of sequence entries in the outgroup having the reference kmer. This option could be useful when there's high similarity between the reference, ingroup AND outgroup sequences and more fine-grain adjustments are needed. Not specifying this option (-m 0) is the original unikseq behaviour.
 
- -s min. reference region [size] (bp) to output (option, default: -s 100 bp)
-  minimum "unique" reference (target) region size to report.
+ -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
+  boolean (1/0, yes/no), controls the output behaviour of unikseq. When set (-c 1), conserved regions between ingroup sequence entries and the reference are identified by repurposing the -p parameter (below), evaluating the % of entries having a reference kmer at each position. When the % falls below the set -p threshold, regions will be part of a new unikseq FASTA output (.conserved.fa) and will be marked in upper-case (A,C,G,T) in the unique regions identified by unikseq. This option is useful for quick identification of unique sequences that are also conserved (to a tunable degree, and controlled by -p). The default (-c 0) is the original unikseq behaviour.  
 
- -p min. average [proportion] ingroup entries in regions (option, default: -p 25 %)
-  program tracks the number of qualifying sequences in the ingroup over the sequence stretch, averages and calculates a proportion of the total entries in the ingroup. Sequences are reported only when that proportion is above the minimum set here. 
+ -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
+  minimum "unique" (and -c 1:"conserved") reference (target) region size to report.
+
+ -p min. [-c 0:region average /-c 1: per position] rate of ingroup entries (option, default: -p 25 %)
+  unikseq tracks the number of qualifying sequences in the ingroup over the sequence stretch, averages and calculates a proportion of the total entries in the ingroup. In the -c 0 mode (original unikseq behaviour), sequences are reported only when that proportion is above the minimum set. When -c 1 is set, -p does not impose a minimum average rate of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. 
 
  -u min. [% unique] kmers in regions (option, default: -u 90 %)
   controls for sequence uniqueness in the reference output regions. 
@@ -80,9 +123,9 @@ Notes:
 </pre>
 
 
-### Outputs (3)
+### Outputs (-c0 : 3 files / -c1 : 5 files)
 
-1) TSV file (.tsv) 
+1) TSV file (-uniqueKmers.tsv) 
 
    Tab-Separated Variable file. Reports all reference sequence kmers in 4 columns:
    <pre>
@@ -104,16 +147,17 @@ Notes:
    ...
    </pre>
 
-2) FASTA file (.fa)
+2) FASTA file (-unique.fa)
 
-   A multi-FASTA with all sequences passing the filters set at run time.
+   A multi-FASTA with all unique sequences passing the filters set at run time.
    Input parameters will be captured in the filename.
 
    e.g.
    <pre>
-    unikseq_v1.0.0-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-s100-p25-l1-u90-m0.fa
+    unikseq_v1.1.0beta-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.fa
 
     -k length (option, default: -k 25)
+    -c conserved mode (option, default: -c 0)
     -s min. reference region [size] (bp) to output (option, default: -s 100 bp)
     -p min. average [proportion] ingroup entries in regions (option, default: -p 25 %)
     -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
@@ -136,9 +180,56 @@ Notes:
    5. Average number of outgroup entries over the region length (avgOUTentriesXX.X). The lower the number the more unique the sequence.
    </pre>   
 
-3. LOG file (.log)
+   NOTE: When -c 1 is set, -p does not impose a minimum average rate of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. This handy feature enables quick identification of conserved regions within unique sequences.
+
+
+3) LOG file (.log)
 
    Captures the verbose STDOUT in a log file, showing the progress of the program.    
+
+
+===================================================================
+NOTE: When -c is set (-c 1), there are two additional output files:
+===================================================================
+
+
+4) TSV file (-conservedKmers.tsv)
+
+   Tab-Separated Variable file. Reports all reference sequence kmers in 4 columns:
+   <pre>
+   position     kmer    condition       value
+   [coordinates][sequence][ingroup][proportion (rate) entries in ingroup]
+
+   e.g.
+   position        kmer                 condition       value
+   ...
+   14      ATTTTAAAGCATGGCACTGAAGATG       ingroup -1.0000
+   15      TTTTAAAGCATGGCACTGAAGATGC       ingroup -1.0000
+   16      TTTAAAGCATGGCACTGAAGATGCT       ingroup -1.0000
+   17      TTAAAGCATGGCACTGAAGATGCTA       ingroup -1.0000
+   18      TAAAGCATGGCACTGAAGATGCTAA       ingroup -1.0000
+   19      AAAGCATGGCACTGAAGATGCTAAG       ingroup -0.9504
+   20      AAGCATGGCACTGAAGATGCTAAGA       ingroup -0.9504
+   21      AGCATGGCACTGAAGATGCTAAGAT       ingroup -0.9504
+   ...
+   </pre>
+
+
+5) FASTA file (-conserved.fa)
+
+   A multi-FASTA with all conserved sequences passing the filters set at run time.
+   Input parameters are captured in the filename (see above description in (2)).
+
+   The header of each FASTA entry captures several key information.
+   e.g.
+   <pre>
+   >ch-CACA1-CM030070.1region0-1527_size1528_propspcIN99.8
+   ...
+
+   1. The reference accession and start-end positions of the conserved region (0-based coordinates, regionXX-XX)
+   2. The size of the region (sizeXX) in bp. It will be equal or larger than -s.
+   3. The average proportion (%) of ingroup entries with reference kmers (over unique region length, propspcINXX.X %). It will be equal or higher than -p.
+   </pre>
 
 
 ### Unikseq algorithm design and implementation
