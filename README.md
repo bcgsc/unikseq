@@ -1,5 +1,5 @@
 # unikseq
-identify unique regions in DNA sequences using a kmer approach
+Unique (& conserved) region identification in DNA sequences, using a kmer approach
 
 ## Rene L. Warren, 2020-2022
 ## email: rwarren [at] bcgsc [dot] ca
@@ -8,7 +8,16 @@ identify unique regions in DNA sequences using a kmer approach
 ### Description
 -----------
 
-Program to identify unique kmers in a reference, tolerated in an ingroup, not found in outgroup. Useful for designing PCR primer-probe sets with higher specificity 
+Unikseq systematically processes the kmers of a reference sequence, tolerated in an ingroup, but not (or marginally tolerated) in an outgroup to ultimately help identify regions that are unique within that reference. 
+
+The unique sequences identified by unikseq are useful for designing qPCR primer-probe sets with high specificity, for instance, with no manual intervention nor sequence inspection.
+
+Unikseq has broad applications in genomics and biology, and was used to develop successful environmental DNA (eDNA) mitogenome assays that are highly specific to their intended target, fast.
+
+Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require the additional analysis one would need to carry out atfer an MSA to identify unique conserved regions.
+
+Unikseq is developed in PERL and runs on any system where PERL is installed.
+
 
 ### Running unikseq
 -----------
