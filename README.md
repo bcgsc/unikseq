@@ -1,3 +1,10 @@
+[![Release](https://img.shields.io/github/release/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/releases)
+[![Issues](https://img.shields.io/github/issues/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/issues)
+Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/stargazers)
+
+![Logo](https://github.com/bcgsc/ntEdit/blob/master/unikseq-logo.png)
+
+
 # unikseq
 Unique (& conserved) region identification in DNA sequences, using a kmer approach
 
