@@ -14,13 +14,13 @@ Unique (& conserved) region identification in DNA sequences, using a kmer approa
 ### Description
 -----------
 
-Unikseq systematically processes the kmers of a reference sequence, tolerated in an ingroup, but not (or marginally tolerated) in an outgroup to ultimately help identify regions that are unique within that reference. 
+Unikseq systematically processes the kmers of a reference sequence, tolerated in an ingroup, but not (or marginally) tolerated in an outgroup sequence set to ultimately help identify regions that are unique within that reference. 
 
-The unique sequences identified by unikseq are useful for designing qPCR primer-probe sets with high specificity, for instance, with no manual intervention nor sequence inspection.
+The unique sequences identified by unikseq are useful for designing qPCR primer-probe sets with high specificity, for instance, with no manual intervention nor time-consuming sequence inspection.
 
-Unikseq has broad applications in genomics and biology, and was used to develop successful environmental DNA (eDNA) mitogenome assays that are highly specific to their intended target, fast.
+Unikseq has broad applications in genomics and biology, including species monitoring and conservation; It was used to develop successful environmental DNA (eDNA) mitogenome assays that are highly specific to their intended target, fast and efficiently.
 
-Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require the additional analysis one would need to carry out atfer an MSA to identify unique conserved regions.
+Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require additional downstream analyses one would need to carry out atfer MSA to identify unique, conserved regions.
 
 
 ### Implementation and requirements
@@ -259,7 +259,7 @@ Below is a reference guide for controlling the [stringency &] output of unikseq.
    (-) decrease: -p, -u and -s (output filter controls) parameters. You may also decrease k
 </pre>
 
-### Plotting "butterfly" plots
+### Generating "butterfly" plots
 -----------
 
 ![UnikseqButterflyPlot](https://github.com/bcgsc/unikseq/blob/main/unikseq-butterfly.png)
