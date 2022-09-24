@@ -180,18 +180,17 @@ Notes:
    5. Average number of outgroup entries over the region length (avgOUTentriesXX.X). The lower the number the more unique the sequence.
    </pre>   
 
-   NOTE: When -c 1 is set, -p does not impose a minimum average rate of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. This handy feature enables quick identification of conserved regions within unique sequences.
-
+   ```diff
+   ! NOTE: When -c 1 is set, -p does not impose a minimum average rate of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. This handy feature enables quick identification of conserved regions within unique sequences.
+   ```
 
 3) LOG file (.log)
 
    Captures the verbose STDOUT in a log file, showing the progress of the program.    
 
-
-===================================================================
-NOTE: When -c is set (-c 1), there are two additional output files:
-===================================================================
-
+   ```diff
+   ! NOTE: When -c is set (-c 1), there are two additional output files:
+   ```
 
 4) TSV file (-conservedKmers.tsv)
 
