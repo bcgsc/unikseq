@@ -25,7 +25,7 @@ use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m $opt_
 getopts('k:r:i:o:p:l:u:s:m:c:');
 
 my $version = "v1.1.0";
-my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag) = (25,100,25,1,90,0,0);
+my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag) = (25,100,25,0,90,0,0);
 
 if(! $opt_r || ! $opt_i){
    print "Usage: $0 $version\n";
@@ -173,7 +173,7 @@ sub slideConserved{
    open(OUT,">$out") || die "Can't write $out -- fatal.\n";
    open(TSV,">$tsv") || die "Can't write $tsv -- fatal.\n";
 
-   print TSV "position\tkmer\tcondition\tvalue\n";
+   print TSV "position\tkmer\tcondition\tnum_entries\trate\n";
 
    open(IN,$f) || die "Can't read $f -- fatal.\n";
    while(<IN>){
@@ -252,9 +252,9 @@ sub printConserved{
 
       my ($ctexf,$ctinf) = (0,0);
       $ctinf = $ctin/$incount if($incount);##as a fraction
-      $ctinf = -1 * $ctinf;
+      #$ctinf = -1 * $ctinf;
 
-      printf TSV "$pos\t$kmer\tingroup\t%.4f\n", $ctinf;
+      printf TSV "$pos\t$kmer\tingroup\t$ctin\t%.4f\n", $ctinf;
 
       if((abs($ctinf)*100) >= $prop){#### kmer is conserved at set proportion in ingroup
 

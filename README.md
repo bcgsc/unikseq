@@ -134,7 +134,7 @@ Notes:
    By default, every instance of a reference kmer is reported when found in the outgroup.
    When it is not found, the ingroup-unique will be reported (if found).
    If a reference kmer is found in outgroup sequences, the ingroup-unique WILL NOT report any
-   values.
+   values. This is the file to use to generate "butterfly" plots (see below and r script attached with this distribution [example.r] for details)
 
    e.g.
    position        kmer                 condition       value
@@ -194,22 +194,20 @@ Notes:
 
 4) TSV file (-conservedKmers.tsv)
 
-   Tab-Separated Variable file. Reports all reference sequence kmers in 4 columns:
+   Tab-Separated Variable file. Reports all reference sequence kmers in 5 columns:
    <pre>
-   position     kmer    condition       value
-   [coordinates][sequence][ingroup][proportion (rate) entries in ingroup]
+   position     kmer    condition       num_entries	rate
+   [coordinates][sequence][ingroup][number of entries in ingroup with conserved reference kmer][proportion (rate) relative to ingroup entries]
 
    e.g.
-   position        kmer                 condition       value
+   position        kmer    condition       num_entries     rate
    ...
-   14      ATTTTAAAGCATGGCACTGAAGATG       ingroup -1.0000
-   15      TTTTAAAGCATGGCACTGAAGATGC       ingroup -1.0000
-   16      TTTAAAGCATGGCACTGAAGATGCT       ingroup -1.0000
-   17      TTAAAGCATGGCACTGAAGATGCTA       ingroup -1.0000
-   18      TAAAGCATGGCACTGAAGATGCTAA       ingroup -1.0000
-   19      AAAGCATGGCACTGAAGATGCTAAG       ingroup -0.9504
-   20      AAGCATGGCACTGAAGATGCTAAGA       ingroup -0.9504
-   21      AGCATGGCACTGAAGATGCTAAGAT       ingroup -0.9504
+   16      TTTAAAGCATGGCACTGAAGATGCT       ingroup 121     1.0000
+   17      TTAAAGCATGGCACTGAAGATGCTA       ingroup 121     1.0000
+   18      TAAAGCATGGCACTGAAGATGCTAA       ingroup 121     1.0000
+   19      AAAGCATGGCACTGAAGATGCTAAG       ingroup 115     0.9504
+   20      AAGCATGGCACTGAAGATGCTAAGA       ingroup 115     0.9504
+   21      AGCATGGCACTGAAGATGCTAAGAT       ingroup 115     0.9504
    ...
    </pre>
 
