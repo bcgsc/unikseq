@@ -242,7 +242,7 @@ sub printConserved{
 
    my ($initial,$sum) = (-1,0);
 
-   for(my $pos=0;$pos<=(length($seq)-$k+1);$pos++){
+   for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
       my $kmer = substr($seq,$pos,$k);
       $kmer = uc($kmer);
       #print "$kmer ......\n";
@@ -304,7 +304,7 @@ sub printOutput{
 
    my ($initial,$unique,$notunique,$sum,$sumout) = (-1,0,0,0,0);
 
-   for(my $pos=0;$pos<=(length($seq)-$k+1);$pos++){
+   for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
       my $kmer = substr($seq,$pos,$k);
       $kmer = uc($kmer);
       #print "$kmer ......\n";
