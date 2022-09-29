@@ -80,7 +80,7 @@ Usage: ./unikseq.pl v1.1.0
 -----output filters-----
  -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
  -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
- -p min. [-c 0:region average /-c 1: per position] rate of ingroup entries (option, default: -p 25 %)
+ -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p 25 %)
  -u min. [% unique] kmers in regions (option, default: -u 90 %)
 </pre>
 
@@ -111,8 +111,8 @@ Notes:
  -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
   minimum "unique" (and -c 1:"conserved") reference (target) region size to report.
 
- -p min. [-c 0:region average /-c 1: per position] rate of ingroup entries (option, default: -p 25 %)
-  unikseq tracks the number of qualifying sequences in the ingroup over the sequence stretch, averages and calculates a proportion of the total entries in the ingroup. In the -c 0 mode (original unikseq behaviour), sequences are reported only when that proportion is above the minimum set. When -c 1 is set, -p does not impose a minimum average rate of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. 
+ -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p 25 %)
+  unikseq tracks the number of qualifying sequences in the ingroup over the sequence stretch, averages and calculates a proportion of the total entries in the ingroup. In the -c 0 mode (original unikseq behaviour), sequences are reported only when that proportion is above the minimum set. When -c 1 is set, -p does not impose a minimum average proportion of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. 
 
  -u min. [% unique] kmers in regions (option, default: -u 90 %)
   controls for sequence uniqueness in the reference output regions. 
@@ -130,7 +130,7 @@ Notes:
    Tab-Separated Variable file. Reports all reference sequence kmers in 4 columns:
    <pre>
    position	kmer	condition	value
-   [coordinates][sequence][in/out group][proportion (rate) in each in/out group]
+   [coordinates][sequence][in/out group][proportion in each in/out group]
    By default, every instance of a reference kmer is reported when found in the outgroup.
    When it is not found, the ingroup-unique will be reported (if found).
    If a reference kmer is found in outgroup sequences, the ingroup-unique WILL NOT report any
@@ -181,7 +181,7 @@ Notes:
    </pre>   
 
    ```diff
-   ! NOTE: When -c 1 is set, -p does not impose a minimum average rate of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. This handy feature enables quick identification of conserved regions within unique sequences.
+   ! NOTE: When -c 1 is set, -p does not impose a minimum average proportion of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. This handy feature enables quick identification of conserved regions within unique sequences.
    ```
 
 3) LOG file (.log)
@@ -196,11 +196,11 @@ Notes:
 
    Tab-Separated Variable file. Reports all reference sequence kmers in 5 columns:
    <pre>
-   position     kmer    condition       num_entries	rate
-   [coordinates][sequence][ingroup][number of entries in ingroup with conserved reference kmer][proportion (rate) relative to ingroup entries]
+   position     kmer    condition       num_entries	proportion
+   [coordinates][sequence][ingroup][number of entries in ingroup with conserved reference kmer][proportion relative to ingroup entries]
 
    e.g.
-   position        kmer    condition       num_entries     rate
+   position        kmer    condition       num_entries     proportion
    ...
    16      TTTAAAGCATGGCACTGAAGATGCT       ingroup 121     1.0000
    17      TTAAAGCATGGCACTGAAGATGCTA       ingroup 121     1.0000

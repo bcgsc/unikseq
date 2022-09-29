@@ -40,7 +40,7 @@ if(! $opt_r || ! $opt_i){
    print "-" x 5, "output filters-----\n";
    print " -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c $cflag==no, [default, original unikseq behaviour])\n";
    print " -s min. reference FASTA region [size] (bp) to output (option, default: -s $regsz bp)\n";
-   print " -p min. [-c 0:region average /-c 1: per position] rate of ingroup entries (option, default: -p $prop %)\n";
+   print " -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p $prop %)\n";
    die   " -u min. [% unique] kmers in regions (option, default: -u $minpercentunique %)\n";
 }
 
@@ -173,7 +173,7 @@ sub slideConserved{
    open(OUT,">$out") || die "Can't write $out -- fatal.\n";
    open(TSV,">$tsv") || die "Can't write $tsv -- fatal.\n";
 
-   print TSV "position\tkmer\tcondition\tnum_entries\trate\n";
+   print TSV "position\tkmer\tcondition\tnum_entries\tproportion\n";
 
    open(IN,$f) || die "Can't read $f -- fatal.\n";
    while(<IN>){
