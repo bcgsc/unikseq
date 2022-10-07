@@ -251,9 +251,8 @@ sub printConserved{
 
    for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
       my $kmer = substr($seq,$pos,$k);
-      $kmer = uc($kmer);
-      $kmer =~ tr/U/T/; ### handles RNA U>>>T
       my $tcharmer = substr($kmer,0,$tchar);
+      $kmer =~ tr/U/T/; ### handles RNA U>>>T
 
       my $listin = $in->{$kmer};
       my $ctin = keys(%$listin);
@@ -286,7 +285,7 @@ sub outputFASTA{
 
    if($initial > -1){###do not update trackers unless the region started with conserved seqs.
       my $stretch = $pos-$initial; ### calculate seq stretch
-      my $avg = $sum / $stretch;#XXX
+      my $avg = $sum / $stretch;
       my $avgpropspc = $avg / $incount *100;
 
       if($stretch>=$regsz && $avgpropspc >= $prop){ ### only output longer regions, with a ingroup prop equal or above user-defined
@@ -312,9 +311,8 @@ sub printOutput{
 
    for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
       my $kmer = substr($seq,$pos,$k);
-      $kmer = uc($kmer);
-      $kmer =~ tr/U/T/; ### handles RNA U>>>T
       my $tcharmer = substr($kmer,0,$tchar);
+      $kmer =~ tr/U/T/; ### handles RNA U>>>T
 
       my $listex = $ex->{$kmer};
       my $ctex = keys(%$listex);
@@ -347,7 +345,7 @@ sub printOutput{
                $sum -= $ctin;
                my $stretch = $pos-$initial; ### calculate seq stretch
                my $perunique = $unique / $stretch *100;
-               my $avg = $sum / $stretch;#XXX
+               my $avg = $sum / $stretch;
                my $avgout = $sumout / $stretch;
                my $avgpropspc = $avg / $incount *100;
 
