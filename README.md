@@ -68,16 +68,17 @@ unikseq (concept, algorithm design and prototype): Rene Warren
 -----------
 
 <pre>
-Usage: ./unikseq.pl v1.1.0
+Usage: ./unikseq.pl v1.2.0
 -----input files-----
  -r reference FASTA (required)
  -i ingroup FASTA (required)
  -o outgroup FASTA (required)
 -----kmer uniqueness filters-----
  -k length (option, default: -k 25)
- -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
+ -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 0)
  -m max. [% entries] in outgroup tolerated to have a reference kmer (option, default: -m 0 % [original behaviour])
 -----output filters-----
+ -t print only first t bases in tsv output (option, default: -t 25)
  -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
  -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
  -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p 25 %)
@@ -105,6 +106,9 @@ Notes:
  -m max. [% entries] in outgroup tolerated to have reference kmer (option, default: -m 0 % [original behaviour])
   controls the kmer "uniqueness" in the outgroup, by tolerating a certain fraction of sequence entries in the outgroup having the reference kmer. This option could be useful when there's high similarity between the reference, ingroup AND outgroup sequences and more fine-grain adjustments are needed. Not specifying this option (-m 0) is the original unikseq behaviour.
 
+ -t print only first t bases in tsv output (option, default: -t [-k])
+  Avoids writing too much data to file. Users opt to specify the first -t base(s) to be printed in the tsv files. Original (default) behaviour is to print the whole [k]-mer
+
  -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
   boolean (1/0, yes/no), controls the output behaviour of unikseq. When set (-c 1), conserved regions between ingroup sequence entries and the reference are identified by repurposing the -p parameter (below), evaluating the % of entries having a reference kmer at each position. When the % falls below the set -p threshold, regions will be part of a new unikseq FASTA output (.conserved.fa) and will be marked in upper-case (A,C,G,T) in the unique regions identified by unikseq. This option is useful for quick identification of unique sequences that are also conserved (to a tunable degree, and controlled by -p). The default (-c 0) is the original unikseq behaviour.  
 
@@ -129,21 +133,21 @@ Notes:
 
    Tab-Separated Variable file. Reports all reference sequence kmers in 4 columns:
    <pre>
-   position	kmer	condition	value
-   [coordinates][sequence][in/out group][proportion in each in/out group]
+   header	position	[k]-mer	condition	value
+   [FASTA header][coordinates][sequence][in/out group][proportion in each in/out group]
    By default, every instance of a reference kmer is reported when found in the outgroup.
-   When it is not found, the ingroup-unique will be reported (if found).
+   When it is not found, the ingroup-unique will be reported (if found). Note: when -t is specified, only the first -t bases of the kmer will be shown in the tsv file(s), but the data reported is for the whole kmer.
    If a reference kmer is found in outgroup sequences, the ingroup-unique WILL NOT report any
    values. This is the file to use to generate "butterfly" plots (see below and r script attached with this distribution [example.r] for details)
 
    e.g.
-   position        kmer                 condition       value
-   0	GCTAGTGTAGCTTAATGTAAAGTAT	ingroup-unique	-0.1270
+   header  position        25-mer  condition       value
+   KC914387.1	0	GCTAGTGTAGCTTAATGTAAAGTAT	ingroup-unique	-0.1270
    ...
-   207	ACCTTGCTAAGCCACACCCCCAAGG	ingroup-unique	-0.9683
-   208	CCTTGCTAAGCCACACCCCCAAGGG	outgroup	0.0115
-   209	CTTGCTAAGCCACACCCCCAAGGGA	outgroup	0.0115
-   210	TTGCTAAGCCACACCCCCAAGGGAT	ingroup-unique	-0.2804
+   KC914387.1	207	ACCTTGCTAAGCCACACCCCCAAGG	ingroup-unique	-0.9683
+   KC914387.1	208	CCTTGCTAAGCCACACCCCCAAGGG	outgroup	0.0115
+   KC914387.1	209	CTTGCTAAGCCACACCCCCAAGGGA	outgroup	0.0115
+   KC914387.1	210	TTGCTAAGCCACACCCCCAAGGGAT	ingroup-unique	-0.2804
    ...
    </pre>
 
@@ -196,18 +200,18 @@ Notes:
 
    Tab-Separated Variable file. Reports all reference sequence kmers in 5 columns:
    <pre>
-   position     kmer    condition       num_entries	proportion
-   [coordinates][sequence][ingroup][number of entries in ingroup with conserved reference kmer][proportion relative to ingroup entries]
+   header	position     [k]-mer    condition       num_entries	proportion
+   [coordinates][sequence][ingroup][number of entries in ingroup with conserved reference kmer][proportion relative to ingroup entries]. Note: when -t is specified, only the first -t bases of the kmer will be shown in the tsv file(s), but the data reported is for the whole kmer.
 
    e.g.
-   position        kmer    condition       num_entries     proportion
+   header	position        25-mer    condition       num_entries     proportion
    ...
-   16      TTTAAAGCATGGCACTGAAGATGCT       ingroup 121     1.0000
-   17      TTAAAGCATGGCACTGAAGATGCTA       ingroup 121     1.0000
-   18      TAAAGCATGGCACTGAAGATGCTAA       ingroup 121     1.0000
-   19      AAAGCATGGCACTGAAGATGCTAAG       ingroup 115     0.9504
-   20      AAGCATGGCACTGAAGATGCTAAGA       ingroup 115     0.9504
-   21      AGCATGGCACTGAAGATGCTAAGAT       ingroup 115     0.9504
+   KC914387.1	16      TTTAAAGCATGGCACTGAAGATGCT       ingroup 121     1.0000
+   KC914387.1	17      TTAAAGCATGGCACTGAAGATGCTA       ingroup 121     1.0000
+   KC914387.1	18      TAAAGCATGGCACTGAAGATGCTAA       ingroup 121     1.0000
+   KC914387.1	19      AAAGCATGGCACTGAAGATGCTAAG       ingroup 115     0.9504
+   KC914387.1	20      AAGCATGGCACTGAAGATGCTAAGA       ingroup 115     0.9504
+   KC914387.1	21      AGCATGGCACTGAAGATGCTAAGAT       ingroup 115     0.9504
    ...
    </pre>
 

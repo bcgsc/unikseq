@@ -21,11 +21,12 @@
 use strict;
 use Getopt::Std;
 
-use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m $opt_c);
-getopts('k:r:i:o:p:l:u:s:m:c:');
+use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m $opt_c $opt_t);
+getopts('k:r:i:o:p:l:u:s:m:c:t:');
 
-my $version = "v1.1.0";
+my $version = "v1.2.0";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag) = (25,100,25,0,90,0,0);
+my $tchar = $k;
 
 if(! $opt_r || ! $opt_i){
    print "Usage: $0 $version\n";
@@ -38,6 +39,7 @@ if(! $opt_r || ! $opt_i){
    print " -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l $minnotunique)\n";
    print " -m max. [% entries] in outgroup tolerated to have a reference kmer (option, default: -m $maxpercentoutgroup % [original behaviour])\n";
    print "-" x 5, "output filters-----\n";
+   print " -t print only first t bases in tsv output (option, default: -t $k)\n";
    print " -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c $cflag==no, [default, original unikseq behaviour])\n";
    print " -s min. reference FASTA region [size] (bp) to output (option, default: -s $regsz bp)\n";
    print " -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p $prop %)\n";
@@ -57,6 +59,7 @@ $cflag = $opt_c if($opt_c);
 $minnotunique = $opt_l if($opt_l);
 $minpercentunique = $opt_u if($opt_u);
 $maxpercentoutgroup = $opt_m if($opt_m);
+$tchar = $opt_t if($opt_t);
 
 ###Prepare output
 #-----
@@ -73,7 +76,7 @@ my $log=$fn . ".log";
 
 open(LOG,">$log") || die "Can't write to $log -- fatal.\n";
 
-my $message = "\nRunning: $0 $version\n\t-k $k\n\t-r $f1\n\t-i $f2\n\t-o $f3\n\t-c $cflag\n\t-s $regsz\n\t-p $prop\n\t-l $minnotunique\n\t-u $minpercentunique\n\t-m $maxpercentoutgroup\n";
+my $message = "\nRunning: $0 $version\n\t-k $k\n\t-r $f1\n\t-i $f2\n\t-o $f3\n\t-t $tchar\n\t-c $cflag\n\t-s $regsz\n\t-p $prop\n\t-l $minnotunique\n\t-u $minpercentunique\n\t-m $maxpercentoutgroup\n";
 
 print $message;
 print LOG $message;
@@ -91,6 +94,10 @@ if(! -e $f2){
 
 if(! -e $f3){
    die "Invalid file: $f3 -- fatal\n";
+}
+
+if($tchar<1 || $tchar > $k){
+   die "Option -t must be a valid number between 1 and $k -- fatal\n";
 }
 
 #-----
@@ -139,7 +146,7 @@ my $cons;
 my $conseq="";
 
 if($cflag){
-   ($cons,$conseq) = &slideConserved($f1,$ex,$in,$k,$incount,$excount,$prop,$outcons,$tsvcons,$minnotunique,$minpercentunique,$maxpercentoutgroup);
+   ($cons,$conseq) = &slideConserved($f1,$ex,$in,$k,$incount,$excount,$prop,$outcons,$tsvcons,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
    $message = "done.\n";
    $message .= "-" x 30, "\n";
    $message .= "\nOutput conserved reference sequence regions >= $regsz bp (vs. ingroup FASTA) in:\n$outcons\n";
@@ -149,7 +156,7 @@ if($cflag){
    print LOG $message;
 }
 
-&slide($cflag,$cons,$conseq,$f1,$ex,$in,$k,$incount,$excount,$prop,$outunique,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup);
+&slide($cflag,$cons,$conseq,$f1,$ex,$in,$k,$incount,$excount,$prop,$outunique,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
 
 $message = "done.\n";
 $message .= "-" x 30, "\n";
@@ -165,7 +172,7 @@ exit;
 #--------------------------------
 sub slideConserved{
 
-   my ($f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup) = @_;
+   my ($f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar) = @_;
 
    my ($head,$prevhead,$seq,$conseq) = ("","","","");
    my $cons;
@@ -173,7 +180,7 @@ sub slideConserved{
    open(OUT,">$out") || die "Can't write $out -- fatal.\n";
    open(TSV,">$tsv") || die "Can't write $tsv -- fatal.\n";
 
-   print TSV "position\tkmer\tcondition\tnum_entries\tproportion\n";
+   print TSV "header\tposition\t$tchar-mer\tcondition\tnum_entries\tproportion\n";
 
    open(IN,$f) || die "Can't read $f -- fatal.\n";
    while(<IN>){
@@ -183,7 +190,7 @@ sub slideConserved{
       if(/^\>(\S+)/){
          $head = $1;
          if($prevhead ne $head && $prevhead ne "" && $seq ne ""){
-            ($cons,$conseq) = &printConserved($seq,$prevhead,$k,$in,$incount,$prop,$cons,lc($seq));
+            ($cons,$conseq) = &printConserved($seq,$prevhead,$k,$in,$incount,$prop,$cons,lc($seq),$tchar);
          }
          $seq = "";
          $prevhead = $head;
@@ -192,7 +199,7 @@ sub slideConserved{
          $seq .= uc($seqstretch);
       }
    }
-   ($cons,$conseq) = &printConserved($seq,$prevhead,$k,$in,$incount,$prop,$cons,lc($seq));
+   ($cons,$conseq) = &printConserved($seq,$prevhead,$k,$in,$incount,$prop,$cons,lc($seq),$tchar);
 
    close OUT;
    close TSV;
@@ -203,14 +210,14 @@ sub slideConserved{
 #--------------------------------
 sub slide{
 
-   my ($cflag,$cons,$conseq,$f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup) = @_;
+   my ($cflag,$cons,$conseq,$f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar) = @_;
 
    my ($head,$prevhead,$seq) = ("","","");
 
    open(OUT,">$out") || die "Can't write $out -- fatal.\n";
    open(TSV,">$tsv") || die "Can't write $tsv -- fatal.\n";
 
-   print TSV "position\tkmer\tcondition\tvalue\n";
+   print TSV "header\tposition\t$tchar-mer\tcondition\tvalue\n";
 
    open(IN,$f) || die "Can't read $f -- fatal.\n";
    while(<IN>){
@@ -220,7 +227,7 @@ sub slide{
       if(/^\>(\S+)/){
          $head = $1;
          if($prevhead ne $head && $prevhead ne "" && $seq ne ""){
-            &printOutput($cflag,$cons,$conseq,$seq,$prevhead,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup);
+            &printOutput($cflag,$cons,$conseq,$seq,$prevhead,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
          }
          $seq = "";
          $prevhead = $head;
@@ -229,7 +236,7 @@ sub slide{
          $seq .= uc($seqstretch);
       }
    }
-   &printOutput($cflag,$cons,$conseq,$seq,$prevhead,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup);
+   &printOutput($cflag,$cons,$conseq,$seq,$prevhead,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
 
    close OUT;
    close TSV;
@@ -238,23 +245,23 @@ sub slide{
 #--------------------------------
 sub printConserved{
 
-   my ($seq,$head,$k,$in,$incount,$prop,$cons,$conseq) = @_;
+   my ($seq,$head,$k,$in,$incount,$prop,$cons,$conseq,$tchar) = @_;
 
    my ($initial,$sum) = (-1,0);
 
    for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
       my $kmer = substr($seq,$pos,$k);
       $kmer = uc($kmer);
-      #print "$kmer ......\n";
+      $kmer =~ tr/U/T/; ### handles RNA U>>>T
+      my $tcharmer = substr($kmer,0,$tchar);
 
       my $listin = $in->{$kmer};
       my $ctin = keys(%$listin);
 
       my ($ctexf,$ctinf) = (0,0);
       $ctinf = $ctin/$incount if($incount);##as a fraction
-      #$ctinf = -1 * $ctinf;
 
-      printf TSV "$pos\t$kmer\tingroup\t$ctin\t%.4f\n", $ctinf;
+      printf TSV "$head\t$pos\t$tcharmer\tingroup\t$ctin\t%.4f\n", $ctinf;
 
       if((abs($ctinf)*100) >= $prop){#### kmer is conserved at set proportion in ingroup
 
@@ -283,7 +290,6 @@ sub outputFASTA{
       my $avgpropspc = $avg / $incount *100;
 
       if($stretch>=$regsz && $avgpropspc >= $prop){ ### only output longer regions, with a ingroup prop equal or above user-defined
-      #if($stretch>=$regsz){ ### only output longer user-defined regions
          my $conservedseq=substr($seq,$initial,$stretch);
          substr($conseq, $initial, $stretch, uc($conservedseq));         
          my $poslast = $pos - 1;
@@ -300,14 +306,15 @@ sub outputFASTA{
 #--------------------------------
 sub printOutput{
 
-   my ($cflag,$cons,$conseq,$seq,$head,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup) = @_;
+   my ($cflag,$cons,$conseq,$seq,$head,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar) = @_;
 
    my ($initial,$unique,$notunique,$sum,$sumout) = (-1,0,0,0,0);
 
    for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
       my $kmer = substr($seq,$pos,$k);
       $kmer = uc($kmer);
-      #print "$kmer ......\n";
+      $kmer =~ tr/U/T/; ### handles RNA U>>>T
+      my $tcharmer = substr($kmer,0,$tchar);
 
       my $listex = $ex->{$kmer};
       my $ctex = keys(%$listex);
@@ -319,20 +326,18 @@ sub printOutput{
       $ctinf = $ctin/$incount if($incount);##as a fraction
       $ctinf = -1 * $ctinf;
 
-      #print "$ctin .. $incount $ctinf %%\n";
-
       if($ctexf==0 || ($ctexf*100) < $maxpercentoutgroup){#### kmer is UNIQUE : absent in outgroup, present at sufficient amounts in ingroup!
 
          $unique++;
          $notunique = 0;### reset notuniquecount
-         printf TSV "$pos\t$kmer\tingroup-unique\t%.4f\n", $ctinf;
+         printf TSV "$head\t$pos\t$tcharmer\tingroup-unique\t%.4f\n", $ctinf;
          $initial = $pos if($initial==-1); ### only track init if was not tracking
          $sum += $ctin;### for average calculation
          $sumout += $ctex;
 
       }else{      #### kmer not unique!
 
-         printf TSV "$pos\t$kmer\toutgroup\t%.4f\n", $ctexf; 
+         printf TSV "$head\t$pos\t$tcharmer\toutgroup\t%.4f\n", $ctexf; 
 
          if($initial > -1){###do not update trackers unless the region started with unique seqs. 
             $notunique++;
@@ -424,8 +429,8 @@ sub kmerize{
    for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
       my $kmer = substr($seq,$pos,$k);
       $kmer = uc($kmer);
+      $kmer =~ tr/U/T/; ### handles RNA U>>>T
       my $rckmer = reverseComplement($kmer);
-      #print "$kmer .. $rckmer\n";
       $h->{$kmer}{$head}++;
       $h->{$rckmer}{$head}++;
    }
