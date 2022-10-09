@@ -24,7 +24,7 @@ use Getopt::Std;
 use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m $opt_c $opt_t);
 getopts('k:r:i:o:p:l:u:s:m:c:t:');
 
-my $version = "v1.2.0";
+my $version = "v1.2.1";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag) = (25,100,25,0,90,0,0);
 my $tchar = $k;
 
@@ -106,37 +106,19 @@ $message = "\nRecording IDs in $f1 and $f2 to exclude from $f3 ...\n";
 print $message;
 print LOG $message;
 
-my $rec;
-open(IN,$f1) || die "Can't read $f1 -- fatal.\n";
-while(<IN>){
-   chomp;
-   s/\r\n/\n/g;### DOS to UNIX
-   $rec->{$1}=1 if(/^\>(\S+)/);
-}
-close IN;
-#-----
-open(IN,$f2) || die "Can't read $f2 -- fatal.\n";
-while(<IN>){
-   chomp;
-   s/\r\n/\n/g;### DOS to UNIX
-   $rec->{$1}=1 if(/^\>(\S+)/);
-}
-close IN;
 #-----
 
 $message = "done.\nReading outgroup $f3, excluding records in $f1 and $f2 ...\n";
 print $message;
 print LOG $message;
 
-my ($ex,$excount) = &readFasta($f3,$k,$rec);##exclude outgroup
-
-my $rec; ### re-initialize record
+my ($ex,$excount) = &readFasta($f3,$k);##exclude outgroup
 
 $message = "done.\nReading ingroup $f2 ...\n";
 print $message;
 print LOG $message;
 
-my ($in,$incount) = &readFasta($f2,$k,$rec);##include ingroup
+my ($in,$incount) = &readFasta($f2,$k);##include ingroup
 
 $message = "done.\nBeginning kmer analysis (k$k), sliding base by base on $f1 ...\n";
 print $message;
@@ -379,8 +361,9 @@ sub printOutput{
 #--------------------------------
 sub readFasta{
 
-   my ($f,$k,$rec) = @_;
+   my ($f,$k) = @_;
    my $h;
+   my $rec;
    my ($head,$prevhead,$seq) = ("","","");
    my ($flag,$prevflag,$count) = (0,0,0);
    
@@ -389,23 +372,17 @@ sub readFasta{
       s/\r\n/\n/g;### DOS to UNIX
       chomp;
 
-      if(/^\>(\S+)/){
+      if(/^\>(\S+)/){### first string with non-space characters is unique ID for entry/entries
 
          $head = $1;
+         $rec->{$head} = 1 ;
 
-         if(defined $rec->{$head}){
-            $flag=1;
-         }else{
-            $flag=0;
-            $count++;
-         }
-
-         if ($head ne $prevhead && $seq ne '' && $prevhead ne '' && $prevflag==0){
+         if ($head ne $prevhead && $seq ne '' && $prevhead ne ''){
             $h = &kmerize($seq,$k,$prevhead,$h);
          }
+
          $seq = '';
          $prevhead = $head;
-         $prevflag = $flag;
       }else{
          my $seqstretch = $1 if(/^(\S+)/); ###this prevents DOS new lines from messing up the TSV output
          $seq .= uc($seqstretch);
@@ -416,6 +393,9 @@ sub readFasta{
    }
 
    close IN;
+
+   my $count = keys(%$rec);###added 2022.10.08
+   print "***$count unique entries***\n";
    return $h,$count;
 }
 

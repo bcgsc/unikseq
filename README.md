@@ -68,7 +68,7 @@ unikseq (concept, algorithm design and prototype): Rene Warren
 -----------
 
 <pre>
-Usage: ./unikseq.pl v1.2.0
+Usage: ./unikseq.pl v1.2.1
 -----input files-----
  -r reference FASTA (required)
  -i ingroup FASTA (required)
@@ -89,16 +89,18 @@ Notes:
 <pre>
 
  -r reference FASTA (required)
-  reference FASTA (unique FASTA) analysis is done relative to it
+  reference FASTA (unique FASTA) analysis is done relative to it.
 
  -i ingroup FASTA (required)
-  tolerated sequences. Used to find regions unique to a % (see -p option)
+  tolerated sequences. Used to find regions unique to a % (see -p option).
+  In v1.2.1 onward, multi-FASTA entries are grouped by the first non-space identifier in the FASTA header. This is useful when querying kmers from genome assemblies or even sequencing reads, summarizing for a giving species, for instance. e.g. >myID contig1 and >myID contig2. When unikseq calculates proportions reported in output files, it will summarize by "myID", counting multi-FASTA entries as one. The original behaviour is obtained by using distinct, non-space headers for each entries (e.g. >myID_contig1 and >myID_contig2 counts as two entries)
 
  -o outgroup FASTA (required)
   outgroup to query kmers against. Note that input reference and ingroup sequences will be automatically excluded from this set.
+  In v1.2.1 onward, multi-FASTA entries are grouped by the first non-space identifier in the FASTA header. This is useful when querying kmers from genome assemblies or even sequencing reads, summarizing for a giving species, for instance. e.g. >myID contig1 and >myID contig2. When unikseq calculates proportions reported in output files, it will summarize by "myID", counting multi-FASTA entries as one. The original behaviour is obtained by using distinct, non-space headers for each entries (e.g. >myID_contig1 and >myID_contig2 counts as two entries).
 
  -k length (option, default: -k 25)
-  kmer length
+  kmer length.
 
  -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
   this leniency factor controls the tolerance for non-unique kmers in the outgroup when computing a sequence stretch. If set to 0, the sequence stretch is limited to unique kmers only and the % unique bases of the stretch will be 100% (see next parameter). Set to 1, allows some leniency and tolerates a single non-unique kmer in a row. Set to 2, tolerates up to 2 in a row, etc. When set >0, the %unique bases of a sequence stretch will almost never be 100% unique and so -u MUST be lowered below 100%.
@@ -107,10 +109,10 @@ Notes:
   controls the kmer "uniqueness" in the outgroup, by tolerating a certain fraction of sequence entries in the outgroup having the reference kmer. This option could be useful when there's high similarity between the reference, ingroup AND outgroup sequences and more fine-grain adjustments are needed. Not specifying this option (-m 0) is the original unikseq behaviour.
 
  -t print only first t bases in tsv output (option, default: -t [-k])
-  Avoids writing too much data to file. Users opt to specify the first -t base(s) to be printed in the tsv files. Original (default) behaviour is to print the whole [k]-mer
+  Avoids writing too much data to file. Users opt to specify the first -t base(s) to be printed in the tsv files. Original (default) behaviour is to print the whole [k]-mer.
 
  -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
-  boolean (1/0, yes/no), controls the output behaviour of unikseq. When set (-c 1), conserved regions between ingroup sequence entries and the reference are identified by repurposing the -p parameter (below), evaluating the % of entries having a reference kmer at each position. When the % falls below the set -p threshold, regions will be part of a new unikseq FASTA output (.conserved.fa) and will be marked in upper-case (A,C,G,T) in the unique regions identified by unikseq. This option is useful for quick identification of unique sequences that are also conserved (to a tunable degree, and controlled by -p). The default (-c 0) is the original unikseq behaviour.  
+  Boolean (1/0, yes/no), controls the output behaviour of unikseq. When set (-c 1), conserved regions between ingroup sequence entries and the reference are identified by repurposing the -p parameter (below), evaluating the % of entries having a reference kmer at each position. When the % falls below the set -p threshold, regions will be part of a new unikseq FASTA output (.conserved.fa) and will be marked in upper-case (A,C,G,T) in the unique regions identified by unikseq. This option is useful for quick identification of unique sequences that are also conserved (to a tunable degree, and controlled by -p). The default (-c 0) is the original unikseq behaviour.  
 
  -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
   minimum "unique" (and -c 1:"conserved") reference (target) region size to report.
