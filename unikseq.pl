@@ -241,7 +241,6 @@ sub printConserved{
 
       my ($ctexf,$ctinf) = (0,0);
       $ctinf = $ctin/$incount if($incount);##as a fraction
-
       printf TSV "$head\t$pos\t$tcharmer\tingroup\t$ctin\t%.4f\n", $ctinf;
 
       if((abs($ctinf)*100) >= $prop){#### kmer is conserved at set proportion in ingroup
@@ -362,10 +361,10 @@ sub printOutput{
 sub readFasta{
 
    my ($f,$k) = @_;
+
    my $h;
    my $rec;
-   my ($head,$prevhead,$seq) = ("","","");
-   my ($flag,$prevflag,$count) = (0,0,0);
+   my ($head,$prevhead,$seq,$preventry) = ("","","","");
    
    open(IN,$f) || die "Can't read $f -- fatal.\n";
    while(<IN>){
@@ -373,29 +372,30 @@ sub readFasta{
       chomp;
 
       if(/^\>(\S+)/){### first string with non-space characters is unique ID for entry/entries
-
-         $head = $1;
-         $rec->{$head} = 1 ;
+         my $entry=$1;
+         $head = $_;
+         $rec->{$entry} = 1 ;
 
          if ($head ne $prevhead && $seq ne '' && $prevhead ne ''){
-            $h = &kmerize($seq,$k,$prevhead,$h);
+            $h = &kmerize($seq,$k,$preventry,$h);
          }
 
          $seq = '';
-         $prevhead = $head;
+         $prevhead = $_;
+         $preventry = $entry;
       }else{
          my $seqstretch = $1 if(/^(\S+)/); ###this prevents DOS new lines from messing up the TSV output
          $seq .= uc($seqstretch);
       }
    }
-   if ($prevflag==0){
-      $h = &kmerize($seq,$k,$prevhead,$h);
-   }
+
+   $h = &kmerize($seq,$k,$preventry,$h);
 
    close IN;
 
    my $count = keys(%$rec);###added 2022.10.08
    print "***$count unique entries***\n";
+
    return $h,$count;
 }
 
@@ -406,12 +406,12 @@ sub kmerize{
 
    for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
       my $kmer = substr($seq,$pos,$k);
-      $kmer = uc($kmer);
       $kmer =~ tr/U/T/; ### handles RNA U>>>T
       my $rckmer = reverseComplement($kmer);
       $h->{$kmer}{$head}++;
       $h->{$rckmer}{$head}++;
    }
+
    return $h;
 }
 
