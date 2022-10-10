@@ -156,7 +156,7 @@ sub slideConserved{
 
    my ($f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar) = @_;
 
-   my ($head,$prevhead,$seq,$conseq) = ("","","","");
+   my ($head,$prevhead,$seq,$conseq,$preventry) = ("","","","","");
    my $cons;
 
    open(OUT,">$out") || die "Can't write $out -- fatal.\n";
@@ -170,18 +170,21 @@ sub slideConserved{
       chomp;
 
       if(/^\>(\S+)/){
-         $head = $1;
+         my $entry=$1;
+         $head = $_;
+
          if($prevhead ne $head && $prevhead ne "" && $seq ne ""){
-            ($cons,$conseq) = &printConserved($seq,$prevhead,$k,$in,$incount,$prop,$cons,lc($seq),$tchar);
+            ($cons,$conseq) = &printConserved($seq,$preventry,$k,$in,$incount,$prop,$cons,lc($seq),$tchar);
          }
          $seq = "";
          $prevhead = $head;
+         $preventry = $entry;
       }else{
          my $seqstretch = $1 if(/^(\S+)/); ###this prevents DOS new lines from messing up the TSV output
          $seq .= uc($seqstretch);
       }
    }
-   ($cons,$conseq) = &printConserved($seq,$prevhead,$k,$in,$incount,$prop,$cons,lc($seq),$tchar);
+   ($cons,$conseq) = &printConserved($seq,$preventry,$k,$in,$incount,$prop,$cons,lc($seq),$tchar);
 
    close OUT;
    close TSV;
@@ -194,7 +197,7 @@ sub slide{
 
    my ($cflag,$cons,$conseq,$f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar) = @_;
 
-   my ($head,$prevhead,$seq) = ("","","");
+   my ($head,$prevhead,$seq,$preventry) = ("","","","");
 
    open(OUT,">$out") || die "Can't write $out -- fatal.\n";
    open(TSV,">$tsv") || die "Can't write $tsv -- fatal.\n";
@@ -207,18 +210,20 @@ sub slide{
       chomp;
 
       if(/^\>(\S+)/){
-         $head = $1;
+         my $entry = $1;
+         $head = $_;
          if($prevhead ne $head && $prevhead ne "" && $seq ne ""){
-            &printOutput($cflag,$cons,$conseq,$seq,$prevhead,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
+            &printOutput($cflag,$cons,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
          }
          $seq = "";
          $prevhead = $head;
+         $preventry = $entry;
       }else{
          my $seqstretch = $1 if(/^(\S+)/); ###this prevents DOS new lines from messing up the TSV output
          $seq .= uc($seqstretch);
       }
    }
-   &printOutput($cflag,$cons,$conseq,$seq,$prevhead,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
+   &printOutput($cflag,$cons,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
 
    close OUT;
    close TSV;
@@ -249,7 +254,7 @@ sub printConserved{
          $initial = $pos if($initial==-1); ### only track init if was not tracking
          $sum += $ctin;### for average calculation
 
-         if($pos==(length($seq)-$k+1)){###end of sequence
+         if($pos==(length($seq)-$k)){###end of sequence
             ($initial,$sum,$conseq) = &outputFASTA($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$conseq);
          }         
       }else{#### kmer below set threshold
