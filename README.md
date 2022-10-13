@@ -93,11 +93,11 @@ Notes:
 
  -i ingroup FASTA (required)
   tolerated sequences. Used to find regions unique to a % (see -p option).
-  In v1.2.1 onward, multi-FASTA entries are grouped by the first non-space identifier in the FASTA header. This is useful when querying kmers from genome assemblies or even sequencing reads, summarizing for a giving species, for instance. e.g. >myID contig1 and >myID contig2. When unikseq calculates proportions reported in output files, it will summarize by "myID", counting multi-FASTA entries as one. The original behaviour is obtained by using distinct, non-space headers for each entries (e.g. >myID_contig1 and >myID_contig2 counts as two entries)
+  In v1.2.1 onward, multi-FASTA entries are grouped by the first non-space identifier in the FASTA header. This is useful when querying kmers from genome assemblies or even sequencing reads, summarizing for a giving species, for instance. e.g. >myID contig1 and >myID contig2. When unikseq calculates proportions reported in output files, it will summarize by "myID", counting multi-FASTA entries as one. The original behaviour is obtained by using distinct, non-space headers for each entries (e.g. >myID_contig1 and >myID_contig2 count as two entries).
 
  -o outgroup FASTA (required)
   outgroup to query kmers against. Note that input reference and ingroup sequences will be automatically excluded from this set.
-  In v1.2.1 onward, multi-FASTA entries are grouped by the first non-space identifier in the FASTA header. This is useful when querying kmers from genome assemblies or even sequencing reads, summarizing for a giving species, for instance. e.g. >myID contig1 and >myID contig2. When unikseq calculates proportions reported in output files, it will summarize by "myID", counting multi-FASTA entries as one. The original behaviour is obtained by using distinct, non-space headers for each entries (e.g. >myID_contig1 and >myID_contig2 counts as two entries).
+  In v1.2.1 onward, multi-FASTA entries are grouped by the first non-space identifier in the FASTA header. This is useful when querying kmers from genome assemblies or even sequencing reads, summarizing for a giving species, for instance. e.g. >myID contig1 and >myID contig2. When unikseq calculates proportions reported in output files, it will summarize by "myID", counting multi-FASTA entries as one. The original behaviour is obtained by using distinct, non-space headers for each entries (e.g. >myID_contig1 and >myID_contig2 count as two entries). For those interested in sequence conservation between reference and ingroup only, you have the option to supply a dummy -o outgroup FASTA file consisting of a header and single base, for instance. 
 
  -k length (option, default: -k 25)
   kmer length.
