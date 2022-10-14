@@ -101,14 +101,8 @@ if($tchar<1 || $tchar > $k){
 }
 
 #-----
-$message = "\nRecording IDs in $f1 and $f2 to exclude from $f3 ...\n";
 
-print $message;
-print LOG $message;
-
-#-----
-
-$message = "done.\nReading outgroup $f3, excluding records in $f1 and $f2 ...\n";
+$message = "done.\nReading outgroup $f3 ...\n";
 print $message;
 print LOG $message;
 
