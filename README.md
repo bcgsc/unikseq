@@ -81,7 +81,7 @@ Usage: ./unikseq.pl v1.2.1
  -t print only first t bases in tsv output (option, default: -t [k])
  -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
  -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
- -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p 25 %)
+ -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p 0 %)
  -u min. [% unique] kmers in regions (option, default: -u 90 %)
 </pre>
 
@@ -117,7 +117,7 @@ Notes:
  -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
   minimum "unique" (and -c 1:"conserved") reference (target) region size to report.
 
- -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p 25 %)
+ -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p 0 %)
   unikseq tracks the number of qualifying sequences in the ingroup over the sequence stretch, averages and calculates a proportion of the total entries in the ingroup. In the -c 0 mode (original unikseq behaviour), sequences are reported only when that proportion is above the minimum set. When -c 1 is set, -p does not impose a minimum average proportion of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. 
 
  -u min. [% unique] kmers in regions (option, default: -u 90 %)

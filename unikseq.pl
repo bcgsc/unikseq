@@ -25,7 +25,7 @@ use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m $opt_
 getopts('k:r:i:o:p:l:u:s:m:c:t:');
 
 my $version = "v1.2.1";
-my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag) = (25,100,25,0,90,0,0);
+my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag) = (25,100,0,0,90,0,0);
 
 if(! $opt_r || ! $opt_i){
    print "Usage: $0 $version\n";
