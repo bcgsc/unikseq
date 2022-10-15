@@ -26,7 +26,6 @@ getopts('k:r:i:o:p:l:u:s:m:c:t:');
 
 my $version = "v1.2.1";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag) = (25,100,25,0,90,0,0);
-my $tchar = $k;
 
 if(! $opt_r || ! $opt_i){
    print "Usage: $0 $version\n";
@@ -39,7 +38,7 @@ if(! $opt_r || ! $opt_i){
    print " -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l $minnotunique)\n";
    print " -m max. [% entries] in outgroup tolerated to have a reference kmer (option, default: -m $maxpercentoutgroup % [original behaviour])\n";
    print "-" x 5, "output filters-----\n";
-   print " -t print only first t bases in tsv output (option, default: -t $k)\n";
+   print " -t print only first t bases in tsv output (option, default: -t [k])\n";
    print " -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c $cflag==no, [default, original unikseq behaviour])\n";
    print " -s min. reference FASTA region [size] (bp) to output (option, default: -s $regsz bp)\n";
    print " -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p $prop %)\n";
@@ -53,6 +52,7 @@ my $f2 = $opt_i; #ingroup
 my $f3 = $opt_o; #outgroup
 
 $k = $opt_k if($opt_k);
+my $tchar = $k;
 $regsz = $opt_s if($opt_s);
 $prop = $opt_p if($opt_p);
 $cflag = $opt_c if($opt_c);

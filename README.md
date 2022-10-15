@@ -78,7 +78,7 @@ Usage: ./unikseq.pl v1.2.1
  -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 0)
  -m max. [% entries] in outgroup tolerated to have a reference kmer (option, default: -m 0 % [original behaviour])
 -----output filters-----
- -t print only first t bases in tsv output (option, default: -t 25)
+ -t print only first t bases in tsv output (option, default: -t [k])
  -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
  -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
  -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p 25 %)
@@ -108,7 +108,7 @@ Notes:
  -m max. [% entries] in outgroup tolerated to have reference kmer (option, default: -m 0 % [original behaviour])
   controls the kmer "uniqueness" in the outgroup, by tolerating a certain fraction of sequence entries in the outgroup having the reference kmer. This option could be useful when there's high similarity between the reference, ingroup AND outgroup sequences and more fine-grain adjustments are needed. Not specifying this option (-m 0) is the original unikseq behaviour.
 
- -t print only first t bases in tsv output (option, default: -t [-k])
+ -t print only first t bases in tsv output (option, default: -t [k])
   Avoids writing too much data to file. Users opt to specify the first -t base(s) to be printed in the tsv files. Original (default) behaviour is to print the whole [k]-mer.
 
  -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
