@@ -68,7 +68,7 @@ unikseq (concept, algorithm design and prototype): Rene Warren
 -----------
 
 <pre>
-Usage: ./unikseq.pl v1.2.1
+Usage: ./unikseq.pl v1.2.2
 -----input files-----
  -r reference FASTA (required)
  -i ingroup FASTA (required)
@@ -89,7 +89,7 @@ Notes:
 <pre>
 
  -r reference FASTA (required)
-  reference FASTA (unique FASTA) analysis is done relative to it.
+  reference FASTA (unique FASTA) analysis is done relative to it. Could be a multi-FASTA, but avoid sequences that are too long, especially when running in -c 1 mode (ideally < 10Mbp).
 
  -i ingroup FASTA (required)
   tolerated sequences. Used to find regions unique to a % (see -p option).
@@ -112,7 +112,7 @@ Notes:
   Avoids writing too much data to file. Users opt to specify the first -t base(s) to be printed in the tsv files. Original (default) behaviour is to print the whole [k]-mer.
 
  -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
-  Boolean (1/0, yes/no), controls the output behaviour of unikseq. When set (-c 1), conserved regions between ingroup sequence entries and the reference are identified by repurposing the -p parameter (below), evaluating the % of entries having a reference kmer at each position. When the % falls below the set -p threshold, regions will be part of a new unikseq FASTA output (.conserved.fa) and will be marked in upper-case (A,C,G,T) in the unique regions identified by unikseq. This option is useful for quick identification of unique sequences that are also conserved (to a tunable degree, and controlled by -p). The default (-c 0) is the original unikseq behaviour.  
+  Boolean (1/0, yes/no), controls the output behaviour of unikseq. When set (-c 1), conserved regions between ingroup sequence entries and the reference are identified by repurposing the -p parameter (below), evaluating the % of entries having a reference kmer at each position. When the % falls below the set -p threshold, regions will be part of a new unikseq FASTA output (.conserved.fa) and will be marked in upper-case (A,C,G,T) in the unique regions identified by unikseq. This option is useful for quick identification of unique sequences that are also conserved (to a tunable degree, and controlled by -p). The default (-c 0) is the original unikseq behaviour. Note: -c 1 may result in long run times on large (>10Mbp) reference (-r) sequences.
 
  -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
   minimum "unique" (and -c 1:"conserved") reference (target) region size to report.

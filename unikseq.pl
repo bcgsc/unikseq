@@ -24,7 +24,7 @@ use Getopt::Std;
 use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m $opt_c $opt_t);
 getopts('k:r:i:o:p:l:u:s:m:c:t:');
 
-my $version = "v1.2.1";
+my $version = "v1.2.2";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag) = (25,100,0,0,90,0,0);
 
 if(! $opt_r || ! $opt_i){
@@ -118,11 +118,10 @@ $message = "done.\nBeginning kmer analysis (k$k), sliding base by base on $f1 ..
 print $message;
 print LOG $message;
 
-my $cons;
-my $conseq="";
+my $conseq;
 
 if($cflag){
-   ($cons,$conseq) = &slideConserved($f1,$ex,$in,$k,$incount,$excount,$prop,$outcons,$tsvcons,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
+   $conseq = &slideConserved($f1,$ex,$in,$k,$incount,$excount,$prop,$outcons,$tsvcons,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
    $message = "done.\n";
    $message .= "-" x 30, "\n";
    $message .= "\nOutput conserved reference sequence regions >= $regsz bp (vs. ingroup FASTA) in:\n$outcons\n";
@@ -132,7 +131,7 @@ if($cflag){
    print LOG $message;
 }
 
-&slide($cflag,$cons,$conseq,$f1,$ex,$in,$k,$incount,$excount,$prop,$outunique,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
+&slide($cflag,$conseq,$f1,$ex,$in,$k,$incount,$excount,$prop,$outunique,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
 
 $message = "done.\n";
 $message .= "-" x 30, "\n";
@@ -150,8 +149,8 @@ sub slideConserved{
 
    my ($f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar) = @_;
 
-   my ($head,$prevhead,$seq,$conseq,$preventry) = ("","","","","");
-   my $cons;
+   my ($head,$prevhead,$seq,$preventry) = ("","","","");
+   my $conseq;
 
    open(OUT,">$out") || die "Can't write $out -- fatal.\n";
    open(TSV,">$tsv") || die "Can't write $tsv -- fatal.\n";
@@ -168,7 +167,7 @@ sub slideConserved{
          $head = $_;
 
          if($prevhead ne $head && $prevhead ne "" && $seq ne ""){
-            ($cons,$conseq) = &printConserved($seq,$preventry,$k,$in,$incount,$prop,$cons,lc($seq),$tchar);
+            $conseq = &printConserved($conseq,$seq,$preventry,$k,$in,$incount,$prop,lc($seq),$tchar);
          }
          $seq = "";
          $prevhead = $head;
@@ -178,18 +177,18 @@ sub slideConserved{
          $seq .= uc($seqstretch);
       }
    }
-   ($cons,$conseq) = &printConserved($seq,$preventry,$k,$in,$incount,$prop,$cons,lc($seq),$tchar);
+   $conseq = &printConserved($conseq,$seq,$preventry,$k,$in,$incount,$prop,lc($seq),$tchar);
 
    close OUT;
    close TSV;
 
-   return $cons,$conseq;
+   return $conseq;
 }
 
 #--------------------------------
 sub slide{
 
-   my ($cflag,$cons,$conseq,$f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar) = @_;
+   my ($cflag,$conseq,$f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar) = @_;
 
    my ($head,$prevhead,$seq,$preventry) = ("","","","");
 
@@ -207,7 +206,7 @@ sub slide{
          my $entry = $1;
          $head = $_;
          if($prevhead ne $head && $prevhead ne "" && $seq ne ""){
-            &printOutput($cflag,$cons,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
+            &printOutput($cflag,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
          }
          $seq = "";
          $prevhead = $head;
@@ -217,7 +216,7 @@ sub slide{
          $seq .= uc($seqstretch);
       }
    }
-   &printOutput($cflag,$cons,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
+   &printOutput($cflag,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
 
    close OUT;
    close TSV;
@@ -226,7 +225,7 @@ sub slide{
 #--------------------------------
 sub printConserved{
 
-   my ($seq,$head,$k,$in,$incount,$prop,$cons,$conseq,$tchar) = @_;
+   my ($conseq,$seq,$head,$k,$in,$incount,$prop,$consequ,$tchar) = @_;
 
    my ($initial,$sum) = (-1,0);
 
@@ -244,24 +243,26 @@ sub printConserved{
 
       if((abs($ctinf)*100) >= $prop){#### kmer is conserved at set proportion in ingroup
 
-         $cons->{$pos}=1;
          $initial = $pos if($initial==-1); ### only track init if was not tracking
          $sum += $ctin;### for average calculation
 
          if($pos==(length($seq)-$k)){###end of sequence
-            ($initial,$sum,$conseq) = &outputFASTA($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$conseq);
+            ($initial,$sum,$consequ) = &outputFASTA($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ);
          }         
       }else{#### kmer below set threshold
-            ($initial,$sum,$conseq) = &outputFASTA($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$conseq);
+            ($initial,$sum,$consequ) = &outputFASTA($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ);
       }
    }
-   return $cons,$conseq;
+
+   $conseq->{$head} = $consequ;
+
+   return $conseq;
 }
 
 #--------------------------------
 sub outputFASTA{
 
-   my ($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$conseq) = @_;
+   my ($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ) = @_;
 
    if($initial > -1){###do not update trackers unless the region started with conserved seqs.
       my $stretch = $pos-$initial; ### calculate seq stretch
@@ -270,7 +271,7 @@ sub outputFASTA{
 
       if($stretch>=$regsz && $avgpropspc >= $prop){ ### only output longer regions, with a ingroup prop equal or above user-defined
          my $conservedseq=substr($seq,$initial,$stretch);
-         substr($conseq, $initial, $stretch, uc($conservedseq));         
+         substr($consequ, $initial, $stretch, uc($conservedseq));         
          my $poslast = $pos - 1;
          my $newhead = $head . "region" . $initial . "-" . $poslast . "_size" . $stretch . "_propspcIN";
          printf OUT ">$newhead%.1f" . "\n$conservedseq\n", ($avgpropspc);
@@ -279,13 +280,14 @@ sub outputFASTA{
       $initial = -1;
       $sum = 0;
    }
-   return $initial,$sum,$conseq;
+
+   return $initial,$sum,$consequ;
 }
 
 #--------------------------------
 sub printOutput{
 
-   my ($cflag,$cons,$conseq,$seq,$head,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar) = @_;
+   my ($cflag,$conseq,$seq,$head,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar) = @_;
 
    my ($initial,$unique,$notunique,$sum,$sumout) = (-1,0,0,0,0);
 
@@ -304,7 +306,7 @@ sub printOutput{
       $ctinf = $ctin/$incount if($incount);##as a fraction
       $ctinf = -1 * $ctinf;
 
-      if($ctexf==0 || ($ctexf*100) < $maxpercentoutgroup){#### kmer is UNIQUE : absent in outgroup, present at sufficient amounts in ingroup!
+      if(($pos < (length($seq)-$k)) && ($ctexf==0 || ($ctexf*100) < $maxpercentoutgroup)){#### kmer is UNIQUE : absent in outgroup, present at sufficient amounts in ingroup!
 
          $unique++;
          $notunique = 0;### reset notuniquecount
@@ -331,12 +333,13 @@ sub printOutput{
 
                if($cflag){
                   if($stretch>=$regsz && $perunique >= $minpercentunique){
-                     my $uniqueseq=substr($conseq,$initial,$stretch);
+                     my $uniqueseq=substr($conseq->{$head},$initial,$stretch);
                      my $poslast = $pos - 1;
                      my $newhead = $head . "region" . $initial . "-" . $poslast . "_size" . $stretch . "_propspcIN";
                      printf OUT ">$newhead%.1f" . "_propunivsOUT%.1f_avgOUTentries%.1f" . "\n$uniqueseq\n", ($avgpropspc,$perunique,$avgout);
                   }
                }else{#original behaviour
+
                   if($stretch>=$regsz && $perunique >= $minpercentunique && $avgpropspc >= $prop){ ### only output longer regions, with a uniqueness prop equal or above user-defined
                      my $uniqueseq=substr($seq,$initial,$stretch);
                      my $poslast = $pos - 1;
