@@ -227,7 +227,7 @@ sub printConserved{
 
    my ($conseq,$seq,$head,$k,$in,$incount,$prop,$consequ,$tchar) = @_;
 
-   my ($initial,$sum) = (-1,0);
+   my ($initial,$sum,$buffer) = (-1,0,0);
 
    for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
       my $kmer = substr($seq,$pos,$k);
@@ -247,10 +247,11 @@ sub printConserved{
          $sum += $ctin;### for average calculation
 
          if($pos==(length($seq)-$k)){###end of sequence
-            ($initial,$sum,$consequ) = &outputFASTA($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ);
+            $buffer = 1;
+            ($initial,$sum,$consequ) = &outputFASTA($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ,$buffer);
          }         
       }else{#### kmer below set threshold
-            ($initial,$sum,$consequ) = &outputFASTA($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ);
+            ($initial,$sum,$consequ) = &outputFASTA($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ,$buffer);
       }
    }
 
@@ -262,17 +263,17 @@ sub printConserved{
 #--------------------------------
 sub outputFASTA{
 
-   my ($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ) = @_;
+   my ($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ,$buffer) = @_;
 
    if($initial > -1){###do not update trackers unless the region started with conserved seqs.
-      my $stretch = $pos-$initial; ### calculate seq stretch
+      my $stretch = $pos-$initial+$buffer; ### calculate seq stretch
       my $avg = $sum / $stretch;
       my $avgpropspc = $avg / $incount *100;
+      my $conservedseq=substr($seq,$initial,$stretch);
+      substr($consequ, $initial, $stretch, uc($conservedseq));
 
       if($stretch>=$regsz && $avgpropspc >= $prop){ ### only output longer regions, with a ingroup prop equal or above user-defined
-         my $conservedseq=substr($seq,$initial,$stretch);
-         substr($consequ, $initial, $stretch, uc($conservedseq));         
-         my $poslast = $pos - 1;
+         my $poslast = $pos - 1 + $buffer;
          my $newhead = $head . "region" . $initial . "-" . $poslast . "_size" . $stretch . "_propspcIN";
          printf OUT ">$newhead%.1f" . "\n$conservedseq\n", ($avgpropspc);
       }
@@ -289,7 +290,7 @@ sub printOutput{
 
    my ($cflag,$conseq,$seq,$head,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar) = @_;
 
-   my ($initial,$unique,$notunique,$sum,$sumout) = (-1,0,0,0,0);
+   my ($initial,$unique,$notunique,$sum,$sumout,$buffer) = (-1,0,0,0,0,0);
 
    for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
       my $kmer = substr($seq,$pos,$k);
@@ -317,7 +318,16 @@ sub printOutput{
 
       }else{      #### kmer not unique!
 
-         printf TSV "$head\t$pos\t$tcharmer\toutgroup\t%.4f\n", $ctexf; 
+         if($ctexf){
+            printf TSV "$head\t$pos\t$tcharmer\toutgroup\t%.4f\n", $ctexf;
+         }elsif($pos == (length($seq)-$k) && $ctinf<=0){###end of sequence exception
+            $unique++;
+            $notunique = 0;### reset notuniquecount
+            printf TSV "$head\t$pos\t$tcharmer\tingroup-unique\t%.4f\n", $ctinf;
+            $sum += $ctin;### for average calculation
+            $sumout += $ctexf;
+            $buffer = 1;
+         }
 
          if($initial > -1){###do not update trackers unless the region started with unique seqs. 
             $notunique++;
@@ -325,7 +335,7 @@ sub printOutput{
 
             if($notunique > $minnotunique){ ### absent kmer in a row exceed min allowed threshold
                $sum -= $ctin;
-               my $stretch = $pos-$initial; ### calculate seq stretch
+               my $stretch = $pos-$initial+$buffer; ### calculate seq stretch
                my $perunique = $unique / $stretch *100;
                my $avg = $sum / $stretch;
                my $avgout = $sumout / $stretch;
@@ -334,7 +344,7 @@ sub printOutput{
                if($cflag){
                   if($stretch>=$regsz && $perunique >= $minpercentunique){
                      my $uniqueseq=substr($conseq->{$head},$initial,$stretch);
-                     my $poslast = $pos - 1;
+                     my $poslast = $pos - 1 + $buffer;
                      my $newhead = $head . "region" . $initial . "-" . $poslast . "_size" . $stretch . "_propspcIN";
                      printf OUT ">$newhead%.1f" . "_propunivsOUT%.1f_avgOUTentries%.1f" . "\n$uniqueseq\n", ($avgpropspc,$perunique,$avgout);
                   }
@@ -342,7 +352,7 @@ sub printOutput{
 
                   if($stretch>=$regsz && $perunique >= $minpercentunique && $avgpropspc >= $prop){ ### only output longer regions, with a uniqueness prop equal or above user-defined
                      my $uniqueseq=substr($seq,$initial,$stretch);
-                     my $poslast = $pos - 1;
+                     my $poslast = $pos - 1 + $buffer;
                      my $newhead = $head . "region" . $initial . "-" . $poslast . "_size" . $stretch . "_propspcIN";
                      printf OUT ">$newhead%.1f" . "_propunivsOUT%.1f_avgOUTentries%.1f" . "\n$uniqueseq\n", ($avgpropspc,$perunique,$avgout);
                   }
