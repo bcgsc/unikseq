@@ -27,7 +27,7 @@ getopts('k:r:i:o:p:l:u:s:m:c:t:');
 my $version = "v1.2.2";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag) = (25,100,0,0,90,0,0);
 
-if(! $opt_r || ! $opt_i){
+if(! $opt_r || ! $opt_i || ! $opt_o){
    print "Usage: $0 $version\n";
    print "-" x 5, "input files-----\n";
    print " -r reference FASTA (required)\n";
@@ -96,7 +96,7 @@ if(! -e $f3){
    die "Invalid file: $f3 -- fatal\n";
 }
 
-if($tchar<1 || $tchar > $k){
+if($tchar < 1 || $tchar > $k){
    die "Option -t must be a valid number between 1 and $k -- fatal\n";
 }
 
