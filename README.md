@@ -5,7 +5,7 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 ![Logo](https://github.com/bcgsc/unikseq/blob/main/unikseq-logo.png)
 
 # unikseq
-Unique (& conserved) region identification in DNA sequences, using a kmer approach
+Unique (& conserved) region identification in DNA sequences, using a k-mer approach
 
 ## Rene L. Warren, 2020-2022
 ## email: rwarren [at] bcgsc [dot] ca
@@ -14,7 +14,7 @@ Unique (& conserved) region identification in DNA sequences, using a kmer approa
 ### Description
 -----------
 
-Unikseq systematically processes the kmers of a reference sequence, tolerated in an ingroup, but not (or marginally) tolerated in an outgroup sequence set to ultimately help identify regions that are unique within that reference. 
+Unikseq systematically processes the k-mers of a reference sequence, tolerated in an ingroup, but not (or marginally) tolerated in an outgroup sequence set to ultimately help identify regions that are unique within that reference. 
 
 The unique sequences identified by unikseq are useful for designing qPCR primer-probe sets with high specificity, for instance, with no manual intervention nor time-consuming sequence inspection.
 
