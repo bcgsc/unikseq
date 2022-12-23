@@ -7,7 +7,7 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 # unikseq
 Unique (& conserved) region identification in DNA sequences, using a k-mer approach
 
-## Rene L. Warren, 2020-2022
+## Rene L. Warren, 2020-2023
 ## email: rwarren [at] bcgsc [dot] ca
 
 
@@ -278,7 +278,7 @@ my_x_title <- expression(paste("Position of 25-mers on ", italic("XX A. fragilis
 ### License
 -------
 
-Unikseq Copyright (c) 2020-2022 British Columbia Cancer Agency Branch.  All rights reserved.
+Unikseq Copyright (c) 2020-2023 British Columbia Cancer Agency Branch.  All rights reserved.
 
 Unikseq is released under the GNU General Public License v3
 
