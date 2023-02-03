@@ -5,7 +5,7 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 ![Logo](https://github.com/bcgsc/unikseq/blob/main/unikseq-logo.png)
 
 # unikseq
-Unique (& conserved) region identification in DNA sequences, using a k-mer approach
+Unique (& conserved) region identification in DNA sequences, using a kmer approach
 
 ## Rene L. Warren, 2020-2023
 ## email: rwarren [at] bcgsc [dot] ca
@@ -14,13 +14,15 @@ Unique (& conserved) region identification in DNA sequences, using a k-mer appro
 ### Description
 -----------
 
-Unikseq systematically processes the k-mers of a reference sequence, tolerated in an ingroup, but not (or marginally) tolerated in an outgroup sequence set to ultimately help identify regions that are unique within that reference. 
+Unikseq systematically processes the kmers of a reference sequence, tolerated in an ingroup, but not (or marginally) tolerated in an outgroup sequence set to ultimately help identify regions that are unique within that reference. 
 
 The unique sequences identified by unikseq are useful for designing qPCR primer-probe sets with high specificity, for instance, with no manual intervention nor time-consuming sequence inspection.
 
 Unikseq has broad applications in genomics and biology, including species monitoring and conservation; It was used to develop successful environmental DNA (eDNA) mitogenome assays that are highly specific to their intended target, fast and efficiently.
 
 Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require additional downstream analyses one would need to carry out atfer MSA to identify unique, conserved regions.
+
+UnikseqBloom is a code variant for processing Gbp-scale genomes/sequencing data sets. Please note that the initial implementation requires pre-built Bloom filters data structures (with the writeBloom.pl utility, provided with unikseq). These are regular, and not counting Bloom filters; As such, k-mers are not counted, and their presence/absence alone are used to infer uniqueness.
 
 
 ### Implementation and requirements
@@ -38,6 +40,15 @@ git clone https://github.com/bcgsc/unikseq
 cd unikseq
 </pre>
 If PERL is installed on your system, you're good to go (no additional libraries needed, nor dependencies).
+
+******************
+If you are interested in running the Bloom filter version on your system and the pre-built libraries do not work on your system, please follow these instructions on how to recompile*:
+
+https://github.com/bcgsc/LINKS/tree/d215339720f39c04537d859d7ea4e962c81b8d53#instructions-for-building-the-bloomfilter-perl-module
+
+*note: You will need to download a older version of the LINKS long read genome scaffolder to do so (links v1.8.7) available here:
+https://github.com/bcgsc/LINKS/releases/download/v1.8.7/links_v1-8-7.tar.gz
+******************
 
 
 ### Documentation
@@ -68,7 +79,7 @@ unikseq (concept, algorithm design and prototype): Rene Warren
 -----------
 
 <pre>
-Usage: ./unikseq.pl v1.2.2
+Usage: ./unikseq.pl v1.3.0
 -----input files-----
  -r reference FASTA (required)
  -i ingroup FASTA (required)
@@ -83,6 +94,19 @@ Usage: ./unikseq.pl v1.2.2
  -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
  -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p 0 %)
  -u min. [% unique] kmers in regions (option, default: -u 90 %)
+ -v output tsv files (option, -v 1==yes -v 0==no [default])
+
+or
+
+Usage: ./unikseqBloom.pl v1.0.0
+ -i ingroup Bloom filter (required)
+ -o outgroup Bloom filter (required)
+The rest of the options are the same.
+
+Bloom filter data structures are built with the writeBloom.pl utility included in the "tools"  directory.
+Both writeBloom.pl and unikseqBloom.pl have a library dependency (mentioned in the "Install" section above), with the pre-compiled library "BloomFilter.pm  BloomFilter.so" located in the "libexec" folder, "tools" directory. 
+
+
 </pre>
 
 Notes:
@@ -109,7 +133,7 @@ Notes:
   controls the kmer "uniqueness" in the outgroup, by tolerating a certain fraction of sequence entries in the outgroup having the reference kmer. This option could be useful when there's high similarity between the reference, ingroup AND outgroup sequences and more fine-grain adjustments are needed. Not specifying this option (-m 0) is the original unikseq behaviour.
 
  -t print only first t bases in tsv output (option, default: -t [k])
-  Avoids writing too much data to file. Users opt to specify the first -t base(s) to be printed in the tsv files. Original (default) behaviour is to print the whole [k]-mer.
+  Avoids writing too much data to file. Users opt to specify the first -t base(s) to be printed in the tsv files, when the -v option is turned on (i.e. -v 1, see -v option below). Original (default) behaviour is to print to file the whole [k]-mer sequence.
 
  -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
   Boolean (1/0, yes/no), controls the output behaviour of unikseq. When set (-c 1), conserved regions between ingroup sequence entries and the reference are identified by repurposing the -p parameter (below), evaluating the % of entries having a reference kmer at each position. When the % falls below the set -p threshold, regions will be part of a new unikseq FASTA output (.conserved.fa) and will be marked in upper-case (A,C,G,T) in the unique regions identified by unikseq. This option is useful for quick identification of unique sequences that are also conserved (to a tunable degree, and controlled by -p). The default (-c 0) is the original unikseq behaviour. Note: -c 1 may result in long run times on large (>10Mbp) reference (-r) sequences.
@@ -122,6 +146,10 @@ Notes:
 
  -u min. [% unique] kmers in regions (option, default: -u 90 %)
   controls for sequence uniqueness in the reference output regions. 
+
+ -v output tsv files (option, -v 1==yes -v 0==no [default])
+  Boolean (1/0, yes/no), controls tsv file output. By default, tsv files are no longer output by unikseq. To turn it on, set it to 1 (e.g. -v 1)
+
 
  Example command:
  ./unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90

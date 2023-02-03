@@ -5,7 +5,7 @@
 #   rwarren at bcgsc.ca
 
 #NAME
-# unikseq
+# unikseqBloom - a simple prototype support for large genomes, with Bloom filter functionality
 
 #SYNOPSIS
 # Find unique regions in target, tolerated in ingroup but not/less in sequence outgroup
@@ -15,24 +15,31 @@
 #   We hope this code is useful to you -- Please send comments & suggestions to rwarren * bcgsc.ca
 
 #LICENSE
-#unikseq Copyright (c) 2020-2023 British Columbia Cancer Agency Branch.  All rights reserved.
-#unikseq is released under the GNU General Public License v3
+#   Unikseq Copyright (c) 2020-2023 British Columbia Cancer Agency Branch.  All rights reserved.
+#   Unikseq is released under the GNU General Public License v3
+#   This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.
+#   For commercial licensing options, please contact Patrick Rebstein prebstein@bccancer.bc.ca
 
 use strict;
 use Getopt::Std;
-
+###
+use POSIX;
+use FindBin;
+use lib "$FindBin::RealBin/./libexec";
+use BloomFilter;
+###
 use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m $opt_c $opt_t $opt_v);
 getopts('k:r:i:o:p:l:u:s:m:c:t:v:');
 
-my $version = "v1.3.0";
+my $version = "v1.0.0";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag,$tsvflag) = (25,100,0,0,90,0,0,0);
 
 if(! $opt_r || ! $opt_i || ! $opt_o){
    print "Usage: $0 $version\n";
    print "-" x 5, "input files-----\n";
    print " -r reference FASTA (required)\n";
-   print " -i ingroup FASTA (required)\n";
-   print " -o outgroup FASTA (required)\n";
+   print " -i ingroup Bloom filter (required)\n";
+   print " -o outgroup Bloom filter (required)\n";
    print "-" x 5, "kmer uniqueness filters-----\n";
    print " -k length (option, default: -k $k)\n";
    print " -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l $minnotunique)\n";
@@ -62,6 +69,8 @@ $minpercentunique = $opt_u if($opt_u);
 $maxpercentoutgroup = $opt_m if($opt_m);
 $tchar = $opt_t if($opt_t);
 $tsvflag = $opt_v if($opt_v);
+my $MAXSTRINGLEN = 5000000;
+
 
 ###Prepare output
 #-----
@@ -108,13 +117,17 @@ $message = "done.\nReading outgroup $f3 ...\n";
 print $message;
 print LOG $message;
 
-my ($ex,$excount) = &readFasta($f3,$k);##exclude outgroup
+my $excount = 1;
+#my ($ex,$excount) = &readFasta($f3,$k);##exclude outgroup
+my $ex = new BloomFilter::BloomFilter($f3);
 
 $message = "done.\nReading ingroup $f2 ...\n";
 print $message;
 print LOG $message;
 
-my ($in,$incount) = &readFasta($f2,$k);##include ingroup
+my $incount = 1;
+#my ($in,$incount) = &readFasta($f2,$k);##include ingroup
+my $in = new BloomFilter::BloomFilter($f2);
 
 $message = "done.\nBeginning kmer analysis (k$k), sliding base by base on $f1 ...\n";
 print $message;
@@ -124,7 +137,7 @@ my $conseq;
 
 if($cflag){
    $conseq = &slideConserved($f1,$ex,$in,$k,$incount,$excount,$prop,$outcons,$tsvcons,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag);
-   $message = "done.\n";
+   $message = "\ndone.\n";
    $message .= "-" x 30, "\n";
    $message .= "\nOutput conserved reference sequence regions >= $regsz bp (vs. ingroup FASTA) in:\n$outcons\n";
 
@@ -135,7 +148,7 @@ if($cflag){
 
 &slide($cflag,$conseq,$f1,$ex,$in,$k,$incount,$excount,$prop,$outunique,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag);
 
-$message = "done.\n";
+$message = "\ndone.\n";
 $message .= "-" x 30, "\n";
 $message .= "\nOutput unique reference sequence regions >= $regsz bp in:\n$outunique\n";
 $message .= "\nOutput unique $k-mers (for butterfly plot):\n$tsv\ndone.\n";
@@ -161,17 +174,23 @@ sub slideConserved{
       print TSV "header\tposition\t$tchar-mer\tcondition\tnum_entries\tproportion\n";
    }
 
+   my $ctseq=0;
    open(IN,$f) || die "Can't read $f -- fatal.\n";
    while(<IN>){
       s/\r\n/\n/g;### DOS to UNIX
       chomp;
 
       if(/^\>(\S+)/){
+
+         $ctseq++;
+         print "\r$ctseq";
+         $|++;
+
          my $entry=$1;
          $head = $_;
 
          if($prevhead ne $head && $prevhead ne "" && $seq ne ""){
-            $conseq = &printConserved($conseq,$seq,$preventry,$k,$in,$incount,$prop,lc($seq),$tchar,$tsvflag);
+            $conseq = &printConserved($conseq,$seq,$preventry,$k,$in,$incount,$prop,$tchar,$tsvflag);
          }
          $seq = "";
          $prevhead = $head;
@@ -181,7 +200,7 @@ sub slideConserved{
          $seq .= uc($seqstretch);
       }
    }
-   $conseq = &printConserved($conseq,$seq,$preventry,$k,$in,$incount,$prop,lc($seq),$tchar,$tsvflag);
+   $conseq = &printConserved($conseq,$seq,$preventry,$k,$in,$incount,$prop,$tchar,$tsvflag);
 
    close OUT;
    close TSV if($tsvflag);
@@ -204,15 +223,21 @@ sub slide{
    }
 
    open(IN,$f) || die "Can't read $f -- fatal.\n";
+   my $ctseq = 0;
    while(<IN>){
       s/\r\n/\n/g;### DOS to UNIX
       chomp;
 
       if(/^\>(\S+)/){
+
+         $ctseq++;
+         print "\r$ctseq";
+         $|++;
+
          my $entry = $1;
          $head = $_;
          if($prevhead ne $head && $prevhead ne "" && $seq ne ""){
-            &printOutput($cflag,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
+            &printOutput($cflag,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag);
          }
          $seq = "";
          $prevhead = $head;
@@ -222,7 +247,7 @@ sub slide{
          $seq .= uc($seqstretch);
       }
    }
-   &printOutput($cflag,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
+   &printOutput($cflag,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag);
 
    close OUT;
    close TSV if($tsvflag);
@@ -231,37 +256,69 @@ sub slide{
 #--------------------------------
 sub printConserved{
 
-   my ($conseq,$seq,$head,$k,$in,$incount,$prop,$consequ,$tchar,$tsvflag) = @_;
+   my ($conseq,$masterseq,$head,$k,$in,$incount,$prop,$tchar,$tsvflag) = @_;
 
-   my ($initial,$sum,$buffer) = (-1,0,0);
+   ### sequence/sub-specific variables
+   my $newmaster = "";
+   my $last2k = "";
+   my $adjustedpos = 0;
+   my $mastercoord = 0;
+   my $chunknum = 0;
 
-   for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
-      my $kmer = substr($seq,$pos,$k);
-      my $tcharmer = substr($kmer,0,$tchar);
-      $kmer =~ tr/U/T/; ### handles RNA U>>>T
+   my $consequ="";
 
-      my $listin = $in->{$kmer};
-      my $ctin = keys(%$listin);
+   print "\nprocessing chunks...\n";
 
-      my ($ctexf,$ctinf) = (0,0);
-      $ctinf = $ctin/$incount if($incount);##as a fraction
-      printf TSV "$head\t$pos\t$tcharmer\tingroup\t$ctin\t%.4f\n", $ctinf if($tsvflag);
+   for(my $mpos=0; $mpos<= length($masterseq); $mpos+=$MAXSTRINGLEN){
+      $chunknum++;
+      my $seq = substr($masterseq,$mastercoord,$MAXSTRINGLEN);###This is needed for better memory management on large strings
+      my $tmpconsequ = lc($seq);
+      my $len = length($seq);
+      print "Adjusted position: $adjustedpos Tile-mpos:$mpos, mastercoord: $mastercoord step: $MAXSTRINGLEN (length of seq = $len)\n" if($tsvflag);
 
-      if((abs($ctinf)*100) >= $prop){#### kmer is conserved at set proportion in ingroup
+      my ($initial,$sum,$buffer) = (-1,0,0);
 
-         $initial = $pos if($initial==-1); ### only track init if was not tracking
-         $sum += $ctin;### for average calculation
+      POSITION:
+      for(my $pos=0;$pos<=(length($seq)-$k);$pos++){
+         my $kmer = substr($seq,$pos,$k);
+         my $tcharmer = substr($kmer,0,$tchar);
+         $kmer =~ tr/U/T/; ### handles RNA U>>>T
 
-         if($pos==(length($seq)-$k)){###end of sequence
-            $buffer = 1;
-            ($initial,$sum,$consequ) = &outputFASTA($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ,$buffer);
-         }         
-      }else{#### kmer below set threshold
-            ($initial,$sum,$consequ) = &outputFASTA($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ,$buffer);
+         #my $listin = $in->{$kmer};
+         #my $ctin = keys(%$listin);
+
+         my ($ctexf,$ctinf) = (0,0);
+         $ctinf = 1 if($in->contains($kmer));    # $ctin/$incount if($incount);##as a fraction
+         if($tsvflag){
+            printf TSV "$head\t$pos\t$tcharmer\tingroup\t$ctinf\t%.4f\n", $ctinf if($tsvflag);
+         }
+         if((abs($ctinf)*100) >= $prop){#### kmer is conserved at set proportion in ingroup
+
+            $initial = $pos if($initial==-1); ### only track init if was not tracking
+            $sum += $ctinf;### for average calculation
+
+            if($pos==(length($seq)-$k)){###end of sequence
+               $buffer = 1;
+               my ($adjstart,$adjend)=($initial+$adjustedpos,$pos+$adjustedpos);
+               ($initial,$sum,$tmpconsequ) = &outputFASTA($initial,$ctinf,$sum,$prop,$regsz,$head,$seq,$pos,$tmpconsequ,$buffer,$adjstart,$adjend);
+            }         
+         }else{#### kmer below set threshold
+               my ($adjstart,$adjend)=($initial+$adjustedpos,$pos+$adjustedpos);
+               ($initial,$sum,$tmpconsequ) = &outputFASTA($initial,$ctinf,$sum,$prop,$regsz,$head,$seq,$pos,$tmpconsequ,$buffer,$adjstart,$adjend);
+         }
       }
-   }
+   
+      my $seqminuslastk = substr($tmpconsequ, 0, (length($tmpconsequ) - (2*$k)));###The last kmer can never be resolved (in fact last <2*k can's be resolved)
+      $last2k = substr($tmpconsequ, (length($tmpconsequ) - (2*$k)), (2*$k));
+      $newmaster .= $seqminuslastk;
+      $adjustedpos = length($newmaster);
+      $mastercoord = ($mpos + $MAXSTRINGLEN) - ((2*$k)*$chunknum);
 
-   $conseq->{$head} = $consequ;
+   }###master seq loop
+
+   $newmaster .= $last2k;
+
+   $conseq->{$head} = $newmaster;
 
    return $conseq;
 }
@@ -269,25 +326,25 @@ sub printConserved{
 #--------------------------------
 sub outputFASTA{
 
-   my ($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ,$buffer) = @_;
+   my ($initial,$ctin,$sum,$prop,$regsz,$head,$seq,$pos,$consequ,$buffer,$adjstart,$adjend) = @_;
 
    if($initial > -1){###do not update trackers unless the region started with conserved seqs.
       my $stretch = $pos-$initial+$buffer; ### calculate seq stretch
       my $avg = $sum / $stretch;
       my $avgpropspc = $avg / $incount *100;
+
       my $conservedseq=substr($seq,$initial,$stretch);
-      substr($consequ, $initial, $stretch, uc($conservedseq));
+      substr($consequ, $initial, $stretch, uc($conservedseq)); ### !!! NOT EFFICIENT IN PERL, AND MAY NOT WORK ON LARGE STRINGS -- see ntEdit for solution
 
       if($stretch>=$regsz && $avgpropspc >= $prop){ ### only output longer regions, with a ingroup prop equal or above user-defined
-         my $poslast = $pos - 1 + $buffer;
-         my $newhead = $head . "region" . $initial . "-" . $poslast . "_size" . $stretch . "_propspcIN";
+         my $poslast = $adjend - 1 + $buffer;
+         my $newhead = $head . "region" . $adjstart . "-" . $poslast . "_size" . $stretch . "_propspcIN";
          printf OUT ">$newhead%.1f" . "\n$conservedseq\n", ($avgpropspc);
       }
       ###reset counters
       $initial = -1;
       $sum = 0;
    }
-
    return $initial,$sum,$consequ;
 }
 
@@ -303,44 +360,47 @@ sub printOutput{
       my $tcharmer = substr($kmer,0,$tchar);
       $kmer =~ tr/U/T/; ### handles RNA U>>>T
 
-      my $listex = $ex->{$kmer};
-      my $ctex = keys(%$listex);
-      my $listin = $in->{$kmer};
-      my $ctin = keys(%$listin);
+      ###my $listex = $ex->{$kmer};
+      ###my $ctex = keys(%$listex);
+      #my $listin = $in->{$kmer};
+      #my $ctin = keys(%$listin);
 
       my ($ctexf,$ctinf) = (0,0);
-      $ctexf = $ctex/$excount if($excount);##as a fraction
-      $ctinf = $ctin/$incount if($incount);##as a fraction
+
+      $ctexf = 1 if($ex->contains($kmer)); #$ctex/$excount if($excount);##as a fraction
+      $ctinf = 1 if($in->contains($kmer)); #$ctin/$incount if($incount);##as a fraction
       $ctinf = -1 * $ctinf;
 
       if(($pos < (length($seq)-$k)) && ($ctexf==0 || ($ctexf*100) < $maxpercentoutgroup)){#### kmer is UNIQUE : absent in outgroup, present at sufficient amounts in ingroup!
 
          $unique++;
          $notunique = 0;### reset notuniquecount
-         printf TSV "$head\t$pos\t$tcharmer\tunique\t%.4f\n", $ctinf if($tsvflag);
+         if($tsvflag){
+            printf TSV "$head\t$pos\t$tcharmer\tingroup-unique\t%.4f\n", $ctinf if($tsvflag);
+         }
          $initial = $pos if($initial==-1); ### only track init if was not tracking
-         $sum += $ctin;### for average calculation
-         $sumout += $ctex;
+         $sum += abs($ctinf);### for average calculation
+         $sumout += $ctexf;
 
       }else{      #### kmer not unique!
 
          if($ctexf){
-            printf TSV "$head\t$pos\t$tcharmer\tnot unique\t%.4f\n", $ctexf if($tsvflag);
+            printf TSV "$head\t$pos\t$tcharmer\toutgroup\t%.4f\n", $ctexf if($tsvflag);
          }elsif($pos == (length($seq)-$k) && $ctinf<=0){###end of sequence exception
             $unique++;
             $notunique = 0;### reset notuniquecount
-            printf TSV "$head\t$pos\t$tcharmer\tunique\t%.4f\n", $ctinf if($tsvflag);
-            $sum += $ctin;### for average calculation
+            printf TSV "$head\t$pos\t$tcharmer\tingroup-unique\t%.4f\n", $ctinf if($tsvflag);
+            $sum += abs($ctinf);### for average calculation
             $sumout += $ctexf;
             $buffer = 1;
          }
 
          if($initial > -1){###do not update trackers unless the region started with unique seqs. 
             $notunique++;
-            $sum += $ctin;### for average calculation
+            $sum += $incount;### for average calculation
 
             if($notunique > $minnotunique){ ### absent kmer in a row exceed min allowed threshold
-               $sum -= $ctin;
+               $sum -= $incount;
                my $stretch = $pos-$initial+$buffer; ### calculate seq stretch
                my $perunique = $unique / $stretch *100;
                my $avg = $sum / $stretch;
@@ -355,6 +415,8 @@ sub printOutput{
                      printf OUT ">$newhead%.1f" . "_propunivsOUT%.1f_avgOUTentries%.1f" . "\n$uniqueseq\n", ($avgpropspc,$perunique,$avgout);
                   }
                }else{#original behaviour
+
+#print "$stretch>=$regsz && $perunique >= $minpercentunique && $avgpropspc >= $prop ****\n";
 
                   if($stretch>=$regsz && $perunique >= $minpercentunique && $avgpropspc >= $prop){ ### only output longer regions, with a uniqueness prop equal or above user-defined
                      my $uniqueseq=substr($seq,$initial,$stretch);
