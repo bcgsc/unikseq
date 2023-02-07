@@ -22,7 +22,7 @@ Unikseq has broad applications in genomics and biology, including species monito
 
 Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require additional downstream analyses one would need to carry out atfer MSA to identify unique, conserved regions.
 
-UnikseqBloom is a code variant for processing Gbp-scale genomes/sequencing data sets. Please note that the initial implementation requires pre-built Bloom filters data structures (with the writeBloom.pl utility, provided with unikseq). These are regular, and not counting Bloom filters; As such, k-mers are not counted, and their presence/absence alone are used to infer uniqueness.
+UnikseqBloom is a code variant for processing Gbp-scale genomes/sequencing data sets. Please note that the initial implementation requires pre-built Bloom filters data structures (generated with the writeBloom.pl utility, provided with unikseq). These are regular, and not counting Bloom filters; As such, k-mers are not counted, and their presence/absence alone are used to infer uniqueness.
 
 
 ### Implementation and requirements
