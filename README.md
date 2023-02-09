@@ -20,7 +20,7 @@ The unique sequences identified by unikseq are useful for designing qPCR primer-
 
 Unikseq has broad applications in genomics and biology, including species monitoring and conservation; It was used to develop successful environmental DNA (eDNA) mitogenome assays that are highly specific to their intended target, fast and efficiently.
 
-Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require additional downstream analyses one would need to carry out atfer MSA to identify unique, conserved regions.
+Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require additional downstream analyses one would need to carry out atfer MSA to identify unique, conserved regions. Further, because unikseq employs a k-mer approach, in/outgroup FASTA sequence files need not be structured. As such , the input in/outgroup is very flexible and can include sequencing reads, whole and/or incomplete genome sequences with inconsistent start coordinates, or even a mix of the two -- as long as the genome sequences to compare a reference against are represented in full to the best of user's knowledge. 
 
 UnikseqBloom is a code variant for processing Gbp-scale genomes/sequencing data sets. Please note that the initial implementation requires pre-built Bloom filters data structures (generated with the writeBloom.pl utility, provided with unikseq). These are regular, and not counting Bloom filters; As such, k-mers are not counted, and their presence/absence alone are used to infer uniqueness.
 
