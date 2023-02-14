@@ -32,7 +32,7 @@ use Net::SMTP;
 use Time::HiRes;
 use vars qw($opt_f $opt_k $opt_p);
 getopts('f:k:p:');
-my ($k,$fpr)=(15,0.001);
+my ($k,$fpr)=(25,0.001);
 
 #-------------------------------------------------
 
