@@ -6,12 +6,26 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 
 # unikseq
 Unique (& conserved) region identification in DNA sequences, using a kmer approach
+### 2020-2023
+### email: rwarren [at] bcgsc [dot] ca
 
-## Rene L. Warren, 2020-2023
-## email: rwarren [at] bcgsc [dot] ca
+## CONTENTS
+--------
+1. [Description](#description)
+2. [Implementation and requirements](#implementation)
+3. [Install](#install)
+4. [Documentation](#docs)
+5. [Citing unikseq](#citing)
+6. [Credits](#credits)
+7. [Running unikseq](#run)
+8. [Outputs](#outputs)
+9. [Algorithm](#algorithm)
+10. [Quick reference](#quickref)
+11. [Generating "butterfly" plots](#bplot)
+12. [License](#license)
 
 
-### Description
+## Description <a name=description></a>
 -----------
 
 Unikseq systematically processes the kmers of a reference sequence, tolerated in an ingroup, but not (or marginally) tolerated in an outgroup sequence set to ultimately help identify regions that are unique within that reference. 
@@ -25,13 +39,13 @@ Because unikseq does not rely on sequence alignments, it is much faster than mul
 UnikseqBloom is a code variant for processing Gbp-scale genomes/sequencing data sets. Please note that the initial implementation requires pre-built Bloom filters data structures (generated with the writeBloom.pl utility, provided with unikseq). These are regular, and not counting Bloom filters; As such, k-mers are not counted, and their presence/absence alone are used to infer uniqueness.
 
 
-### Implementation and requirements
+## Implementation and requirements <a name=implementation></a>
 -------------------------------
 
 Unikseq is developed in PERL and runs on any system where PERL is installed.
 
 
-### Install
+## Install <a name=install></a>
 -------
 
 Clone and enter the unikseq directory.
@@ -51,7 +65,7 @@ https://github.com/bcgsc/LINKS/releases/download/v1.8.7/links_v1-8-7.tar.gz
 ******************
 
 
-### Documentation
+## Documentation <a name=docs></a>
 -------------
 
 Refer to the README.md file on how to install and run unikseq
@@ -61,7 +75,7 @@ Questions or comments?  We would love to hear from you!
 rwarren@bcgsc.ca
 
 
-### Citing unikseq
+## Citing unikseq <a name=cite></a>
 ------------
 
 Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/stargazers) and for using, developing and promoting this free software!
@@ -69,13 +83,13 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 If you use unikseq in your research, please cite: TBD
 
 
-### Credits
+## Credits <a name=credits></a>
 -------
 
 unikseq (concept, algorithm design and prototype): Rene Warren
 
 
-### Running unikseq
+## Running unikseq <a name=run></a>
 -----------
 
 <pre>
@@ -157,7 +171,7 @@ Notes:
 </pre>
 
 
-### Outputs (-c0 : 3 files / -c1 : 5 files)
+## Outputs (-c0 : 3 files / -c1 : 5 files) <a name=outputs></a>
 
 1) TSV file (-uniqueKmers.tsv) 
 
@@ -263,7 +277,7 @@ Notes:
    </pre>
 
 
-### Unikseq algorithm design and implementation
+## Algorithm, design and implementation <a name=algorithm></a>
 
 The algorithm starts by first parsing FASTA sequence(s) supplied by the user as “outgroup” (-o option) and “ingroup” (-i option) and extracting every word of length k (kmers, -k option) and their reverse complement and storing each in respective two-dimensional hash data structures, keeping track of the kmer occurrence in each FASTA entry for either sets. We point out that in/outgroup sequences need not start at the same position, nor be represented on the same strand since unikseq is kmer-based, so no specific DNA sequence formatting is required other than supplying a FASTA-formatted file (e.g. no need to adjust the sequence start for mtDNA genomes). 
 
@@ -276,7 +290,7 @@ When the unique sequence can no longer be extended, it will be written to a FAST
 Unikseq also outputs a tab-separated value (tsv) file that tracks, at each coordinate relative to the reference sequence, the proportion of corresponding kmers in the outgroup and ingroup sets, and was used to generate the butterfly plots (below). Instructions and code for generating the butterfly plots in the R programming language are both available from the repository at the URL below. The intended use-case of unikseq is for identification of unique sequences in mitochrondrial [genome] and similarly short sequences (In initial tests comparing 52 x 2-5Mbp bacterial [HMP mock community] genomes, unikseq ran in 5m and required 54GB RAM). For larger, Gbp-size genomes, we recommend the use of unikseqBloom, included in the v1.3 commit of the code. Unikseq is developed in PERL and runs on any system where PERL is installed, requiring no additional library. It is distributed under GPLv3 license and available freely from github (https://github.com/bcgsc/unikseq).
 
  
-### Quick reference
+## Quick reference <a name=quickref></a>
 
 Below is a reference guide for controlling the [stringency &] output of unikseq.
 <pre>
@@ -291,7 +305,7 @@ Below is a reference guide for controlling the [stringency &] output of unikseq.
    (-) decrease: -p, -u and -s (output filter controls) parameters. You may also decrease k
 </pre>
 
-### Generating "butterfly" plots
+## Generating "butterfly" plots <a name=bplot></a>
 -----------
 
 ![UnikseqButterflyPlot](https://github.com/bcgsc/unikseq/blob/main/unikseq-butterfly.png)
@@ -303,7 +317,7 @@ dfa<-read.table("XX unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-uniqueKmers.ts
 my_x_title <- expression(paste("Position of 25-mers on ", italic("XX A. fragilis XX"), " Mt genome"))
 </pre>
 
-### License
+## License <a name=license></a>
 -------
 
 Unikseq Copyright (c) 2020-2023 British Columbia Cancer Agency Branch.  All rights reserved.
