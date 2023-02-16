@@ -14,15 +14,17 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 1. [Description](#description)
 2. [Implementation and requirements](#implementation)
 3. [Install](#install)
-4. [Documentation](#docs)
-5. [Citing unikseq](#cite)
-6. [Credits](#credits)
-7. [Running unikseq](#run)
-8. [Output](#output)
-9. [Algorithm](#algorithm)
-10. [Quick reference](#quickref)
-11. [Generating "butterfly" plots](#bplot)
-12. [License](#license)
+4. [Dependencies](#dep)
+5. [Bloom filter version](#bloom)
+6. [Documentation](#docs)
+7. [Citing unikseq](#cite)
+8. [Credits](#credits)
+9. [Running unikseq](#run)
+10. [Output](#output)
+11. [Algorithm](#algorithm)
+12. [Quick reference](#quickref)
+13. [Generating "butterfly" plots](#bplot)
+14. [License](#license)
 
 
 ## Description <a name=description></a>
@@ -53,7 +55,17 @@ Clone and enter the unikseq directory.
 git clone https://github.com/bcgsc/unikseq
 cd unikseq
 </pre>
-If PERL is installed on your system, you're good to go (no additional libraries needed, nor dependencies).
+
+## Dependencies <a name=dep></a>
+-------
+
+If PERL is installed on your system, and you're interested in the original unikseq code*, you're good to go (no additional libraries needed, nor dependencies).
+
+* As opposed to the Bloom filter version, see below
+
+
+## Bloom filter version <a name=bloom></a>
+-------
 
 ******************
 If you are interested in running the Bloom filter version on your system and the pre-built libraries do not work on your system, please follow these instructions on how to recompile*:
