@@ -9,7 +9,7 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 ### 2020-2023
 ### email: rwarren [at] bcgsc [dot] ca
 
-## CONTENTS
+## Contents
 
 1. [Description](#description)
 2. [Implementation and requirements](#implementation)
