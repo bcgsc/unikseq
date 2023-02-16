@@ -63,14 +63,12 @@ If PERL is installed on your system, and you're interested in the original uniks
 
 ## Bloom filter version <a name=bloom></a>
 
-<pre>
 If you are interested in running the Bloom filter version on your system and the pre-built libraries do not work on your system, please follow these instructions on how to recompile*:
 
 https://github.com/bcgsc/LINKS/tree/d215339720f39c04537d859d7ea4e962c81b8d53#instructions-for-building-the-bloomfilter-perl-module
 
 *note: You will need to download a older version of the LINKS long read genome scaffolder to do so (links v1.8.7) available here:
 https://github.com/bcgsc/LINKS/releases/download/v1.8.7/links_v1-8-7.tar.gz
-</pre>
 
 
 ## Documentation <a name=docs></a>
