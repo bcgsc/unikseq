@@ -10,7 +10,7 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 ### email: rwarren [at] bcgsc [dot] ca
 
 ## CONTENTS
---------
+
 1. [Description](#description)
 2. [Implementation and requirements](#implementation)
 3. [Install](#install)
@@ -28,7 +28,6 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 
 
 ## Description <a name=description></a>
------------
 
 Unikseq systematically processes the kmers of a reference sequence, tolerated in an ingroup, but not (or marginally) tolerated in an outgroup sequence set to ultimately help identify regions that are unique within that reference. 
 
@@ -42,13 +41,11 @@ UnikseqBloom is a code variant for processing Gbp-scale genomes/sequencing data 
 
 
 ## Implementation and requirements <a name=implementation></a>
--------------------------------
 
 Unikseq is developed in PERL and runs on any system where PERL is installed.
 
 
 ## Install <a name=install></a>
--------
 
 Clone and enter the unikseq directory.
 <pre>
@@ -56,8 +53,8 @@ git clone https://github.com/bcgsc/unikseq
 cd unikseq
 </pre>
 
+
 ## Dependencies <a name=dep></a>
--------
 
 If PERL is installed on your system, and you're interested in the original unikseq code*, you're good to go (no additional libraries needed, nor dependencies).
 
@@ -65,20 +62,18 @@ If PERL is installed on your system, and you're interested in the original uniks
 
 
 ## Bloom filter version <a name=bloom></a>
--------
 
-******************
+<pre>
 If you are interested in running the Bloom filter version on your system and the pre-built libraries do not work on your system, please follow these instructions on how to recompile*:
 
 https://github.com/bcgsc/LINKS/tree/d215339720f39c04537d859d7ea4e962c81b8d53#instructions-for-building-the-bloomfilter-perl-module
 
 *note: You will need to download a older version of the LINKS long read genome scaffolder to do so (links v1.8.7) available here:
 https://github.com/bcgsc/LINKS/releases/download/v1.8.7/links_v1-8-7.tar.gz
-******************
+</pre>
 
 
 ## Documentation <a name=docs></a>
--------------
 
 Refer to the README.md file on how to install and run unikseq
 Manuscript in preparation
@@ -88,7 +83,6 @@ rwarren@bcgsc.ca
 
 
 ## Citing unikseq <a name=cite></a>
-------------
 
 Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/stargazers) and for using, developing and promoting this free software!
 
@@ -96,13 +90,11 @@ If you use unikseq in your research, please cite: TBD
 
 
 ## Credits <a name=credits></a>
--------
 
 unikseq (concept, algorithm design and prototype): Rene Warren
 
 
 ## Running unikseq <a name=run></a>
------------
 
 <pre>
 Usage: ./unikseq.pl v1.3.0
@@ -318,7 +310,6 @@ Below is a reference guide for controlling the [stringency &] output of unikseq.
 </pre>
 
 ## Generating "butterfly" plots <a name=bplot></a>
------------
 
 ![UnikseqButterflyPlot](https://github.com/bcgsc/unikseq/blob/main/unikseq-butterfly.png)
 
@@ -330,7 +321,6 @@ my_x_title <- expression(paste("Position of 25-mers on ", italic("XX A. fragilis
 </pre>
 
 ## License <a name=license></a>
--------
 
 Unikseq Copyright (c) 2020-2023 British Columbia Cancer Agency Branch.  All rights reserved.
 
