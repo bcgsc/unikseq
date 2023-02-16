@@ -15,10 +15,10 @@ Unique (& conserved) region identification in DNA sequences, using a kmer approa
 2. [Implementation and requirements](#implementation)
 3. [Install](#install)
 4. [Documentation](#docs)
-5. [Citing unikseq](#citing)
+5. [Citing unikseq](#cite)
 6. [Credits](#credits)
 7. [Running unikseq](#run)
-8. [Outputs](#outputs)
+8. [Output](#output)
 9. [Algorithm](#algorithm)
 10. [Quick reference](#quickref)
 11. [Generating "butterfly" plots](#bplot)
@@ -171,7 +171,7 @@ Notes:
 </pre>
 
 
-## Outputs (-c0 : 3 files / -c1 : 5 files) <a name=outputs></a>
+## Output (-c0 : 3 files / -c1 : 5 files) <a name=output></a>
 
 1) TSV file (-uniqueKmers.tsv) 
 
