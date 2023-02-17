@@ -279,7 +279,7 @@ Notes:
    </pre>
 
 
-## Algorithm, design and implementation <a name=algorithm></a>
+## Algorithm design and implementation <a name=algorithm></a>
 
 The algorithm starts by first parsing FASTA sequence(s) supplied by the user as “outgroup” (-o option) and “ingroup” (-i option) and extracting every word of length k (kmers, -k option) and their reverse complement and storing each in respective two-dimensional hash data structures, keeping track of the kmer occurrence in each FASTA entry for either sets. We point out that in/outgroup sequences need not start at the same position, nor be represented on the same strand since unikseq is kmer-based, so no specific DNA sequence formatting is required other than supplying a FASTA-formatted file (e.g. no need to adjust the sequence start for mtDNA genomes). 
 
