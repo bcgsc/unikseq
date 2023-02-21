@@ -142,6 +142,13 @@ $message .= "\nOutput unique $k-mers (for butterfly plot):\n$tsv\ndone.\n";
 print $message;
 print LOG $message;
 
+$message = "\nNOTE1: The unique (and/or hypervariable) reference regions identified by unikseq are RELATIVE to the sequences provided in the outgroup file. Please ensure COMPLETENESS* of outgroup sequences to help interpretability of results or for use in downstream applications.\n\n";
+
+$message .= "NOTE2*: An incomplete outgroup sequence (or sequences) may be used, but the reference regions identified by unikseq would help characterize missing stretches in the former instead, for instance.\n";
+
+print $message;
+print LOG $message;
+
 close LOG;
 
 exit;
