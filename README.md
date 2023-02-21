@@ -35,9 +35,17 @@ The unique sequences identified by unikseq are useful for designing qPCR primer-
 
 Unikseq has broad applications in genomics and biology, including species monitoring and conservation; It was used to develop successful environmental DNA (eDNA) mitogenome assays that are highly specific to their intended target, fast and efficiently.
 
-Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require additional downstream analyses one would need to carry out atfer MSA to identify unique, and potentially conserved, regions. Further, because unikseq employs a k-mer approach, in/outgroup FASTA sequence files need not be structured. As such, the input in/outgroup is very flexible and can include raw RNA-seq/WGS sequencing reads, contiguous/fragmented genome sequences with inconsistent start coordinates, unordered/unoriented contigs or even a mix of reads/genome sequences - as long as the genome sequences to compare a reference against are represented in full (i.e. complete), to the best of each user's knowledge; This is especially important for outgroup sequence sets, as absence of kmers due to incomplete sequences may result in the identification of unique sequences in the reference sequence under scrutiny. 
+Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require additional downstream analyses one would need to carry out atfer MSA to identify unique, and potentially conserved, regions. Further, because unikseq employs a k-mer approach, in/outgroup FASTA sequence files need not be structured. As such, the input in/outgroup is very flexible and can include raw RNA-seq/WGS sequencing reads, contiguous/fragmented genome sequences with inconsistent start coordinates, unordered/unoriented contigs or even a mix of reads/genome sequences - as long as the genome sequences to compare a reference against are represented in full (i.e. complete), to the best of the user's knowledge; This is especially important for outgroup sequence sets, as absence of kmers due to incomplete sequences may result in the identification of unique sequences in the reference sequence under scrutiny. 
 
 UnikseqBloom is a code variant for processing Gbp-scale genomes/sequencing data sets. Please note that the initial implementation requires pre-built Bloom filters data structures (generated with the writeBloom.pl utility, provided with unikseq). These are regular, and not counting Bloom filters; As such, k-mers are not counted, and their presence/absence alone are used to infer uniqueness.
+
+```diff
+! NOTE1: The unique (and/or hypervariable) reference regions identified by unikseq are RELATIVE to the sequences provided in the outgroup file. Please ensure COMPLETNESS* of outgroup sequences to help interpretability of results or for use in downstream applications. 
+```
+
+```diff
+! NOTE2*: An incomplete outgroup sequence (or sequences) may be used, but the reference regions identified by unikseq would help characterize missing stretches in the former instead, for instance.
+```
 
 
 ## Implementation and requirements <a name=implementation></a>
@@ -199,7 +207,7 @@ Notes:
 
 2) FASTA file (-unique.fa)
 
-   A multi-FASTA with all unique sequences passing the filters set at run time.
+   A multi-FASTA with all unique (relative to outgroup) sequences passing the filters set at run time.
    Input parameters will be captured in the filename.
 
    e.g.
@@ -231,7 +239,7 @@ Notes:
    </pre>   
 
    ```diff
-   ! NOTE: When -c 1 is set, -p does not impose a minimum average proportion of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. This handy feature enables quick identification of conserved regions within unique sequences.
+   ! NOTE: When -c 1 is set, -p does not impose a minimum average proportion of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. This handy feature enables quick identification of conserved (ingroup) regions within unique (relative to outgroup) sequences.
    ```
 
 3) LOG file (.log)
@@ -264,7 +272,7 @@ Notes:
 
 5) FASTA file (-conserved.fa)
 
-   A multi-FASTA with all conserved sequences passing the filters set at run time.
+   A multi-FASTA with all conserved (within ingroup) sequences passing the filters set at run time.
    Input parameters are captured in the filename (see above description in (2)).
 
    The header of each FASTA entry captures several key information.
