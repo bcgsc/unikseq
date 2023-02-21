@@ -44,7 +44,7 @@ UnikseqBloom is a code variant for processing Gbp-scale genomes/sequencing data 
 ```
 
 ```diff
-! *NOTE2: An incomplete outgroup sequence (or sequences) may be used, but the reference regions identified by unikseq would help characterize missing stretches in the former instead, for instance
+! *NOTE2: An incomplete outgroup sequence (or sequences) may be used; In that case, the reference regions identified by unikseq could help characterize missing stretches in those outgroup sequences, for instance
 ```
 
 
