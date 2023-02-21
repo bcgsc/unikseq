@@ -35,7 +35,7 @@ The unique sequences identified by unikseq are useful for designing qPCR primer-
 
 Unikseq has broad applications in genomics and biology, including species monitoring and conservation; It was used to develop successful environmental DNA (eDNA) mitogenome assays that are highly specific to their intended target, fast and efficiently.
 
-Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require additional downstream analyses one would need to carry out atfer MSA to identify unique, and potentially conserved, regions. Further, because unikseq employs a k-mer approach, in/outgroup FASTA sequence files need not be structured. As such, the input in/outgroup is very flexible and can include raw RNA-seq/WGS sequencing reads, contiguous/fragmented genome sequences with inconsistent start coordinates, unordered/unoriented contigs or even a mix of reads/genome sequences - as long as the genome sequences to compare a reference against are represented in full (i.e. complete), to the best of the user's knowledge; This is especially important for outgroup sequence sets, as absence of kmers due to incomplete sequences may result in the identification of unique sequences in the reference sequence under scrutiny. 
+Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require additional downstream analyses one would need to carry out atfer MSA to identify unique, and potentially conserved, regions. Further, because unikseq employs a k-mer approach, in/outgroup FASTA sequence files need not be structured. As such, the input in/outgroup is very flexible and can include raw RNA-seq/WGS sequencing reads, contiguous/fragmented genome sequences with inconsistent start coordinates, unordered/unoriented contigs or even a mix of reads/genome sequences - as long as the genome sequences to compare a reference against are represented in full (i.e. complete), to the best of the user's knowledge; This is especially important for outgroup sequence sets, as absence of kmers due to incomplete sequences may result in the identification of unique sequences in the reference sequence under scrutiny (see NOTES below). 
 
 UnikseqBloom is a code variant for processing Gbp-scale genomes/sequencing data sets. Please note that the initial implementation requires pre-built Bloom filters data structures (generated with the writeBloom.pl utility, provided with unikseq). These are regular, and not counting Bloom filters; As such, k-mers are not counted, and their presence/absence alone are used to infer uniqueness.
 
@@ -44,7 +44,7 @@ UnikseqBloom is a code variant for processing Gbp-scale genomes/sequencing data 
 ```
 
 ```diff
-! NOTE2*: An incomplete outgroup sequence (or sequences) may be used, but the reference regions identified by unikseq would help characterize missing stretches in the former instead, for instance.
+! *NOTE2: An incomplete outgroup sequence (or sequences) may be used, but the reference regions identified by unikseq would help characterize missing stretches in the former instead, for instance.
 ```
 
 
