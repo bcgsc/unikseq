@@ -66,8 +66,9 @@ cd unikseq
 
 If PERL is installed on your system, and you're interested in the original unikseq code*, you're good to go (no additional libraries needed, nor dependencies).
 
+<pre>
 * As opposed to the Bloom filter version, see below
-
+</pre>
 
 ## Bloom filter version <a name=bloom></a>
 
