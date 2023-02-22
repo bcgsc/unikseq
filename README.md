@@ -5,7 +5,7 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 ![Logo](https://github.com/bcgsc/unikseq/blob/main/unikseq-logo.png)
 
 # unikseq
-## Unique (& conserved) region identification in DNA sequences, using a kmer approach
+## Unique (& conserved) region identification in DNA sequences, using a k-mer approach
 ### 2020-2023
 ### email: rwarren [at] bcgsc [dot] ca
 
@@ -29,13 +29,13 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 
 ## Description <a name=description></a>
 
-Unikseq systematically processes the kmers of a reference sequence, tolerated in an ingroup, but not (or marginally) tolerated in an outgroup sequence set to ultimately help identify regions that are unique within that reference. 
+Unikseq systematically processes the k-mers of a reference sequence, tolerated in an ingroup, but not (or marginally) tolerated in an outgroup sequence set to ultimately help identify regions that are unique within that reference. 
 
 The unique sequences identified by unikseq are useful for designing qPCR primer-probe sets with high specificity, for instance, with no manual intervention nor time-consuming sequence inspection.
 
 Unikseq has broad applications in genomics and biology, including species monitoring and conservation; It was used to develop successful environmental DNA (eDNA) mitogenome assays that are highly specific to their intended target, fast and efficiently.
 
-Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require additional downstream analyses one would need to carry out atfer MSA to identify unique, and potentially conserved, regions. Further, because unikseq employs a k-mer approach, in/outgroup FASTA sequence files need not be structured. As such, the input in/outgroup is very flexible and can include raw RNA-seq/WGS sequencing reads, contiguous/fragmented genome sequences with inconsistent start coordinates, unordered/unoriented contigs or even a mix of reads/genome sequences - as long as the genome sequences to compare a reference against are represented in full (i.e. complete), to the best of the user's knowledge; This is especially important for outgroup sequence sets, as absence of kmers due to incomplete sequences may result in the identification of unique sequences in the reference sequence under scrutiny (see NOTES below). 
+Because unikseq does not rely on sequence alignments, it is much faster than multiple sequence alignments (MSA), and doesn't require additional downstream analyses one would need to carry out atfer MSA to identify unique, and potentially conserved, regions. Further, because unikseq employs a k-mer approach, in/outgroup FASTA sequence files need not be structured. As such, the input in/outgroup is very flexible and can include raw RNA-seq/WGS sequencing reads, contiguous/fragmented genome sequences with inconsistent start coordinates, unordered/unoriented contigs or even a mix of reads/genome sequences - as long as the genome sequences to compare a reference against are represented in full (i.e. complete), to the best of the user's knowledge; This is especially important for outgroup sequence sets, as absence of k-mers due to incomplete sequences may result in the identification of unique sequences in the reference sequence under scrutiny (see NOTES below). 
 
 UnikseqBloom is a code variant for processing Gbp-scale genomes/sequencing data sets. Please note that the initial implementation requires pre-built Bloom filters data structures (generated with the writeBloom.pl utility, provided with unikseq). These are regular, and not counting Bloom filters; As such, k-mers are not counted, and their presence/absence alone are used to infer uniqueness.
 
@@ -109,16 +109,16 @@ Usage: ./unikseq.pl v1.3.0
  -r reference FASTA (required)
  -i ingroup FASTA (required)
  -o outgroup FASTA (required)
------kmer uniqueness filters-----
+-----k-mer uniqueness filters-----
  -k length (option, default: -k 25)
- -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 0)
- -m max. [% entries] in outgroup tolerated to have a reference kmer (option, default: -m 0 % [original behaviour])
+ -l [leniency] min. non-unique consecutive k-mers allowed in outgroup (option, default: -l 0)
+ -m max. [% entries] in outgroup tolerated to have a reference k-mer (option, default: -m 0 % [original behaviour])
 -----output filters-----
  -t print only first t bases in tsv output (option, default: -t [k])
  -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
  -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
  -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p 0 %)
- -u min. [% unique] kmers in regions (option, default: -u 90 %)
+ -u min. [% unique] k-mers in regions (option, default: -u 90 %)
  -v output tsv files (option, -v 1==yes -v 0==no [default])
 
 or
@@ -142,26 +142,26 @@ Notes:
 
  -i ingroup FASTA (required)
   tolerated sequences. Used to find regions unique to a % (see -p option).
-  In v1.2.1 onward, multi-FASTA entries are grouped by the first non-space identifier in the FASTA header. This is useful when querying kmers from genome assemblies or even sequencing reads, summarizing for a giving species, for instance. e.g. >myID contig1 and >myID contig2. When unikseq calculates proportions reported in output files, it will summarize by "myID", counting multi-FASTA entries as one. The original behaviour is obtained by using distinct, non-space headers for each entries (e.g. >myID_contig1 and >myID_contig2 count as two entries).
+  In v1.2.1 onward, multi-FASTA entries are grouped by the first non-space identifier in the FASTA header. This is useful when querying k-mers from genome assemblies or even sequencing reads, summarizing for a giving species, for instance. e.g. >myID contig1 and >myID contig2. When unikseq calculates proportions reported in output files, it will summarize by "myID", counting multi-FASTA entries as one. The original behaviour is obtained by using distinct, non-space headers for each entries (e.g. >myID_contig1 and >myID_contig2 count as two entries).
 
  -o outgroup FASTA (required)
-  outgroup to query kmers against. Note that input reference and ingroup sequences will be automatically excluded from this set.
-  In v1.2.1 onward, multi-FASTA entries are grouped by the first non-space identifier in the FASTA header. This is useful when querying kmers from genome assemblies or even sequencing reads, summarizing for a giving species, for instance. e.g. >myID contig1 and >myID contig2. When unikseq calculates proportions reported in output files, it will summarize by "myID", counting multi-FASTA entries as one. The original behaviour is obtained by using distinct, non-space headers for each entries (e.g. >myID_contig1 and >myID_contig2 count as two entries). For those interested in sequence conservation between reference and ingroup only, you have the option to supply a dummy -o outgroup FASTA file consisting of a header and single base, for instance. 
+  outgroup to query k-mers against. Note that input reference and ingroup sequences will be automatically excluded from this set.
+  In v1.2.1 onward, multi-FASTA entries are grouped by the first non-space identifier in the FASTA header. This is useful when querying k-mers from genome assemblies or even sequencing reads, summarizing for a giving species, for instance. e.g. >myID contig1 and >myID contig2. When unikseq calculates proportions reported in output files, it will summarize by "myID", counting multi-FASTA entries as one. The original behaviour is obtained by using distinct, non-space headers for each entries (e.g. >myID_contig1 and >myID_contig2 count as two entries). For those interested in sequence conservation between reference and ingroup only, you have the option to supply a dummy -o outgroup FASTA file consisting of a header and single base, for instance. 
 
  -k length (option, default: -k 25)
-  kmer length.
+  k-mer length.
 
- -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
-  this leniency factor controls the tolerance for non-unique kmers in the outgroup when computing a sequence stretch. If set to 0, the sequence stretch is limited to unique kmers only and the % unique bases of the stretch will be 100% (see next parameter). Set to 1, allows some leniency and tolerates a single non-unique kmer in a row. Set to 2, tolerates up to 2 in a row, etc. When set >0, the %unique bases of a sequence stretch will almost never be 100% unique and so -u MUST be lowered below 100%.
+ -l [leniency] min. non-unique consecutive k-mers allowed in outgroup (option, default: -l 1)
+  this leniency factor controls the tolerance for non-unique k-mers in the outgroup when computing a sequence stretch. If set to 0, the sequence stretch is limited to unique k-mers only and the % unique bases of the stretch will be 100% (see next parameter). Set to 1, allows some leniency and tolerates a single non-unique k-mer in a row. Set to 2, tolerates up to 2 in a row, etc. When set >0, the %unique bases of a sequence stretch will almost never be 100% unique and so -u MUST be lowered below 100%.
 
- -m max. [% entries] in outgroup tolerated to have reference kmer (option, default: -m 0 % [original behaviour])
-  controls the kmer "uniqueness" in the outgroup, by tolerating a certain fraction of sequence entries in the outgroup having the reference kmer. This option could be useful when there's high similarity between the reference, ingroup AND outgroup sequences and more fine-grain adjustments are needed. Not specifying this option (-m 0) is the original unikseq behaviour.
+ -m max. [% entries] in outgroup tolerated to have reference k-mer (option, default: -m 0 % [original behaviour])
+  controls the k-mer "uniqueness" in the outgroup, by tolerating a certain fraction of sequence entries in the outgroup having the reference k-mer. This option could be useful when there's high similarity between the reference, ingroup AND outgroup sequences and more fine-grain adjustments are needed. Not specifying this option (-m 0) is the original unikseq behaviour.
 
  -t print only first t bases in tsv output (option, default: -t [k])
   Avoids writing too much data to file. Users opt to specify the first -t base(s) to be printed in the tsv files, when the -v option is turned on (i.e. -v 1, see -v option below). Original (default) behaviour is to print to file the whole [k]-mer sequence.
 
  -c output conserved FASTA regions between reference and ingroup entries (option, -c 1==yes -c 0==no, [default, original unikseq behaviour])
-  Boolean (1/0, yes/no), controls the output behaviour of unikseq. When set (-c 1), conserved regions between ingroup sequence entries and the reference are identified by repurposing the -p parameter (below), evaluating the % of entries having a reference kmer at each position. When the % falls below the set -p threshold, regions will be part of a new unikseq FASTA output (.conserved.fa) and will be marked in upper-case (A,C,G,T) in the unique regions identified by unikseq. This option is useful for quick identification of unique sequences that are also conserved (to a tunable degree, and controlled by -p). The default (-c 0) is the original unikseq behaviour. Note: -c 1 may result in long run times on large (>10Mbp) reference (-r) sequences.
+  Boolean (1/0, yes/no), controls the output behaviour of unikseq. When set (-c 1), conserved regions between ingroup sequence entries and the reference are identified by repurposing the -p parameter (below), evaluating the % of entries having a reference k-mer at each position. When the % falls below the set -p threshold, regions will be part of a new unikseq FASTA output (.conserved.fa) and will be marked in upper-case (A,C,G,T) in the unique regions identified by unikseq. This option is useful for quick identification of unique sequences that are also conserved (to a tunable degree, and controlled by -p). The default (-c 0) is the original unikseq behaviour. Note: -c 1 may result in long run times on large (>10Mbp) reference (-r) sequences.
 
  -s min. reference FASTA region [size] (bp) to output (option, default: -s 100 bp)
   minimum "unique" (and -c 1:"conserved") reference (target) region size to report.
@@ -169,7 +169,7 @@ Notes:
  -p min. [-c 0:region average /-c 1: per position] proportion of ingroup entries (option, default: -p 0 %)
   unikseq tracks the number of qualifying sequences in the ingroup over the sequence stretch, averages and calculates a proportion of the total entries in the ingroup. In the -c 0 mode (original unikseq behaviour), sequences are reported only when that proportion is above the minimum set. When -c 1 is set, -p does not impose a minimum average proportion of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. 
 
- -u min. [% unique] kmers in regions (option, default: -u 90 %)
+ -u min. [% unique] k-mers in regions (option, default: -u 90 %)
   controls for sequence uniqueness in the reference output regions. 
 
  -v output tsv files (option, -v 1==yes -v 0==no [default])
@@ -186,13 +186,13 @@ Notes:
 
 1) TSV file (-uniqueKmers.tsv) 
 
-   Tab-Separated Variable file. Reports all reference sequence kmers in 4 columns:
+   Tab-Separated Variable file. Reports all reference sequence k-mers in 4 columns:
    <pre>
    header	position	[k]-mer	condition	value
    [FASTA header][coordinates][sequence][in/out group][proportion in each in/out group]
-   By default, every instance of a reference kmer is reported when found in the outgroup.
-   When it is not found, the ingroup-unique will be reported (if found). Note: when -t is specified, only the first -t bases of the kmer will be shown in the tsv file(s), but the data reported is for the whole kmer.
-   If a reference kmer is found in outgroup sequences, the ingroup-unique WILL NOT report any
+   By default, every instance of a reference k-mer is reported when found in the outgroup.
+   When it is not found, the ingroup-unique will be reported (if found). Note: when -t is specified, only the first -t bases of the k-mer will be shown in the tsv file(s), but the data reported is for the whole k-mer.
+   If a reference k-mer is found in outgroup sequences, the ingroup-unique WILL NOT report any
    values. This is the file to use to generate "butterfly" plots (see below and r script attached with this distribution [example.r] for details)
 
    e.g.
@@ -219,12 +219,12 @@ Notes:
     -c conserved mode (option, default: -c 0)
     -s min. reference region [size] (bp) to output (option, default: -s 100 bp)
     -p min. average [proportion] ingroup entries in regions (option, default: -p 25 %)
-    -l [leniency] min. non-unique consecutive kmers allowed in outgroup (option, default: -l 1)
-    -u min. [% unique] kmers in regions (option, default: -u 90 %)
-    -m max. [% entries] in outgroup tolerated to have reference kmer at each position (option, default: -m 0 % [original behaviour])
+    -l [leniency] min. non-unique consecutive k-mers allowed in outgroup (option, default: -l 1)
+    -u min. [% unique] k-mers in regions (option, default: -u 90 %)
+    -m max. [% entries] in outgroup tolerated to have reference k-mer at each position (option, default: -m 0 % [original behaviour])
    </pre>
 
-   In this example, unique sequences -s >=100 bp, found in -p >=25% of ingroup sequence entries on average, with -u >=90% of its -k 25-mers uniquely found (i.e. not in outgroup entries kmers), and with a leniency of at most -l 1 consecutive non-unique kmer (i.e. found in outgroup). Further, reference kmers are not tolerated in the outgroup (i.e. -m 0% outgroup entries are tolerated to have the reference kmer at each position).
+   In this example, unique sequences -s >=100 bp, found in -p >=25% of ingroup sequence entries on average, with -u >=90% of its -k 25-mers uniquely found (i.e. not in outgroup entries k-mers), and with a leniency of at most -l 1 consecutive non-unique k-mer (i.e. found in outgroup). Further, reference k-mers are not tolerated in the outgroup (i.e. -m 0% outgroup entries are tolerated to have the reference k-mer at each position).
 
    The header of each FASTA entry captures several key information.
    e.g.
@@ -234,8 +234,8 @@ Notes:
 
    1. The reference accession and start-end positions of the unique region (0-based coordinates, regionXX-XX)
    2. The size of the region (sizeXX) in bp. It will be equal or larger than -s.
-   3. The average proportion (%) of ingroup entries with reference kmers (over unique region length, propspcINXX.X %). It will be equal or higher than -p.
-   4. The percent kmer uniqueness over the region length (propunivsOUTXX.X %). It will be equal or higher than -u.
+   3. The average proportion (%) of ingroup entries with reference k-mers (over unique region length, propspcINXX.X %). It will be equal or higher than -p.
+   4. The percent k-mer uniqueness over the region length (propunivsOUTXX.X %). It will be equal or higher than -u.
    5. Average number of outgroup entries over the region length (avgOUTentriesXX.X). The lower the number the more unique the sequence.
    </pre>   
 
@@ -253,10 +253,10 @@ Notes:
 
 4) TSV file (-conservedKmers.tsv)
 
-   Tab-Separated Variable file. Reports all reference sequence kmers in 5 columns:
+   Tab-Separated Variable file. Reports all reference sequence k-mers in 5 columns:
    <pre>
    header	position     [k]-mer    condition       num_entries	proportion
-   [coordinates][sequence][ingroup][number of entries in ingroup with conserved reference kmer][proportion relative to ingroup entries]. Note: when -t is specified, only the first -t bases of the kmer will be shown in the tsv file(s), but the data reported is for the whole kmer.
+   [coordinates][sequence][ingroup][number of entries in ingroup with conserved reference k-mer][proportion relative to ingroup entries]. Note: when -t is specified, only the first -t bases of the k-mer will be shown in the tsv file(s), but the data reported is for the whole k-mer.
 
    e.g.
    header	position        25-mer    condition       num_entries     proportion
@@ -284,21 +284,21 @@ Notes:
 
    1. The reference accession and start-end positions of the conserved region (0-based coordinates, regionXX-XX)
    2. The size of the region (sizeXX) in bp. It will be equal or larger than -s.
-   3. The average proportion (%) of ingroup entries with reference kmers (over unique region length, propspcINXX.X %). It will be equal or higher than -p.
+   3. The average proportion (%) of ingroup entries with reference k-mers (over unique region length, propspcINXX.X %). It will be equal or higher than -p.
    </pre>
 
 
 ## Algorithm design and implementation <a name=algorithm></a>
 
-The algorithm starts by first parsing FASTA sequence(s) supplied by the user as “outgroup” (-o option) and “ingroup” (-i option) and extracting every word of length k (kmers, -k option) and their reverse complement and storing each in respective two-dimensional hash data structures, keeping track of the kmer occurrence in each FASTA entry for either sets. We point out that in/outgroup sequences need not start at the same position, nor be represented on the same strand since unikseq is kmer-based, so no specific DNA sequence formatting is required other than supplying a FASTA-formatted file (e.g. no need to adjust the sequence start for mtDNA genomes). 
+The algorithm starts by first parsing FASTA sequence(s) supplied by the user as “outgroup” (-o option) and “ingroup” (-i option) and extracting every word of length k (k-mers, -k option) and their reverse complement and storing each in respective two-dimensional hash (or Bloom filter) data structures, keeping track of the k-mer occurrence in each FASTA entry for either sets. We point out that in/outgroup sequences need not start at the same position, nor be represented on the same strand since unikseq is k-mer based, so no specific DNA sequence formatting is required other than supplying a FASTA-formatted file (e.g. no need to adjust the sequence start for mtDNA genomes). 
 
-The search for stretches of potentially unique sequence in a reference sequence (-r option) begins with the 5’ to 3’ extraction of a forward-strand kmer and querying of the above two hash data structures for 1) exclusion of the kmer in the outgroup and 2) inclusion of the kmer in the ingroup, moving the kmer frame over base by base until the entire FASTA sequence is read and all reference kmers have been interrogated. When a sequence kmer is not found in the outgroup hash data structure, it is deemed unique and its position and coverage in the outgroup set is tracked and a unique sequence stretch is initialized if the kmer demarks the beginning of a new unique region. A record of the kmer’s presence in the ingroup hash data structure is also kept for the purpose of plotting and evaluating the overall conservation of the unique sequence stretch in the ingroup (see the -p option described below). In the event that a unique kmer follows a kmer previously identified as unique, the last unique base is concatenated onto the growing unique sequence stretch on the 3’-end. This process is repeated until the end of the FASTA reference sequence is reached or until a condition is no longer met, including when the next kmer is found to be non-unique in the outgroup set. 
+The search for stretches of potentially unique sequence in a reference sequence (-r option) begins with the 5’ to 3’ extraction of a forward-strand k-mer and querying of the above two data structures for 1) exclusion of the k-mer in the outgroup and 2) inclusion of the k-mer in the ingroup, moving the k-mer frame over base by base until the entire FASTA sequence is read and all reference k-mers have been interrogated. When a sequence k-mer is not found in the outgroup data structure, it is deemed unique and its position and coverage in the outgroup set is tracked and a unique sequence stretch is initialized if the k-mer demarks the beginning of a new unique region. A record of the k-mer’s presence in the ingroup data structure is also kept for the purpose of plotting and evaluating the overall conservation of the unique sequence stretch in the ingroup (see the -p option described below). In the event that a unique k-mer follows a k-mer previously identified as unique, the last unique base is concatenated onto the growing unique sequence stretch on the 3’-end. This process is repeated until the end of the FASTA reference sequence is reached or until a condition is no longer met, including when the next k-mer is found to be non-unique in the outgroup set. 
 
-To facilitate the detection of unique regions that may be interspersed with non-unique kmers, a leniency parameter (-l option) is used to control the number of consecutive non-unique reference kmers that are tolerated in the outgroup. The unique sequence stretch extension is stopped when the number of consecutive reference kmers found in the outgroup set has exceeded that minimum -l threshold. A grace parameter (-m option) can also be used to adjust the tolerance, or uniqueness factor, in the outgroup. This is particularly useful when searching for unique regions in sets of very similar sequences, for instance, as -m describes the maximum proportion of outgroup sequences in the set that are tolerated before the reference kmer is considered unique (default set to 0, indicating no tolerance). The -m and -l parameters work hand-in-hand in controlling the stringency of unikseq, with -m describing the unique kmer tolerance rate threshold in the outgroup set, and the latter option allowing -l consecutive “non-unique” bases when that is not the case.
+To facilitate the detection of unique regions that may be interspersed with non-unique k-mers, a leniency parameter (-l option) is used to control the number of consecutive non-unique reference k-mers that are tolerated in the outgroup. The unique sequence stretch extension is stopped when the number of consecutive reference k-mers found in the outgroup set has exceeded that minimum -l threshold. A grace parameter (-m option) can also be used to adjust the tolerance, or uniqueness factor, in the outgroup. This is particularly useful when searching for unique regions in sets of very similar sequences, for instance, as -m describes the maximum proportion of outgroup sequences in the set that are tolerated before the reference k-mer is considered unique (default set to 0, indicating no tolerance). The -m and -l parameters work hand-in-hand in controlling the stringency of unikseq, with -m describing the unique k-mer tolerance rate threshold in the outgroup set, and the latter option allowing -l consecutive “non-unique” bases when that is not the case.
 
-When the unique sequence can no longer be extended, it will be written to a FASTA file only when 1) it has reached a length of at least (-s option) bp in size, 2) its constituent kmers have been identified, on average proportion, in at least (-p option) % of ingroup sequences and, overall, 3) those kmers are at least (-u option) % unique, as specified by -l and -m. 
+When the unique sequence can no longer be extended, it will be written to a FASTA file only when 1) it has reached a length of at least (-s option) bp in size, 2) its constituent k-mers have been identified, on average proportion, in at least (-p option) % of ingroup sequences and, overall, 3) those k-mers are at least (-u option) % unique, as specified by -l and -m. 
 
-Unikseq also outputs a tab-separated value (tsv) file that tracks, at each coordinate relative to the reference sequence, the proportion of corresponding kmers in the outgroup and ingroup sets, and was used to generate the butterfly plots (below). Instructions and code for generating the butterfly plots in the R programming language are both available from the repository at the URL below. The intended use-case of unikseq is for identification of unique sequences in mitochrondrial [genome] and similarly short sequences (In initial tests comparing 52 x 2-5Mbp bacterial [HMP mock community] genomes, unikseq ran in 5m and required 54GB RAM). For larger, Gbp-size genomes, we recommend the use of unikseqBloom, included in the v1.3 commit of the code. Unikseq is developed in PERL and runs on any system where PERL is installed, requiring no additional library. It is distributed under GPLv3 license and available freely from github (https://github.com/bcgsc/unikseq).
+Unikseq also outputs a tab-separated value (tsv) file that tracks, at each coordinate relative to the reference sequence, the proportion of corresponding k-mers in the outgroup and ingroup sets, and was used to generate the butterfly plots (below). Instructions and code for generating the butterfly plots in the R programming language are both available from the repository at the URL below. The intended use-case of unikseq is for identification of unique sequences in mitochrondrial [genome] and similarly short sequences (In initial tests comparing 52 x 2-5Mbp bacterial [HMP mock community] genomes, unikseq ran in 5m and required 54GB RAM). For larger, Gbp-size genomes, we recommend the use of unikseqBloom, included in the v1.3 commit of the code. Unikseq is developed in PERL and runs on any system where PERL is installed, requiring no additional library. It is distributed under GPLv3 license and available freely from github (https://github.com/bcgsc/unikseq).
 
  
 ## Quick reference <a name=quickref></a>
