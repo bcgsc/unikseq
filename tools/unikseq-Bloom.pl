@@ -5,7 +5,7 @@
 #   rwarren at bcgsc.ca
 
 #NAME
-# unikseqBloom - a simple prototype support for large genomes, with Bloom filter functionality
+# unikseq-Bloom - prototype support for large genomes, with Bloom filter functionality
 
 #SYNOPSIS
 # Find unique regions in target, tolerated in ingroup but not/less in sequence outgroup

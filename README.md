@@ -123,13 +123,13 @@ Usage: ./unikseq.pl v1.3.0
 
 or
 
-Usage: ./unikseqBloom.pl v1.0.0
+Usage: ./unikseq-Bloom.pl v1.0.0
  -i ingroup Bloom filter (required)
  -o outgroup Bloom filter (required)
 The rest of the options are the same.
 
 Bloom filter data structures are built with the writeBloom.pl utility included in the "tools"  directory.
-Both writeBloom.pl and unikseqBloom.pl have a library dependency (mentioned in the "Install" section above), with the pre-compiled library "BloomFilter.pm  BloomFilter.so" located in the "libexec" folder, "tools" directory. 
+Both writeBloom.pl and unikseq-Bloom.pl have a library dependency (mentioned in the "Install" section above), with the pre-compiled library "BloomFilter.pm  BloomFilter.so" located in the "libexec" folder, "tools" directory. 
 
 
 </pre>
@@ -299,7 +299,7 @@ To facilitate the detection of unique regions that may be interspersed with non-
 
 When the unique sequence can no longer be extended, it will be written to a FASTA file only when 1) it has reached a length of at least (-s option) bp in size, 2) its constituent k-mers have been identified, on average proportion, in at least (-p option) % of ingroup sequences and, overall, 3) those k-mers are at least (-u option) % unique, as specified by -l and -m. 
 
-Unikseq also outputs a tab-separated value (tsv) file that tracks, at each coordinate relative to the reference sequence, the proportion of corresponding k-mers in the outgroup and ingroup sets, and was used to generate the butterfly plots (below). Instructions and code for generating the butterfly plots in the R programming language are both available from the repository at the URL below. The intended use-case of unikseq is for identification of unique sequences in mitochrondrial [genome] and similarly short sequences (In initial tests comparing 52 x 2-5Mbp bacterial [HMP mock community] genomes, unikseq ran in 5m and required 54GB RAM). For larger, Gbp-size genomes, we recommend the use of unikseqBloom, included in the v1.3 commit of the code. Unikseq is developed in PERL and runs on any system where PERL is installed, requiring no additional library. It is distributed under GPLv3 license and available freely from github (https://github.com/bcgsc/unikseq).
+Unikseq also outputs a tab-separated value (tsv) file that tracks, at each coordinate relative to the reference sequence, the proportion of corresponding k-mers in the outgroup and ingroup sets, and was used to generate the butterfly plots (below). Instructions and code for generating the butterfly plots in the R programming language are both available from the repository at the URL below. The intended use-case of unikseq is for identification of unique sequences in mitochrondrial [genome] and similarly short sequences (In initial tests comparing 52 x 2-5Mbp bacterial [HMP mock community] genomes, unikseq ran in 5m and required 54GB RAM). For larger, Gbp-size genomes, we recommend the use of unikseq-Bloom, included in the v1.3 commit of the code. Unikseq is developed in PERL and runs on any system where PERL is installed, requiring no additional library. It is distributed under GPLv3 license and available freely from github (https://github.com/bcgsc/unikseq).
 
  
 ## Quick reference <a name=quickref></a>
