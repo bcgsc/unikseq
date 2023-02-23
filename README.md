@@ -7,7 +7,7 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 # unikseq
 ## Unique (& conserved) region identification in DNA sequences, using a k-mer approach
 ### 2020-2023
-### email: rwarren [at] bcgsc [dot] ca
+
 
 ## Contents
 
@@ -84,9 +84,6 @@ https://github.com/bcgsc/LINKS/releases/download/v1.8.7/links_v1-8-7.tar.gz
 
 Refer to the README.md file on how to install and run unikseq
 Manuscript in preparation
-
-Questions or comments?  We would love to hear from you!
-rwarren@bcgsc.ca
 
 
 ## Citing unikseq <a name=cite></a>
