@@ -2,17 +2,17 @@
 
 Directory testdata
 
-For convenience, we provide users with test data for running unikseq. The test data consists of:
+For convenience, we provide users with mitogenome test data for running unikseq. The test data consists of:
 
-reference (-r)
+reference mitogenome (-r)
 CEMA.fa
 1 FASTA entry
 
-ingroup sequence set (-i)
+ingroup mitogenome (tolerated) sequence set (-i)
 shark.fa
 189 FASTA entries
 
-outgroup/non-target sequence set (-o)
+outgroup/non-target (non-tolerated) sequence set (-o)
 teleost.fa
 872 FASTA entries
 
