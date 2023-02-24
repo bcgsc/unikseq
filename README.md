@@ -20,11 +20,12 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 7. [Citing unikseq](#cite)
 8. [Credits](#credits)
 9. [Running unikseq](#run)
-10. [Output](#output)
-11. [Algorithm](#algorithm)
-12. [Quick reference](#quickref)
-13. [Generating "butterfly" plots](#bplot)
-14. [License](#license)
+10. [Test data](#data)
+11. [Output](#output)
+12. [Algorithm](#algorithm)
+13. [Quick reference](#quickref)
+14. [Generating "butterfly" plots](#bplot)
+15. [License](#license)
 
 
 ## Description <a name=description></a>
@@ -176,6 +177,19 @@ Notes:
  Example command:
  ./unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
 
+</pre>
+
+### Test data <a name=data></a>
+---------
+<pre>
+1. Go to ./testdata
+(cd testdata)
+
+2. Unzip all FASTA files
+(gunzip *fa) on unix
+
+3. Run unikseq on the provided test data
+../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
 </pre>
 
 
