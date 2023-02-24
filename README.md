@@ -195,7 +195,7 @@ This specific command will generate two output files:
 unikseq_vXX-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
 unikseq_vXX-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.log
 
-If the run was successful, the -unique.fa output should contain 5 entries.
+If the run is successful, the -unique.fa FASTA output should contain 5 sequences.
 </pre>
 
 
