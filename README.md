@@ -102,7 +102,7 @@ unikseq (concept, algorithm design and prototype): Rene Warren
 ## Running unikseq <a name=run></a>
 
 <pre>
-Usage: ./unikseq.pl v1.3.0
+Usage: ./unikseq.pl VERSION
 -----input files-----
  -r reference FASTA (required)
  -i ingroup FASTA (required)
@@ -121,7 +121,7 @@ Usage: ./unikseq.pl v1.3.0
 
 or
 
-Usage: ./unikseq-Bloom.pl v1.0.0
+Usage: ./unikseq-Bloom.pl VERSION
  -i ingroup Bloom filter (required)
  -o outgroup Bloom filter (required)
 The rest of the options are the same.
@@ -174,7 +174,7 @@ Notes:
   Boolean (1/0, yes/no), controls tsv file output. By default, tsv files are no longer output by unikseq. To turn it on, set it to 1 (e.g. -v 1)
 
 
- Example command:
+ Example command (refer to the Test data section below):
  ./unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
 
 </pre>
@@ -190,6 +190,12 @@ Notes:
 
 3. Run unikseq on the provided test data
 ../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
+
+This specific command will generate two output files:
+unikseq_vXX-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
+unikseq_vXX-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.log
+
+If the run was successful, the -unique.fa output should contain 5 entries.
 </pre>
 
 

@@ -31,7 +31,7 @@ use BloomFilter;
 use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m $opt_c $opt_t $opt_v);
 getopts('k:r:i:o:p:l:u:s:m:c:t:v:');
 
-my $version = "v1.0.0";
+my $version = "v1.0.1";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag,$tsvflag) = (25,100,0,0,90,0,0,0);
 
 if(! $opt_r || ! $opt_i || ! $opt_o){
@@ -141,7 +141,7 @@ if($cflag){
    $message .= "-" x 30, "\n";
    $message .= "\nOutput conserved reference sequence regions >= $regsz bp (vs. ingroup FASTA) in:\n$outcons\n";
 
-   $message .= "\nOutput conserved $k-mers within ingroup FASTA (for your reference):\n$tsvcons\n\n";
+   $message .= "\nOutput conserved $k-mers within ingroup FASTA (for your reference):\n$tsvcons\n\n" if($tsvflag);
    print $message;
    print LOG $message;
 }
@@ -151,7 +151,7 @@ if($cflag){
 $message = "\ndone.\n";
 $message .= "-" x 30, "\n";
 $message .= "\nOutput unique reference sequence regions >= $regsz bp in:\n$outunique\n";
-$message .= "\nOutput unique $k-mers (for butterfly plot):\n$tsv\ndone.\n";
+$message .= "\nOutput unique $k-mers (for butterfly plot):\n$tsv\ndone.\n" if($tsvflag);
 print $message;
 print LOG $message;
 
