@@ -176,7 +176,7 @@ Notes:
 
 
  Example command (refer to the Test data section below):
- ./unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
+ ./unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o actinopterygii.fa -s 100 -p 25 -l 1 -u 90
 
 </pre>
 
@@ -190,11 +190,11 @@ Notes:
 (gunzip *fa) on unix
 
 3. Run unikseq on the provided test data
-../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
+../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o actinopterygii.fa -s 100 -p 25 -l 1 -u 90
 
 This specific command will generate two output files:
-unikseq_vXX-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
-unikseq_vXX-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.log
+unikseq_vXX-r_CEMA.fa-i_shark.fa-o_actinopterygii.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
+unikseq_vXX-r_CEMA.fa-i_shark.fa-o_actinopterygii.fa-k25-c0-s100-p25-l1-u90-m0-unique.log
 
 If the run is successful, the -unique.fa FASTA output should contain 5 sequences.
 </pre>
@@ -231,7 +231,7 @@ If the run is successful, the -unique.fa FASTA output should contain 5 sequences
 
    e.g.
    <pre>
-    unikseq_v1.1.0beta-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.fa
+    unikseq_v1.1.0beta-r_CEMA.fa-i_shark.fa-o_actinopterygii.fa-k25-c0-s100-p25-l1-u90-m0.fa
 
     -k length (option, default: -k 25)
     -c conserved mode (option, default: -c 0)
@@ -342,8 +342,8 @@ Below is a reference guide for controlling the [stringency &] output of unikseq.
 Refer to `example.r` included with the unikseq distribution, and replace these lines:
 
 <pre>
-dfa<-read.table("XX unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-uniqueKmers.tsv XX", sep="\t", header = TRUE)
-my_x_title <- expression(paste("Position of 25-mers on ", italic("XX A. fragilis XX"), " Mt genome"))
+dfa<-read.table("XX unikseq-r_CEMA.fa-i_shark.fa-o_actinopterygii.fa-k25-uniqueKmers.tsv XX", sep="\t", header = TRUE)
+my_x_title <- expression(paste("Position of 25-mers on ", italic("XX C. maximus XX"), " Mt genome"))
 </pre>
 
 ## License <a name=license></a>

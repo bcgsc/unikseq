@@ -1,6 +1,6 @@
 library(ggplot2)
 
-dfa<-read.table("unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-uniqueKmers.tsv", sep="\t", header = TRUE)
+dfa<-read.table("unikseq-r_CEMA.fa-i_shark.fa-o_actinopterygii.fa-k25-uniqueKmers.tsv", sep="\t", header = TRUE)
 my_x_title <- expression(paste("Position of 25-mers on ", italic("C. maximus"), " Mt genome"))
 
 # Stacked
@@ -15,7 +15,7 @@ library(ggplot2)
 library(ggallin)
 library(scales)
 
-dfa<-read.table("unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-uniqueKmers.tsv", sep="\t", header = TRUE)
+dfa<-read.table("unikseq-r_CEMA.fa-i_shark.fa-o_actinopterygii.fa-k25-uniqueKmers.tsv", sep="\t", header = TRUE)
 my_x_title <- expression(paste("Position of 25-mers on ", italic("C. maximus"), " Mt genome"))
 
 # Stacked
