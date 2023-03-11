@@ -13,7 +13,7 @@ shark.fa
 189 FASTA entries
 
 outgroup/non-target (non-tolerated) sequence set (-o)
-actinopterygii.fa
+teleost.fa
 872 FASTA entries
 
 <pre>
@@ -24,5 +24,5 @@ actinopterygii.fa
 (gunzip *fa) on unix
 
 3. Run unikseq on the provided test data
-../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o actinopterygii.fa -s 100 -p 25 -l 1 -u 90
+../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
 </pre>

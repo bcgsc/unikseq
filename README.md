@@ -177,15 +177,15 @@ Notes:
 
 
  Example command (refer to the Test data section below):
- ./unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o actinopterygii.fa -s 100 -p 25 -l 1 -u 90
+ ./unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
 
 </pre>
 
 ### Test data <a name=data></a>
 ---------
-We showcase the utility of unikseq in identifying mitogenome (MtG) regions unique to C. maximum (basking shark, CEMA.fa reference) compared to ray-finned fishes (actinopterygii.fa outgroup, non-target sequence set n=868 MtG), and conserved in >=25% of (shark.fa ingroup, n=189 MtG) shark mitogenomes, on average.
+We showcase the utility of unikseq in identifying mitogenome (MtG) regions unique to C. maximum (basking shark, CEMA.fa reference) compared to ray-finned fishes (teleost.fa outgroup, non-target sequence set n=868 MtG), and conserved in >=25% of (shark.fa ingroup, n=189 MtG) shark mitogenomes, on average.
 
-Depending on your system, expect unikseq to use 2.5 GB RAM and run in 49.1s (wall clock time) on a single CPU thread on a MacBook Pro (2.6 GHz 6-Core Intel Core i7 chipset with 16GB RAM onboard) running mac OS (Catalina v10.15.7). On a server-class CentOS Linux 7 system with 144 Intel(R) Xeon(R) Gold 6254, 3.10GHz CPUs with 3TB RAM, the same test sample ran in 31.5s (wall clock time), using a single thread and required 2.5GB RAM. If your system is limited in RAM, you could subsample from shark.fa and/or actinopterygii.fa -- just to make sure unikseq is installed properly and will run on your system.
+Depending on your system, expect unikseq to use 2.5 GB RAM and run in 49.1s (wall clock time) on a single CPU thread on a MacBook Pro (2.6 GHz 6-Core Intel Core i7 chipset with 16GB RAM onboard) running mac OS (Catalina v10.15.7). On a server-class CentOS Linux 7 system with 144 Intel(R) Xeon(R) Gold 6254, 3.10GHz CPUs with 3TB RAM, the same test sample ran in 31.5s (wall clock time), using a single thread and required 2.5GB RAM. If your system is limited in RAM, you could subsample from shark.fa and/or teleost.fa -- just to make sure unikseq is installed properly and will run on your system.
 
 <pre>
 1. Go to ./testdata
@@ -195,11 +195,11 @@ Depending on your system, expect unikseq to use 2.5 GB RAM and run in 49.1s (wal
 (gunzip *fa) on unix
 
 3. Run unikseq on the provided test data
-../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o actinopterygii.fa -s 100 -p 25 -l 1 -u 90
+../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
 
 This specific command will generate two output files:
-unikseq_vXX-r_CEMA.fa-i_shark.fa-o_actinopterygii.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
-unikseq_vXX-r_CEMA.fa-i_shark.fa-o_actinopterygii.fa-k25-c0-s100-p25-l1-u90-m0-unique.log
+unikseq_vXX-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
+unikseq_vXX-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.log
 
 If the run is successful, the -unique.fa FASTA output should contain 5 sequences.
 </pre>
@@ -236,7 +236,7 @@ If the run is successful, the -unique.fa FASTA output should contain 5 sequences
 
    e.g.
    <pre>
-    unikseq_v1.1.0beta-r_CEMA.fa-i_shark.fa-o_actinopterygii.fa-k25-c0-s100-p25-l1-u90-m0.fa
+    unikseq_v1.1.0beta-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.fa
 
     -k length (option, default: -k 25)
     -c conserved mode (option, default: -c 0)
@@ -347,7 +347,7 @@ Below is a reference guide for controlling the [stringency &] output of unikseq.
 Refer to `example.r` included with the unikseq distribution, and replace these lines:
 
 <pre>
-dfa<-read.table("XX unikseq-r_CEMA.fa-i_shark.fa-o_actinopterygii.fa-k25-uniqueKmers.tsv XX", sep="\t", header = TRUE)
+dfa<-read.table("XX unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-uniqueKmers.tsv XX", sep="\t", header = TRUE)
 my_x_title <- expression(paste("Position of 25-mers on ", italic("XX C. maximus XX"), " Mt genome"))
 </pre>
 
