@@ -64,6 +64,11 @@ git clone https://github.com/bcgsc/unikseq
 cd unikseq
 </pre>
 
+or using conda:
+<pre>
+conda install -c bioconda unikseq
+</pre>
+
 
 ## Dependencies <a name=dep></a>
 
