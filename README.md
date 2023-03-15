@@ -191,23 +191,64 @@ Notes:
 We showcase the utility of unikseq in identifying mitogenome (MtG) regions unique to C. maximum (basking shark, CEMA.fa reference) compared to ray-finned fishes (teleost.fa outgroup, non-target sequence set n=868 MtG), and conserved in >=25% of (shark.fa ingroup, n=189 MtG) shark mitogenomes, on average.
 
 Depending on your system, expect unikseq to use 2.5 GB RAM and run in 49.1s (wall clock time) on a single CPU thread on a MacBook Pro (2.6 GHz 6-Core Intel Core i7 chipset with 16GB RAM onboard) running mac OS (Catalina v10.15.7). On a server-class CentOS Linux 7 system with 144 Intel(R) Xeon(R) Gold 6254, 3.10GHz CPUs with 3TB RAM, the same test sample ran in 31.5s (wall clock time), using a single thread and required 2.5GB RAM. If your system is limited in RAM, you could subsample from shark.fa and/or teleost.fa -- just to make sure unikseq is installed properly and will run on your system.
-
+#### unikseq.pl
 <pre>
+
 1. Go to ./testdata
 (cd testdata)
 
+
 2. Unzip all FASTA files
 (gunzip *fa) on unix
+
 
 3. Run unikseq on the provided test data
 ../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
 
 This specific command will generate two output files:
-unikseq_vXX-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
-unikseq_vXX-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.log
+unikseq_v1.3.2-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
+unikseq_v1.3.2-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.log
 
 If the run is successful, the -unique.fa FASTA output should contain 5 sequences.
+
 </pre>
+
+#### unikseq-Bloom.pl
+<pre>
+
+1. Go to ./testdata
+(cd testdata)
+
+
+2. Unzip all FASTA files
+(gunzip *fa) on unix
+
+
+3. Generate Bloom filters from in/outgroup FASTA files
+
+writeBloom.pl -f shark.fa
+writeBloom.pl -f teleost.fa
+
+These commands will write two output files:
+shark.fa_k25_p0.001_rolling.bloom
+teleost.fa_k25_p0.001_rolling.bloom
+
+
+4. Run unikseq-Bloom.pl on the provided test data and Bloom filters generated in (3)
+
+unikseq-Bloom.pl -k 25 -r CEMA.fa -i shark.fa_k25_p0.001_rolling.bloom -o teleost.fa_k25_p0.001_rolling.bloom -s 500 -p 100 -l 1 -u 99.5
+
+This specific command will generate two output files:
+unikseq_v1.3.2-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
+unikseq_v1.3.2-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
+
+If the run is successful, the -unique.fa FASTA output should contain 4 sequences.
+
+</pre>
+
+```diff
+! *NOTE: The sequence output of unikseq.pl and unikseq-Bloom.pl are NOT EXPECTED to be the same. This is because k-mers are counted (and used for analysis) in the former, but not in the latter
+```
 
 
 ## Output (-c0 : 3 files / -c1 : 5 files) <a name=output></a>
