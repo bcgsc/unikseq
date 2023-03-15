@@ -188,10 +188,11 @@ Notes:
 
 ### Test data <a name=data></a>
 ---------
-We showcase the utility of unikseq in identifying mitogenome (MtG) regions unique to C. maximum (basking shark, CEMA.fa reference) compared to ray-finned fishes (teleost.fa outgroup, non-target sequence set n=868 MtG), and conserved in >=25% of (shark.fa ingroup, n=189 MtG) shark mitogenomes, on average.
+We showcase the utility of unikseq in identifying mitogenome (MtG) regions unique to C. maximum (basking shark, CEMA.fa reference) compared to ray-finned fishes (teleost.fa outgroup, non-target sequence set n=868 MtG), and conserved in >=25% of (shark.fa ingroup, n=189 MtG) shark mitogenomes, on average (unikseq.pl query below).
 
-Depending on your system, expect unikseq to use 2.5 GB RAM and run in 49.1s (wall clock time) on a single CPU thread on a MacBook Pro (2.6 GHz 6-Core Intel Core i7 chipset with 16GB RAM onboard) running mac OS (Catalina v10.15.7). On a server-class CentOS Linux 7 system with 144 Intel(R) Xeon(R) Gold 6254, 3.10GHz CPUs with 3TB RAM, the same test sample ran in 31.5s (wall clock time), using a single thread and required 2.5GB RAM. If your system is limited in RAM, you could subsample from shark.fa and/or teleost.fa -- just to make sure unikseq is installed properly and will run on your system.
-#### unikseq.pl
+Depending on your system, expect unikseq.pl to use 2.5 GB RAM and run in 49.1s (wall clock time) on a single CPU thread on a MacBook Pro (2.6 GHz 6-Core Intel Core i7 chipset with 16GB RAM onboard) running mac OS (Catalina v10.15.7). On a server-class CentOS Linux 7 system with 144 Intel(R) Xeon(R) Gold 6254, 3.10GHz CPUs with 3TB RAM, the same test sample ran in 31.5s (wall clock time), using a single thread and required 2.5GB RAM. If your system is limited in RAM, you could subsample from shark.fa and/or teleost.fa -- just to make sure unikseq is installed properly and will run on your system.
+
+#### Testing unikseq.pl
 <pre>
 
 1. Go to ./testdata
@@ -213,7 +214,7 @@ If the run is successful, the -unique.fa FASTA output should contain 5 sequences
 
 </pre>
 
-#### unikseq-Bloom.pl
+#### Testing unikseq-Bloom.pl
 <pre>
 
 1. Go to ./testdata
