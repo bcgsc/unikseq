@@ -248,7 +248,7 @@ If the run is successful, the -unique.fa FASTA output should contain 4 sequences
 </pre>
 
 ```diff
-! *NOTE: The sequence output of unikseq.pl and unikseq-Bloom.pl are NOT EXPECTED to be the same. This is because k-mers are counted (and used for analysis) in the former, but not in the latter
+! NOTE: The sequence output of unikseq.pl and unikseq-Bloom.pl are NOT EXPECTED to be the same. This is because k-mers are counted (and used for analysis) in the former, but not in the latter
 ```
 
 
