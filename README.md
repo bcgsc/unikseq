@@ -90,8 +90,10 @@ https://github.com/bcgsc/LINKS/releases/download/v1.8.7/links_v1-8-7.tar.gz
 
 ## Documentation <a name=docs></a>
 
-Refer to the README.md file on how to install and run unikseq
-Manuscript in preparation
+Refer to the README.md file on how to install and run unikseq.
+A manuscript is under peer-review.
+![poster](https://github.com/bcgsc/unikseq/blob/main/unikseq-recomb2023poster.png)
+Warren RL, Allison MJ, Lopez ML, Acharya-Patel N, Coombe L, Yang CL, Helbing CC, Birol I, "Unique region identification in genomes using a k-mer approach", 27th Annual International Conference on Research in Computational Molecular Biology (RECOMB), RECOMB, RECOMB-Seq and RECOMB-CG, Istanbul, Turkey, April 2023.
 
 
 ## Citing unikseq <a name=cite></a>
