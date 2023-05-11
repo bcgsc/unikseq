@@ -24,7 +24,7 @@ use Getopt::Std;
 use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m $opt_c $opt_t $opt_v);
 getopts('k:r:i:o:p:l:u:s:m:c:t:v:');
 
-my $version = "v1.3.2";
+my $version = "v1.3.3";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag,$tsvflag) = (25,100,0,0,90,0,0,0);
 
 if(! $opt_r || ! $opt_i || ! $opt_o){
