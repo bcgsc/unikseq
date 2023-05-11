@@ -219,7 +219,7 @@ sub slide{
          my $entry = $1;
          $head = $_;
          if($prevhead ne $head && $prevhead ne "" && $seq ne ""){
-            &printOutput($cflag,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
+            &printOutput($cflag,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag);
          }
          $seq = "";
          $prevhead = $head;
@@ -229,7 +229,7 @@ sub slide{
          $seq .= uc($seqstretch);
       }
    }
-   &printOutput($cflag,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar);
+   &printOutput($cflag,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag);
 
    close OUT;
    close TSV if($tsvflag);
