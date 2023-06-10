@@ -109,7 +109,11 @@ If you use unikseq in your research, please cite:
 
 [Enabling robust environmental DNA assay design with “unikseq” for the identification of taxon-specific regions within whole mitochondrial genomes](https://doi.org/10.1002/edn3.438)
 <pre>
-Allison MJ, Warren RL, Lopez ML, Acharya-Patel N, Imbery JJ, Coombe L, Yang CL, Birol I, & Helbing CC. 2023. Enabling robust environmental DNA assay design with “unikseq” for the identification of taxon-specific regions within whole mitochondrial genomes. Environmental DNA, 00, 1-16. https://doi.org/10.1002/edn3.438
+Allison MJ, Warren RL, Lopez ML, Acharya-Patel N, Imbery JJ, Coombe L, Yang CL, Birol I, Helbing CC.
+Enabling robust environmental DNA assay design with “unikseq” for the identification of 
+taxon-specific regions within whole mitochondrial genomes. 
+Environmental DNA, 00, 1-16 (2023)
+https://doi.org/10.1002/edn3.438
 </pre>
 [![link](https://img.shields.io/badge/unikseq-manuscript-brightgreen)](https://doi.org/10.1002/edn3.438)
 
