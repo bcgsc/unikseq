@@ -96,7 +96,7 @@ https://github.com/bcgsc/LINKS/releases/download/v1.8.7/links_v1-8-7.tar.gz
 ## Documentation <a name=docs></a>
 
 Refer to the README.md file on how to install and run unikseq.
-A manuscript is under peer-review.
+[![link](https://img.shields.io/badge/unikseq-manuscript-brightgreen)](https://doi.org/10.1002/edn3.438)
 ![poster](https://github.com/bcgsc/unikseq/blob/main/unikseq-recomb2023poster.png)
 Warren RL, Allison MJ, Lopez ML, Acharya-Patel N, Coombe L, Yang CL, Helbing CC, Birol I, "Unique region identification in genomes using a k-mer approach", 27th Annual International Conference on Research in Computational Molecular Biology (RECOMB), RECOMB, RECOMB-Seq and RECOMB-CG, Istanbul, Turkey, April 2023.
 
@@ -117,10 +117,13 @@ https://doi.org/10.1002/edn3.438
 </pre>
 [![link](https://img.shields.io/badge/unikseq-manuscript-brightgreen)](https://doi.org/10.1002/edn3.438)
 
-
 ## Credits <a name=credits></a>
-
-unikseq (concept, algorithm design and prototype): Rene Warren
+<pre>
+Unikseq concept, algorithm design, implementation: Rene L Warren
+Project inception (iTrackDNA): Caren C Helbing
+Project oversight (bioinformatics): Inanc Birol
+Beta testers, eDNA assay designs: Michael J Allison, M. Louie Lopez, Neha Acharya-Patel
+</pre>
 
 
 ## Running unikseq <a name=run></a>
