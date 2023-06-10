@@ -2,6 +2,7 @@
 [![Downloads](https://img.shields.io/github/downloads/bcgsc/unikseq/total?logo=github)](https://github.com/bcgsc/unikseq/releases/download/v1.0.0/unikseq-1.0.0.tar.gz)
 [![Conda](https://img.shields.io/conda/dn/bioconda/unikseq?label=Conda)](https://anaconda.org/bioconda/unikseq)
 [![Issues](https://img.shields.io/github/issues/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/issues)
+[![link](https://img.shields.io/badge/unikseq-manuscript-brightgreen)](https://doi.org/10.1002/edn3.438)
 Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/stargazers)
 
 ![Logo](https://github.com/bcgsc/unikseq/blob/main/unikseq-logo.png)
@@ -104,7 +105,13 @@ Warren RL, Allison MJ, Lopez ML, Acharya-Patel N, Coombe L, Yang CL, Helbing CC,
 
 Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/stargazers) and for using, developing and promoting this free software!
 
-If you use unikseq in your research, please cite: TBD
+If you use unikseq in your research, please cite: 
+
+[Enabling robust environmental DNA assay design with “unikseq” for the identification of taxon-specific regions within whole mitochondrial genomes](https://doi.org/10.1002/edn3.438)
+<pre>
+Allison MJ, Warren RL, Lopez ML, Acharya-Patel N, Imbery JJ, Coombe L, Yang CL, Birol I, & Helbing CC. 2023. Enabling robust environmental DNA assay design with “unikseq” for the identification of taxon-specific regions within whole mitochondrial genomes. Environmental DNA, 00, 1-16. https://doi.org/10.1002/edn3.438
+</pre>
+[![link](https://img.shields.io/badge/unikseq-manuscript-brightgreen)](https://doi.org/10.1002/edn3.438)
 
 
 ## Credits <a name=credits></a>
