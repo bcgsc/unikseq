@@ -242,7 +242,7 @@ If the run is successful, the -unique.fa FASTA output should contain 5 sequences
 
 
 2. Unzip all FASTA files
-(gunzip *fa) on unix
+(gunzip *.fa.gz) on unix
 
 
 3. Generate Bloom filters from in/outgroup FASTA files
