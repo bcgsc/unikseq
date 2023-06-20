@@ -21,7 +21,7 @@ teleost.fa
 (cd testdata)
 
 2. Unzip all FASTA files
-(gunzip *fa) on unix
+(gunzip *.fa.gz) on unix
 
 3. Run unikseq on the provided test data
 ../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
