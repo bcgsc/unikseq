@@ -220,7 +220,7 @@ Depending on your system, expect unikseq.pl to use 2.5 GB RAM and run in 49.1s (
 
 
 2. Unzip all FASTA files
-(gunzip *fa) on unix
+(gunzip *fa.gz) on unix
 
 
 3. Run unikseq on the provided test data
