@@ -129,7 +129,7 @@ Beta testers, eDNA assay designs: Michael J Allison, M. Louie Lopez, Neha Achary
 ## Running unikseq <a name=run></a>
 
 <pre>
-Usage: ./unikseq.pl VERSION
+Usage: ./unikseq.pl
 -----input files-----
  -r reference FASTA (required)
  -i ingroup FASTA (required)
@@ -222,6 +222,8 @@ Depending on your system, expect unikseq.pl to use 2.5 GB RAM and run in 49.1s (
 2. Unzip all FASTA files
 (gunzip *fa.gz) on unix
 
+Note: In version 1.3.4 and subsequent, unikseq.pl supports .zip and .gz FASTA files directly (i.e., no need to uncompressed before running) 
+
 
 3. Run unikseq on the provided test data
 ../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
@@ -243,6 +245,8 @@ If the run is successful, the -unique.fa FASTA output should contain 5 sequences
 
 2. Unzip all FASTA files
 (gunzip *.fa.gz) on unix
+
+Note: In version 1.3.4 and subsequent, unikseq-Bloom.pl supports .zip and .gz FASTA files directly (i.e., no need to uncompressed before running)
 
 
 3. Generate Bloom filters from in/outgroup FASTA files

@@ -31,7 +31,7 @@ use BloomFilter;
 use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m $opt_c $opt_t $opt_v);
 getopts('k:r:i:o:p:l:u:s:m:c:t:v:');
 
-my $version = "v1.3.3";
+my $version = "v1.3.4";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag,$tsvflag) = (25,100,0,0,90,0,0,0);
 
 if(! $opt_r || ! $opt_i || ! $opt_o){
@@ -182,7 +182,16 @@ sub slideConserved{
    }
 
    my $ctseq=0;
-   open(IN,$f) || die "Can't read $f -- fatal.\n";
+
+   ###Support for compressed files
+   if($f=~/zip$/i){
+      open(IN,"unzip -p $f|") || die "Error reading $f -- fatal\n";
+   }elsif($f=~/gz$/i || $f=~/gzip$/i){
+      open(IN,"gunzip -c $f|") || die "Error reading $f -- fatal\n";
+   }else{
+      open(IN,$f) || die "Error reading $f -- fatal\n";
+   }
+
    while(<IN>){
       s/\r\n/\n/g;### DOS to UNIX
       chomp;
@@ -229,7 +238,15 @@ sub slide{
       print TSV "header\tposition\t$tchar-mer\tcondition\tvalue\n";
    }
 
-   open(IN,$f) || die "Can't read $f -- fatal.\n";
+   ###Support for compressed files
+   if($f=~/zip$/i){
+      open(IN,"unzip -p $f|") || die "Error reading $f -- fatal\n";
+   }elsif($f=~/gz$/i || $f=~/gzip$/i){
+      open(IN,"gunzip -c $f|") || die "Error reading $f -- fatal\n";
+   }else{
+      open(IN,$f) || die "Error reading $f -- fatal\n";
+   }
+
    my $ctseq = 0;
    while(<IN>){
       s/\r\n/\n/g;### DOS to UNIX
@@ -452,8 +469,16 @@ sub readFasta{
    my $h;
    my $rec;
    my ($head,$prevhead,$seq,$preventry) = ("","","","");
-   
-   open(IN,$f) || die "Can't read $f -- fatal.\n";
+  
+   ###Support for compressed files
+   if($f=~/zip$/i){
+      open(IN,"unzip -p $f|") || die "Error reading $f -- fatal\n";
+   }elsif($f=~/gz$/i || $f=~/gzip$/i){
+      open(IN,"gunzip -c $f|") || die "Error reading $f -- fatal\n";
+   }else{
+      open(IN,$f) || die "Error reading $f -- fatal\n";
+   }
+ 
    while(<IN>){
       s/\r\n/\n/g;### DOS to UNIX
       chomp;
