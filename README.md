@@ -163,14 +163,14 @@ Notes:
 <pre>
 
  -r reference FASTA (required)
-  reference FASTA (unique FASTA) analysis is done relative to it. Could be a multi-FASTA, but avoid sequences that are too long, especially when running in -c 1 mode (ideally < 10Mbp).
+  reference FASTA (unique FASTA) analysis is done relative to it. Could be a multi-FASTA, but avoid sequences that are too long, especially when running in -c 1 mode (ideally < 10Mbp). For longer sequences, use unikseq-Bloom.pl located in the tools folder. Version 1.3.4 supports gzip and zip files.
 
  -i ingroup FASTA (required)
-  tolerated sequences. Used to find regions unique to a % (see -p option).
+  tolerated sequences. Used to find regions unique to a % (see -p option). Version 1.3.4 supports gzip and zip files.
   In v1.2.1 onward, multi-FASTA entries are grouped by the first non-space identifier in the FASTA header. This is useful when querying k-mers from genome assemblies or even sequencing reads, summarizing for a giving species, for instance. e.g. >myID contig1 and >myID contig2. When unikseq calculates proportions reported in output files, it will summarize by "myID", counting multi-FASTA entries as one. The original behaviour is obtained by using distinct, non-space headers for each entries (e.g. >myID_contig1 and >myID_contig2 count as two entries).
 
  -o outgroup FASTA (required)
-  outgroup to query k-mers against. Note that input reference and ingroup sequences will be automatically excluded from this set.
+  outgroup to query k-mers against. Note that input reference and ingroup sequences will be automatically excluded from this set. Version 1.3.4 supports gzip and zip files.
   In v1.2.1 onward, multi-FASTA entries are grouped by the first non-space identifier in the FASTA header. This is useful when querying k-mers from genome assemblies or even sequencing reads, summarizing for a giving species, for instance. e.g. >myID contig1 and >myID contig2. When unikseq calculates proportions reported in output files, it will summarize by "myID", counting multi-FASTA entries as one. The original behaviour is obtained by using distinct, non-space headers for each entries (e.g. >myID_contig1 and >myID_contig2 count as two entries). For those interested in sequence conservation between reference and ingroup only, you have the option to supply a dummy -o outgroup FASTA file consisting of a header and single base, for instance. 
 
  -k length (option, default: -k 25)
