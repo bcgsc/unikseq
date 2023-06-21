@@ -148,7 +148,7 @@ Usage: ./unikseq.pl
 
 or
 
-Usage: ./unikseq-Bloom.pl VERSION
+Usage: ./unikseq-Bloom.pl
  -i ingroup Bloom filter (required)
  -o outgroup Bloom filter (required)
 The rest of the options are the same.
