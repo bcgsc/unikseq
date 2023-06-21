@@ -10,7 +10,7 @@
 #SYNOPSIS
 
 #DOCUMENTATION
-#   This code was originally writtent for PERL LINKS. Please see this readme for details:
+#   This code was originally developed for PERL LINKS. Please see this readme for details:
 #   https://github.com/bcgsc/LINKS#testing-the-bloom-filters
 #   We hope this code is useful to you -- Please send comments & suggestions to rwarren * bcgsc.ca
 #   If you use LINKS, unikseq, the LINKS/unikseq code or ideas, please cite our work
@@ -118,12 +118,20 @@ exit 1;
 
 #----------------
 sub contigsToBloom{
-   my ($file,$hashfct,$k,$bloom) = @_;
+   my ($f,$hashfct,$k,$bloom) = @_;
 
    my $prevhead = "";
    my $seq = "";
    my $cttig=0;
-   open(IN,$file) || die "Error reading $file -- fatal.\n";
+
+   ###Support for compressed files
+   if($f=~/zip$/i){
+      open(IN,"unzip -p $f|") || die "Error reading $f -- fatal\n";
+   }elsif($f=~/gz$/i || $f=~/gzip$/i){
+      open(IN,"gunzip -c $f|") || die "Error reading $f -- fatal\n";
+   }else{
+      open(IN,$f) || die "Error reading $f -- fatal\n";
+   }
 
    print "Contigs processed k=$k:\n";
    ###

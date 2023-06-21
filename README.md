@@ -203,7 +203,8 @@ Notes:
 
  Example command (refer to the Test data section below):
  ./unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
-
+ ---or---
+ ./unikseq.pl -k 25 -r CEMA.fa.gz -i shark.fa.gz -o teleost.fa.gz -s 100 -p 25 -l 1 -u 90
 </pre>
 
 ### Test data <a name=data></a>
@@ -227,10 +228,17 @@ Note: In version 1.3.4 and subsequent, unikseq.pl supports .zip and .gz FASTA fi
 
 3. Run unikseq on the provided test data
 ../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
+---or---
+./unikseq.pl -k 25 -r CEMA.fa.gz -i shark.fa.gz -o teleost.fa.gz -s 100 -p 25 -l 1 -u 90
+
 
 This specific command will generate two output files:
 unikseq_v1.3.2-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
 unikseq_v1.3.2-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.log
+---or---
+unikseq_v1.3.2-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0-unique.fa
+unikseq_v1.3.2-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.log
+
 
 If the run is successful, the -unique.fa FASTA output should contain 5 sequences.
 
@@ -262,10 +270,17 @@ teleost.fa_k25_p0.001_rolling.bloom
 4. Run unikseq-Bloom.pl on the provided test data and Bloom filters generated in (3)
 
 unikseq-Bloom.pl -k 25 -r CEMA.fa -i shark.fa_k25_p0.001_rolling.bloom -o teleost.fa_k25_p0.001_rolling.bloom -s 500 -p 100 -l 1 -u 99.5
+---or---
+unikseq-Bloom.pl -k 25 -r CEMA.fa.gz -i shark.fa_k25_p0.001_rolling.bloom -o teleost.fa_k25_p0.001_rolling.bloom -s 500 -p 100 -l 1 -u 99.5
+
 
 This specific command will generate two output files:
 unikseq_v1.3.2-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
 unikseq_v1.3.2-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
+---or---
+unikseq_v1.3.2-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
+unikseq_v1.3.2-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
+
 
 If the run is successful, the -unique.fa FASTA output should contain 4 sequences.
 
