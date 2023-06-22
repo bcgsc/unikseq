@@ -8,7 +8,7 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 ![Logo](https://github.com/bcgsc/unikseq/blob/main/unikseq-logo.png)
 
 # unikseq
-## Unique (& conserved) region identification in DNA sequences, using a k-mer approach
+## Unique (& conserved) region identification in DNA sequences, using k-mers
 ### 2020-2023
 
 
