@@ -9,7 +9,7 @@ Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.s
 
 # unikseq
 ## Unique (& conserved) region identification in DNA sequences, using k-mers
-### 2020-2023
+### 2020-present
 
 
 ## Contents
@@ -439,7 +439,7 @@ my_x_title <- expression(paste("Position of 25-mers on ", italic("XX C. maximus 
 
 ## License <a name=license></a>
 
-Unikseq Copyright (c) 2020-2023 British Columbia Cancer Agency Branch.  All rights reserved.
+Unikseq Copyright (c) 2020-present British Columbia Cancer Agency Branch.  All rights reserved.
 
 Unikseq is released under the GNU General Public License v3
 
