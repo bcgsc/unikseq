@@ -232,12 +232,14 @@ Note: In version 1.3.4 and subsequent, unikseq.pl supports .zip and .gz FASTA fi
 ./unikseq.pl -k 25 -r CEMA.fa.gz -i shark.fa.gz -o teleost.fa.gz -s 100 -p 25 -l 1 -u 90
 
 
-This specific command will generate two output files:
-unikseq_v1.3.2-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
-unikseq_v1.3.2-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.log
+This specific command will generate three output files:
+unikseq_v1.3.5-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
+unikseq_v1.3.5-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.bed
+unikseq_v1.3.5-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.log
 ---or---
-unikseq_v1.3.2-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0-unique.fa
-unikseq_v1.3.2-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.log
+unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0-unique.fa
+unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.bed
+unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.log
 
 
 If the run is successful, the -unique.fa FASTA output should contain 5 sequences.
@@ -274,12 +276,14 @@ unikseq-Bloom.pl -k 25 -r CEMA.fa -i shark.fa_k25_p0.001_rolling.bloom -o teleos
 unikseq-Bloom.pl -k 25 -r CEMA.fa.gz -i shark.fa_k25_p0.001_rolling.bloom -o teleost.fa_k25_p0.001_rolling.bloom -s 500 -p 100 -l 1 -u 99.5
 
 
-This specific command will generate two output files:
-unikseq_v1.3.2-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
-unikseq_v1.3.2-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
+This specific command will generate three output files:
+unikseq_v1.3.5-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
+unikseq_v1.3.5-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.bed
+unikseq_v1.3.5-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
 ---or---
-unikseq_v1.3.2-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
-unikseq_v1.3.2-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
+unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
+unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.bed
+unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
 
 
 If the run is successful, the -unique.fa FASTA output should contain 4 sequences.
@@ -291,7 +295,7 @@ If the run is successful, the -unique.fa FASTA output should contain 4 sequences
 ```
 
 
-## Output (-c0 : 3 files / -c1 : 5 files) <a name=output></a>
+## Output (-c0 -v1 : 4 files / -c1 -v1 : 6 files) <a name=output></a>
 
 1) TSV file (-uniqueKmers.tsv) 
 
@@ -352,7 +356,11 @@ If the run is successful, the -unique.fa FASTA output should contain 4 sequences
    ! NOTE: When -c 1 is set, -p does not impose a minimum average proportion of ingroup entries within unique regions and instead, non-conserved regions are soft-masked (a,c,g,t) and conserved regions are upper-cased (A,C,G,T) in the FASTA output. This handy feature enables quick identification of conserved (ingroup) regions within unique (relative to outgroup) sequences.
    ```
 
-3) LOG file (.log)
+3) BED-like file (.bed)
+
+   The first three columns contain the names of chromosomes or scaffolds, the start, and the end coordinates of the sequences considered. When -c 1 is set, the bed-like file records the coordinates of conserved (upper-case base) regions ONLY, when applicable. The file can be used in conjunction with bedtools (intersect) to find possible overlap with the annotated regions of a GFF3 file, for instance.
+
+4) LOG file (.log)
 
    Captures the verbose STDOUT in a log file, showing the progress of the program.    
 
@@ -360,7 +368,7 @@ If the run is successful, the -unique.fa FASTA output should contain 4 sequences
    ! NOTE: When -c is set (-c 1), there are two additional output files:
    ```
 
-4) TSV file (-conservedKmers.tsv)
+5) TSV file (-conservedKmers.tsv)
 
    Tab-Separated Variable file. Reports all reference sequence k-mers in 5 columns:
    <pre>
@@ -379,8 +387,7 @@ If the run is successful, the -unique.fa FASTA output should contain 4 sequences
    ...
    </pre>
 
-
-5) FASTA file (-conserved.fa)
+6) FASTA file (-conserved.fa)
 
    A multi-FASTA with all conserved (within ingroup) sequences passing the filters set at run time.
    Input parameters are captured in the filename (see above description in (2)).

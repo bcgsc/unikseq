@@ -1,22 +1,22 @@
 #!/usr/bin/env perl
 
 #AUTHOR
-#   Rene Warren
-#   rwarren at bcgsc.ca
+# Rene Warren
+# rwarren at bcgsc.ca
 
 #NAME
 # unikseq
 
 #SYNOPSIS
-# Find unique regions in target, tolerated in ingroup but not/less in sequence outgroup
+# unique region identification in target, tolerated in ingroup but not/less in sequence outgroup
 
 #DOCUMENTATION
-#   README.md distributed with this software
-#   We hope this code is useful to you -- Please send comments & suggestions to rwarren * bcgsc.ca
+# README.md distributed with this software
+# We hope this code is useful to you -- Please send comments & suggestions to rwarren * bcgsc.ca
 
 #LICENSE
-#unikseq Copyright (c) 2020-2023 British Columbia Cancer Agency Branch.  All rights reserved.
-#unikseq is released under the GNU General Public License v3
+# unikseq Copyright (c) 2020-2024 British Columbia Cancer Agency Branch. All rights reserved.
+# unikseq is released under the GNU General Public License v3
 
 use strict;
 use Getopt::Std;
@@ -24,7 +24,7 @@ use Getopt::Std;
 use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m $opt_c $opt_t $opt_v);
 getopts('k:r:i:o:p:l:u:s:m:c:t:v:');
 
-my $version = "v1.3.4";
+my $version = "v1.3.5";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag,$tsvflag) = (25,100,0,0,90,0,0,0);
 
 if(! $opt_r || ! $opt_i || ! $opt_o){
@@ -71,10 +71,10 @@ my $tsvcons = $fn . "-conservedKmers.tsv";
 
 $fn .= "-c" . $cflag . "-s" . $regsz . "-p" . $prop . "-l" . $minnotunique . "-u" . $minpercentunique . "-m" . $maxpercentoutgroup;
 
-my $outunique=$fn . "-unique.fa";
-my $outcons=$fn . "-conserved.fa";
-
-my $log=$fn . ".log";
+my $outunique = $fn . "-unique.fa";
+my $outcons = $fn . "-conserved.fa";
+my $bed = $fn . ".bed";
+my $log = $fn . ".log";
 
 open(LOG,">$log") || die "Can't write to $log -- fatal.\n";
 
@@ -123,7 +123,7 @@ print LOG $message;
 my $conseq;
 
 if($cflag){
-   $conseq = &slideConserved($f1,$ex,$in,$k,$incount,$excount,$prop,$outcons,$tsvcons,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag);
+   $conseq = &slideConserved($f1,$ex,$in,$k,$incount,$excount,$prop,$outcons,$tsvcons,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag,$bed);
    $message = "done.\n";
    $message .= "-" x 30, "\n";
    $message .= "\nOutput conserved reference sequence regions >= $regsz bp (vs. ingroup FASTA) in:\n$outcons\n";
@@ -133,7 +133,7 @@ if($cflag){
    print LOG $message;
 }
 
-&slide($cflag,$conseq,$f1,$ex,$in,$k,$incount,$excount,$prop,$outunique,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag);
+&slide($cflag,$conseq,$f1,$ex,$in,$k,$incount,$excount,$prop,$outunique,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag,$bed);
 
 $message = "done.\n";
 $message .= "-" x 30, "\n";
@@ -156,12 +156,13 @@ exit;
 #--------------------------------
 sub slideConserved{
 
-   my ($f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag) = @_;
+   my ($f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag,$bed) = @_;
 
    my ($head,$prevhead,$seq,$preventry) = ("","","","");
    my $conseq;
 
    open(OUT,">$out") || die "Can't write $out -- fatal.\n";
+   open(BED,">$bed") || die "Can't write $bed -- fatal.\n";
 
    if($tsvflag){
       open(TSV,">$tsv") || die "Can't write $tsv -- fatal.\n";
@@ -199,6 +200,7 @@ sub slideConserved{
    $conseq = &printConserved($conseq,$seq,$preventry,$k,$in,$incount,$prop,lc($seq),$tchar,$tsvflag);
 
    close OUT;
+   close BED;
    close TSV if($tsvflag);
 
    return $conseq;
@@ -207,12 +209,14 @@ sub slideConserved{
 #--------------------------------
 sub slide{
 
-   my ($cflag,$conseq,$f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag) = @_;
+   my ($cflag,$conseq,$f,$ex,$in,$k,$incount,$excount,$prop,$out,$tsv,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag,$bed) = @_;
 
    my ($head,$prevhead,$seq,$preventry) = ("","","","");
 
    open(OUT,">$out") || die "Can't write $out -- fatal.\n";
-
+   if(! $cflag){
+      open(BED,">$bed") || die "Can't write $bed -- fatal.\n";
+   }
    if($tsvflag){
       open(TSV,">$tsv") || die "Can't write $tsv -- fatal.\n";
       print TSV "header\tposition\t$tchar-mer\tcondition\tvalue\n";
@@ -248,6 +252,7 @@ sub slide{
    &printOutput($cflag,$conseq,$seq,$preventry,$k,$in,$ex,$incount,$excount,$prop,$minnotunique,$minpercentunique,$maxpercentoutgroup,$tchar,$tsvflag);
 
    close OUT;
+   close BED if(! $cflag);
    close TSV if($tsvflag);
 }
 
@@ -304,6 +309,7 @@ sub outputFASTA{
       if($stretch>=$regsz && $avgpropspc >= $prop){ ### only output longer regions, with a ingroup prop equal or above user-defined
          my $poslast = $pos - 1 + $buffer;
          my $newhead = $head . "region" . $initial . "-" . $poslast . "_size" . $stretch . "_propspcIN";
+         print BED "$head\t$initial\t$poslast\n";
          printf OUT ">$newhead%.1f" . "\n$conservedseq\n", ($avgpropspc);
       }
       ###reset counters
@@ -383,6 +389,7 @@ sub printOutput{
                      my $uniqueseq=substr($seq,$initial,$stretch);
                      my $poslast = $pos - 1 + $buffer;
                      my $newhead = $head . "region" . $initial . "-" . $poslast . "_size" . $stretch . "_propspcIN";
+                     print BED "$head\t$initial\t$poslast\n";
                      printf OUT ">$newhead%.1f" . "_propunivsOUT%.1f_avgOUTentries%.1f" . "\n$uniqueseq\n", ($avgpropspc,$perunique,$avgout);
                   }
                }
