@@ -256,13 +256,17 @@ If the run is successful, the -unique.fa FASTA output should contain 5 sequences
 2. Unzip all FASTA files
 (gunzip *.fa.gz) on unix
 
-Note: In version 1.3.4 and subsequent, unikseq-Bloom.pl supports .zip and .gz FASTA files directly (i.e., no need to uncompressed before running unikseq-Bloom.pl)
+Note: In version 1.3.4 and subsequent, unikseq-Bloom.pl supports .zip and .gz FASTA files directly (i.e., no need to uncompressed before running)
 
 
-3. Generate Bloom filters from in/outgroup (uncompressed) FASTA files
+3. Generate Bloom filters from in/outgroup FASTA files
 
 writeBloom.pl -f shark.fa
 writeBloom.pl -f teleost.fa
+---or---
+writeBloom.pl -f shark.fa.gz
+writeBloom.pl -f teleost.fa.gz
+
 
 These commands will write two output files:
 shark.fa_k25_p0.001_rolling.bloom
