@@ -256,10 +256,10 @@ If the run is successful, the -unique.fa FASTA output should contain 5 sequences
 2. Unzip all FASTA files
 (gunzip *.fa.gz) on unix
 
-Note: In version 1.3.4 and subsequent, unikseq-Bloom.pl supports .zip and .gz FASTA files directly (i.e., no need to uncompressed before running)
+Note: In version 1.3.4 and subsequent, unikseq-Bloom.pl supports .zip and .gz FASTA files directly (i.e., no need to uncompressed before running unikseq-Bloom.pl)
 
 
-3. Generate Bloom filters from in/outgroup FASTA files
+3. Generate Bloom filters from in/outgroup (uncompressed) FASTA files
 
 writeBloom.pl -f shark.fa
 writeBloom.pl -f teleost.fa
@@ -358,7 +358,7 @@ If the run is successful, the -unique.fa FASTA output should contain 4 sequences
 
 3) BED-like file (.bed)
 
-   The first three columns contain the names of chromosomes or scaffolds, the start, and the end coordinates of the sequences considered. When -c 1 is set, the bed-like file records the coordinates of conserved (upper-case base) regions ONLY, when applicable. The file can be used in conjunction with bedtools (intersect) to find possible overlap with the annotated regions of a GFF3 file, for instance.
+   The first three columns contain the names of chromosomes or scaffolds, the start, and the end coordinates of the sequences considered. When -c 1 is set, the bed-like file records the coordinates of conserved (upper-case base) regions ONLY, when applicable. The file can be used in conjunction with bedtools (intersect) to find possible overlap with the annotated regions of a GFF3 file, for instance (example command: bedtools intersect -a KF597303.1.gff3 -b unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.bed.
 
 4) LOG file (.log)
 
