@@ -75,16 +75,15 @@ my $MAXSTRINGLEN = 5000000;
 ###Prepare output
 #-----
 my $fn = "unikseq_" . $version . "-r_" . $f1 . "-i_" . $f2 . "-o_" . $f3 . "-k" . $k;
-my $tsv= $fn . "-uniqueKmers.tsv";
+my $tsv = $fn . "-uniqueKmers.tsv";
 my $tsvcons = $fn . "-conservedKmers.tsv";
-my $bed = $fn . ".bed";
 
 $fn .= "-c" . $cflag . "-s" . $regsz . "-p" . $prop . "-l" . $minnotunique . "-u" . $minpercentunique . "-m" . $maxpercentoutgroup;
 
-my $outunique=$fn . "-unique.fa";
-my $outcons=$fn . "-conserved.fa";
-
-my $log=$fn . ".log";
+my $outunique = $fn . "-unique.fa";
+my $outcons = $fn . "-conserved.fa";
+my $bed = $fn . ".bed";
+my $log = $fn . ".log";
 
 open(LOG,">$log") || die "Can't write to $log -- fatal.\n";
 

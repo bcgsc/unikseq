@@ -66,7 +66,7 @@ $tsvflag = $opt_v if($opt_v);
 ###Prepare output
 #-----
 my $fn = "unikseq_" . $version . "-r_" . $f1 . "-i_" . $f2 . "-o_" . $f3 . "-k" . $k;
-my $tsv= $fn . "-uniqueKmers.tsv";
+my $tsv = $fn . "-uniqueKmers.tsv";
 my $tsvcons = $fn . "-conservedKmers.tsv";
 
 $fn .= "-c" . $cflag . "-s" . $regsz . "-p" . $prop . "-l" . $minnotunique . "-u" . $minpercentunique . "-m" . $maxpercentoutgroup;
