@@ -1,5 +1,5 @@
 [![Release](https://img.shields.io/github/release/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/releases)
-[![Downloads](https://img.shields.io/github/downloads/bcgsc/unikseq/total?logo=github)](https://github.com/bcgsc/unikseq/releases/download/v1.0.0/unikseq-1.0.0.tar.gz)
+[![Downloads](https://img.shields.io/github/downloads/bcgsc/unikseq/total?logo=github)](https://github.com/bcgsc/unikseq/releases/download/v2.0.0/unikseq-2.0.0.tar.gz)
 [![Conda](https://img.shields.io/conda/dn/bioconda/unikseq?label=Conda)](https://anaconda.org/bioconda/unikseq)
 [![Issues](https://img.shields.io/github/issues/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/issues)
 [![link](https://img.shields.io/badge/unikseq-manuscript-brightgreen)](https://doi.org/10.1002/edn3.438)

@@ -15,7 +15,7 @@
 # We hope this code is useful to you -- Please send comments & suggestions to rwarren * bcgsc.ca
 
 #LICENSE
-# unikseq Copyright (c) 2020-2024 British Columbia Cancer Agency Branch. All rights reserved.
+# unikseq Copyright (c) 2020-present British Columbia Cancer Agency Branch. All rights reserved.
 # unikseq is released under the GNU General Public License v3
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.
 # For commercial licensing options, please contact Patrick Rebstein prebstein@bccancer.bc.ca
@@ -31,7 +31,7 @@ use BloomFilter;
 use vars qw($opt_k $opt_r $opt_i $opt_o $opt_s $opt_p $opt_l $opt_u $opt_m $opt_c $opt_t $opt_v);
 getopts('k:r:i:o:p:l:u:s:m:c:t:v:');
 
-my $version = "v1.3.5";
+my $version = "v2.0.0";
 my ($k, $regsz, $prop, $minnotunique, $minpercentunique,$maxpercentoutgroup,$cflag,$tsvflag) = (25,100,0,0,90,0,0,0);
 
 if(! $opt_r || ! $opt_i || ! $opt_o){
