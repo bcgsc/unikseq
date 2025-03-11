@@ -209,7 +209,7 @@ Notes:
 
 ### Test data <a name=data></a>
 ---------
-We showcase the utility of unikseq in identifying mitogenome (MtG) regions unique to C. maximum (basking shark, CEMA.fa reference) compared to ray-finned fishes (teleost.fa outgroup, non-target sequence set n=868 MtG), and conserved in >=25% of (shark.fa ingroup, n=189 MtG) shark mitogenomes, on average (unikseq.pl query below).
+We showcase the utility of unikseq in identifying mitogenome (MtG) regions unique to C. maximum (basking shark, CEMA.fa reference) compared to ray-finned fishes (teleost.fa outgroup, non-target sequence set n=872 MtG), and conserved in >=25% of (shark.fa ingroup, n=189 MtG) shark mitogenomes, on average (unikseq.pl query below).
 
 Depending on your system, expect unikseq.pl to use 2.5 GB RAM and run in 49.1s (wall clock time) on a single CPU thread on a MacBook Pro (2.6 GHz 6-Core Intel Core i7 chipset with 16GB RAM onboard) running mac OS (Catalina v10.15.7). On a server-class CentOS Linux 7 system with 144 Intel(R) Xeon(R) Gold 6254, 3.10GHz CPUs with 3TB RAM, the same test sample ran in 31.5s (wall clock time), using a single thread and required 2.5GB RAM. If your system is limited in RAM, you could subsample from shark.fa and/or teleost.fa -- just to make sure unikseq is installed properly and will run on your system.
 
@@ -229,20 +229,28 @@ Note: In version 1.3.4 and subsequent, unikseq.pl supports .zip and .gz FASTA fi
 3. Run unikseq on the provided test data
 ../unikseq.pl -k 25 -r CEMA.fa -i shark.fa -o teleost.fa -s 100 -p 25 -l 1 -u 90
 ---or---
-./unikseq.pl -k 25 -r CEMA.fa.gz -i shark.fa.gz -o teleost.fa.gz -s 100 -p 25 -l 1 -u 90
+./unikseq.pl -k 25 -r CEMA.fa.gz -i shark.fa.gz -o teleost.fa.gz -s 100 -p 25 -l 1 -u 90 -v 1
 
 
-This specific command will generate three output files:
-unikseq_v1.3.5-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
-unikseq_v1.3.5-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.bed
-unikseq_v1.3.5-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.log
+This specific command will generate 3 output files (4 if you ran with -v 1):
+unikseq_v2.0.0-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
+unikseq_v2.0.0-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.bed
+unikseq_v2.0.0-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.log
 ---or---
-unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0-unique.fa
-unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.bed
-unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.log
-
+unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0-unique.fa
+unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.bed
+unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.log
+unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-uniqueKmers.tsv
 
 If the run is successful, the -unique.fa FASTA output should contain 5 sequences.
+
+
+4. Generate a butterfly plot with R (you may need to install rscript and the R package ggplot2)
+rscript ../butterfly-plot.r unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-uniqueKmers.tsv "C. maximus"
+
+5. Run unikseq in conserved (-c 1) mode on the provided test data
+../unikseq.pl -k 25 -r CEMA.fa.gz -i shark.fa.gz -o teleost.fa.gz -s 100 -p 15 -l 1 -u 90 -v 1 -c 1
+*note: this will output conserved regions (-conserved.fa) that satisfy both the minimum length (-s 100bp and up) threshold, and the proportion of conserved k-mers (-p 15% and higher) out of 189 shark entries in shark.fa.gz. The unique regions (-unique.fa) lists all unique regions in reference CEMA.fa.gz (i.e., not found in the 872 teleost.fa.gz outgroup entries). The conserved regions with shark.fa.gz (at the 15% level and higher) are represented as upper case bases in the latter file.
 
 </pre>
 
@@ -281,14 +289,13 @@ unikseq-Bloom.pl -k 25 -r CEMA.fa.gz -i shark.fa_k25_p0.001_rolling.bloom -o tel
 
 
 This specific command will generate three output files:
-unikseq_v1.3.5-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
-unikseq_v1.3.5-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.bed
-unikseq_v1.3.5-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
+unikseq_v2.0.0-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
+unikseq_v2.0.0-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.bed
+unikseq_v2.0.0-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
 ---or---
-unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
-unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.bed
-unikseq_v1.3.5-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
-
+unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
+unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.bed
+unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
 
 If the run is successful, the -unique.fa FASTA output should contain 4 sequences.
 
@@ -310,7 +317,7 @@ If the run is successful, the -unique.fa FASTA output should contain 4 sequences
    By default, every instance of a reference k-mer is reported when found in the outgroup.
    When it is not found, the ingroup-unique will be reported (if found). Note: when -t is specified, only the first -t bases of the k-mer will be shown in the tsv file(s), but the data reported is for the whole k-mer.
    If a reference k-mer is found in outgroup sequences, the ingroup-unique WILL NOT report any
-   values. This is the file to use to generate "butterfly" plots (see below and r script attached with this distribution [example.r] for details)
+   values. This is the file to use to generate "butterfly" plots (see below and r script attached with this distribution [butterfly-plot.r] for details)
 
    e.g.
    header  position        25-mer  condition       value
@@ -442,15 +449,10 @@ Below is a reference guide for controlling the [stringency &] output of unikseq.
 </pre>
 
 ## Generating "butterfly" plots <a name=bplot></a>
-
+For user convenience, an R script is included to facilitate data visualization. Refer to `butterfly-plot.r` included with the unikseq distribution. You may test it using the example data provided; Please refer to the testdata folder README.md for instructions on how to generate butterfly plots.
 ![UnikseqButterflyPlot](https://github.com/bcgsc/unikseq/blob/main/unikseq-butterfly.png)
+Example butterfly-type plot generated from the testdata (and run parameters) provided.
 
-Refer to `example.r` included with the unikseq distribution, and replace these lines:
-
-<pre>
-dfa<-read.table("XX unikseq-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-uniqueKmers.tsv XX", sep="\t", header = TRUE)
-my_x_title <- expression(paste("Position of 25-mers on ", italic("XX C. maximus XX"), " Mt genome"))
-</pre>
 
 ## License <a name=license></a>
 
