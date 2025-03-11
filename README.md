@@ -303,7 +303,7 @@ If the run is successful, the -unique.fa FASTA output should contain 4 sequences
 
 1) TSV file (-uniqueKmers.tsv) 
 
-   Tab-Separated Variable file. Reports all reference sequence k-mers in 4 columns:
+   Tab-Separated Variable file. Reports all reference sequence k-mers in 5 columns:
    <pre>
    header	position	[k]-mer	condition	value
    [FASTA header][coordinates][sequence][in/out group][proportion in each in/out group]
@@ -378,7 +378,7 @@ If the run is successful, the -unique.fa FASTA output should contain 4 sequences
 
 5) TSV file (-conservedKmers.tsv)
 
-   Tab-Separated Variable file. Reports all reference sequence k-mers in 5 columns:
+   Tab-Separated Variable file. Reports all reference sequence k-mers in 6 columns:
    <pre>
    header	position     [k]-mer    condition       num_entries	proportion
    [coordinates][sequence][ingroup][number of entries in ingroup with conserved reference k-mer][proportion relative to ingroup entries]. Note: when -t is specified, only the first -t bases of the k-mer will be shown in the tsv file(s), but the data reported is for the whole k-mer.
