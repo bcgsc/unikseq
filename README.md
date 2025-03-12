@@ -1,5 +1,5 @@
 [![Release](https://img.shields.io/github/release/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/releases)
-[![Downloads](https://img.shields.io/github/downloads/bcgsc/unikseq/total?logo=github)](https://github.com/bcgsc/unikseq/releases/download/v2.0.0/unikseq-2.0.0.tar.gz)
+[![Downloads](https://img.shields.io/github/downloads/bcgsc/unikseq/total?logo=github)](https://github.com/bcgsc/unikseq/releases/download/v2.0.1/unikseq-2.0.1.tar.gz)
 [![Conda](https://img.shields.io/conda/dn/bioconda/unikseq?label=Conda)](https://anaconda.org/bioconda/unikseq)
 [![Issues](https://img.shields.io/github/issues/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/issues)
 [![link](https://img.shields.io/badge/unikseq-manuscript-brightgreen)](https://doi.org/10.1002/edn3.438)
@@ -233,20 +233,20 @@ Note: In version 1.3.4 and subsequent, unikseq.pl supports .zip and .gz FASTA fi
 
 
 This specific command will generate 3 output files (4 if you ran with -v 1):
-unikseq_v2.0.0-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
-unikseq_v2.0.0-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.bed
-unikseq_v2.0.0-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.log
+unikseq_v2.0.1-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0-unique.fa
+unikseq_v2.0.1-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.bed
+unikseq_v2.0.1-r_CEMA.fa-i_shark.fa-o_teleost.fa-k25-c0-s100-p25-l1-u90-m0.log
 ---or---
-unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0-unique.fa
-unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.bed
-unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.log
-unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-uniqueKmers.tsv
+unikseq_v2.0.1-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0-unique.fa
+unikseq_v2.0.1-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.bed
+unikseq_v2.0.1-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-c0-s100-p25-l1-u90-m0.log
+unikseq_v2.0.1-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-uniqueKmers.tsv
 
 If the run is successful, the -unique.fa FASTA output should contain 5 sequences.
 
 
 4. Generate a butterfly plot with R (you may need to install rscript and the R package ggplot2)
-rscript ../butterfly-plot.r unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-uniqueKmers.tsv "C. maximus"
+rscript ../butterfly-plot.r unikseq_v2.0.1-r_CEMA.fa.gz-i_shark.fa.gz-o_teleost.fa.gz-k25-uniqueKmers.tsv "C. maximus"
 
 5. Run unikseq in conserved (-c 1) mode on the provided test data
 ../unikseq.pl -k 25 -r CEMA.fa.gz -i shark.fa.gz -o teleost.fa.gz -s 100 -p 15 -l 1 -u 90 -v 1 -c 1
@@ -289,13 +289,13 @@ unikseq-Bloom.pl -k 25 -r CEMA.fa.gz -i shark.fa_k25_p0.001_rolling.bloom -o tel
 
 
 This specific command will generate three output files:
-unikseq_v2.0.0-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
-unikseq_v2.0.0-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.bed
-unikseq_v2.0.0-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
+unikseq_v2.0.1-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
+unikseq_v2.0.1-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.bed
+unikseq_v2.0.1-r_CEMA.fa-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
 ---or---
-unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
-unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.bed
-unikseq_v2.0.0-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
+unikseq_v2.0.1-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0-unique.fa
+unikseq_v2.0.1-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.bed
+unikseq_v2.0.1-r_CEMA.fa.gz-i_shark.fa_k25_p0.001_rolling.bloom-o_teleost.fa_k25_p0.001_rolling.bloom-k25-c0-s500-p100-l1-u99.5-m0.log
 
 If the run is successful, the -unique.fa FASTA output should contain 4 sequences.
 
