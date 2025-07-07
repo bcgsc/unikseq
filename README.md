@@ -3,6 +3,7 @@
 [![Conda](https://img.shields.io/conda/dn/bioconda/unikseq?label=Conda)](https://anaconda.org/bioconda/unikseq)
 [![Issues](https://img.shields.io/github/issues/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/issues)
 [![link](https://img.shields.io/badge/unikseq-manuscript-brightgreen)](https://doi.org/10.1002/edn3.438)
+[![link](https://img.shields.io/badge/unikseq2-manuscript-brightgreen)](https://doi.org/10.1111/1755-0998.70014)
 Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/stargazers)
 
 ![Logo](https://github.com/bcgsc/unikseq/blob/main/unikseq-logo.png)
@@ -106,7 +107,7 @@ Warren RL, Allison MJ, Lopez ML, Acharya-Patel N, Coombe L, Yang CL, Helbing CC,
 Thank you for your [![Stars](https://img.shields.io/github/stars/bcgsc/unikseq.svg)](https://github.com/bcgsc/unikseq/stargazers) and for using, developing and promoting this free software!
 
 If you use unikseq in your research, please cite: 
-
+(1)
 [Enabling robust environmental DNA assay design with “unikseq” for the identification of taxon-specific regions within whole mitochondrial genomes](https://doi.org/10.1002/edn3.438)
 <pre>
 Allison MJ, Warren RL, Lopez ML, Acharya-Patel N, Imbery JJ, Coombe L, Yang CL, Birol I, Helbing CC.
@@ -116,6 +117,17 @@ Environmental DNA, 00, 1-16 (2023)
 https://doi.org/10.1002/edn3.438
 </pre>
 [![link](https://img.shields.io/badge/unikseq-manuscript-brightgreen)](https://doi.org/10.1002/edn3.438)
+
+AND
+(2)
+[Conserved sequence identification within large genomic datasets using unikseq2: Application in environmental DNA assay development](https://doi.org/10.1111/1755-0998.70014)
+<pre>
+Lopez MLD, Warren RL, Allison MJ, Coombe L, Imbery JJ, Birol I, Helbing CC.
+Conserved sequence identification within large genomic datasets using unikseq2: Application in environmental DNA assay development. Molecular Ecology Resources. 
+Molecular Ecology Resources (2025)
+https://doi.org/10.1111/1755-0998.70014
+</pre>
+[![link](https://img.shields.io/badge/unikseq2-manuscript-brightgreen)](https://doi.org/10.1111/1755-0998.70014)
 
 ## Credits <a name=credits></a>
 <pre>
