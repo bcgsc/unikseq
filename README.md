@@ -1,10 +1,8 @@
-[![Release](https://img.shields.io/github/release/BirolLab/unikseq.svg)](https://github.com/BirolLab/unikseq/releases)
 [![Downloads](https://img.shields.io/github/downloads/BirolLab/unikseq/total?logo=github)](https://github.com/BirolLab/unikseq/releases/download/v2.0.1/unikseq-2.0.1.tar.gz)
 [![Conda](https://img.shields.io/conda/dn/bioconda/unikseq?label=Conda)](https://anaconda.org/bioconda/unikseq)
 [![Issues](https://img.shields.io/github/issues/BirolLab/unikseq.svg)](https://github.com/BirolLab/unikseq/issues)
 [![link](https://img.shields.io/badge/unikseq-manuscript-brightgreen)](https://doi.org/10.1002/edn3.438)
 [![link](https://img.shields.io/badge/unikseq2-manuscript-brightgreen)](https://doi.org/10.1111/1755-0998.70014)
-Thank you for your [![Stars](https://img.shields.io/github/stars/BirolLab/unikseq.svg)](https://github.com/BirolLab/unikseq/stargazers)
 
 ![Logo](https://github.com/BirolLab/unikseq/blob/main/unikseq-logo.png)
 
